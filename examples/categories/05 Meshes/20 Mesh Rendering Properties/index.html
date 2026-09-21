@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Mesh Rendering Properties">
+    <meta name="keywords" content="Mesh, Rendering">
+    <title>Mesh Rendering Properties | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #rendering-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .rendering-controls {
+            display: grid;
+            gap: 14px;
+        }
+
+        .rendering-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rendering-control input {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Rendering Properties
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Mesh Rendering
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Mesh Rendering Properties</h1>
+                    <span class="example-badge green">78</span>
+                </div>
+
+                <p>
+                    Control mesh rendering properties such as outlines, overlay rendering, and pickability at runtime.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="mesh-rendering" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 8, new BABYLON.Vector3(0, 0, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="rendering-mesh" size="2" position="new BABYLON.Vector3(0, 0, 0)"
+                        renderOutline="true" outlineWidth="0.05" outlineColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        isPickable="true">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="rendering-status">
+                    <strong>Outline: On · Pickable: On</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Rendering Controls
+                    </h2>
+
+                    <p class="example-section-description">
+                        Change mesh rendering properties directly on the Babylon.js mesh.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Mesh Properties
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <div class="rendering-controls">
+
+                                <label class="rendering-control">
+                                    <input type="checkbox" id="outline-toggle" checked>
+                                    <span>Render Outline</span>
+                                </label>
+
+                                <label class="rendering-control">
+                                    <input type="checkbox" id="pickable-toggle" checked>
+                                    <span>Pickable</span>
+                                </label>
+
+                                <label class="rendering-control">
+                                    <input type="checkbox" id="overlay-toggle">
+                                    <span>Overlay Rendering</span>
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Rendering properties are modified directly on the mesh after the runtime initializes.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="rendering-mesh"
+    size="2"
+    renderOutline="true"
+    outlineWidth="0.05"
+    outlineColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+    isPickable="true"&gt;
+&lt;/arashtad-mesh&gt;
+
+const scene = await ready(canvas);
+
+const mesh = scene.meshes.find(
+    mesh =&gt; mesh.name === 'rendering-mesh'
+);
+
+outlineToggle.addEventListener('change', () =&gt; {
+    mesh.renderOutline = outlineToggle.checked;
+});
+
+pickableToggle.addEventListener('change', () =&gt; {
+    mesh.isPickable = pickableToggle.checked;
+});
+
+overlayToggle.addEventListener('change', () =&gt; {
+    mesh.overlayRendering = overlayToggle.checked;
+});</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('mesh-rendering');
+
+        const scene = await ready(canvas);
+
+        const mesh = scene.meshes.find(
+            mesh => mesh.name === 'rendering-mesh'
+        );
+
+        const outlineToggle = document.getElementById('outline-toggle');
+        const pickableToggle = document.getElementById('pickable-toggle');
+        const overlayToggle = document.getElementById('overlay-toggle');
+        const status = document.getElementById('rendering-status');
+
+        function updateStatus() {
+            status.innerHTML =
+                `<strong>Outline: ${mesh.renderOutline ? 'On' : 'Off'} · ` +
+                `Pickable: ${mesh.isPickable ? 'On' : 'Off'} · ` +
+                `Overlay: ${mesh.overlayRendering ? 'On' : 'Off'}</strong>`;
+        }
+
+        outlineToggle.addEventListener('change', () => {
+            mesh.renderOutline = outlineToggle.checked;
+            updateStatus();
+        });
+
+        pickableToggle.addEventListener('change', () => {
+            mesh.isPickable = pickableToggle.checked;
+            updateStatus();
+        });
+
+        overlayToggle.addEventListener('change', () => {
+            mesh.overlayRendering = overlayToggle.checked;
+            updateStatus();
+        });
+
+        updateStatus();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Model loading error handling.">
+    <meta name="keywords" content="Models, Errors">
+    <title>Model Loading Errors | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-demo canvas {
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        .model-demo canvas.loading {
+            opacity: 0;
+        }
+
+        .model-demo canvas.loaded {
+            opacity: 1;
+        }
+
+        #preloader {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #080d0c;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #preloader-spinner {
+            width: 46px;
+            height: 46px;
+            margin-bottom: 22px;
+            border: 3px solid rgba(38, 163, 140, 0.2);
+            border-top-color: #26a38c;
+            border-radius: 50%;
+            animation: preloader-spin 0.9s linear infinite;
+        }
+
+        #loading-label {
+            margin-bottom: 10px;
+            color: #26a38c;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        #loading-counter {
+            margin-bottom: 18px;
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        #loading-track {
+            width: min(280px, 70%);
+            height: 4px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #loading-bar {
+            width: 0;
+            height: 100%;
+            background: #26a38c;
+            transition: width 0.15s ease;
+        }
+
+        #loading-error {
+            display: none;
+            width: min(520px, 80%);
+            margin-top: 22px;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 100, 80, 0.35);
+            background: rgba(80, 20, 15, 0.35);
+            color: #ff8f7a;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        #loading-error.visible {
+            display: block;
+        }
+
+        @keyframes preloader-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#models">Models</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>43</span>
+                    <span>/</span>
+                    <span>Models</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    43 · Models
+                </div>
+
+                <h1>Model Loading Errors</h1>
+
+                <p>
+                    Handle model loading failures with a runtime-level error
+                    callback while continuing to display loading progress.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge">Error Handling</span>
+                    <span class="example-badge">OnLoadError</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="model-loading-errors" class="loading"
+                    clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" OnLoadProgress="
+                            document.getElementById('loading-counter').textContent = progress + '%';
+                            document.getElementById('loading-bar').style.width = progress + '%';
+
+                            if (progress >= 100) {
+                                setTimeout(() => {
+                                    document.getElementById('model-loading-errors').classList.remove('loading');
+                                    document.getElementById('model-loading-errors').classList.add('loaded');
+                                    document.getElementById('preloader').classList.add('hidden');
+                                }, 200);
+                            }
+                        " OnLoadError="
+                            const error = document.getElementById('loading-error');
+                            error.textContent = 'Model loading error: ' + message;
+                            error.classList.add('visible');
+                        "></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, -0.2, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-model id="valid-model" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)"></arashtad-model>
+
+                    <arashtad-model id="invalid-model" src="../../../assets/3d/model-that-does-not-exist.glb"></arashtad-model>
+
+                </canvas>
+
+                <div id="preloader">
+
+                    <div id="preloader-spinner"></div>
+
+                    <div id="loading-label">
+                        Loading Scene
+                    </div>
+
+                    <div id="loading-counter">
+                        0%
+                    </div>
+
+                    <div id="loading-track">
+                        <div id="loading-bar"></div>
+                    </div>
+
+                    <div id="loading-error"></div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Runtime-level handling of model loading failures.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                OnLoadError
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The runtime calls
+                                <code>OnLoadError</code> when a model fails
+                                to load. The callback receives the loading
+                                error message through <code>message</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Failed Model
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The second model intentionally references a
+                                nonexistent GLB file so the error handler can
+                                be observed without modifying the runtime.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Model loading errors are handled through the runtime's scene-level error callback.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="model-loading-errors"
+    class="loading"
+    clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)"
+&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        OnLoadProgress="
+            document.getElementById('loading-counter').textContent = progress + '%';
+            document.getElementById('loading-bar').style.width = progress + '%';
+
+            if (progress &gt;= 100) {
+                setTimeout(() =&gt; {
+                    document.getElementById('model-loading-errors').classList.remove('loading');
+                    document.getElementById('model-loading-errors').classList.add('loaded');
+                    document.getElementById('preloader').classList.add('hidden');
+                }, 200);
+            }
+        "
+        OnLoadError="
+            const error = document.getElementById('loading-error');
+            error.textContent = 'Model loading error: ' + message;
+            error.classList.add('visible');
+        "
+    &gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, -0.2, 0)"
+        minZ="0.1"
+        maxZ="1000"
+    &gt;&lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"
+    &gt;&lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="valid-model"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(0, -0.5, 0)"
+        scaling="new BABYLON.Vector3(5, 5, 5)"
+    &gt;&lt;/arashtad-model&gt;
+
+    &lt;arashtad-model
+        id="invalid-model"
+        src="../../../assets/3d/model-that-does-not-exist.glb"
+    &gt;&lt;/arashtad-model&gt;
+
+&lt;/canvas&gt;
+
+&lt;div id="preloader"&gt;
+    &lt;div id="preloader-spinner"&gt;&lt;/div&gt;
+    &lt;div id="loading-label"&gt;Loading Scene&lt;/div&gt;
+    &lt;div id="loading-counter"&gt;0%&lt;/div&gt;
+    &lt;div id="loading-track"&gt;
+        &lt;div id="loading-bar"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id="loading-error"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('model-loading-errors');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

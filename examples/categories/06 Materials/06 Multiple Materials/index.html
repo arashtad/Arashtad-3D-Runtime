@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Multiple Materials">
+    <meta name="keywords" content="Materials, Multiple">
+    <title>Multiple Materials | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .material-demo {
+            position: relative;
+        }
+
+        #material-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Materials / Multiple
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Material Assignment
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Multiple Materials</h1>
+                    <span class="example-badge green">91</span>
+                </div>
+
+                <p>
+                    Create multiple independent materials and assign each one to a different mesh in the same scene.
+                </p>
+
+            </header>
+
+            <section class="example-demo material-demo">
+
+                <canvas id="multiple-materials" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3.2, 11, new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="box-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="sphere-material"
+                        diffuseColor="new BABYLON.Color3(1, 0.56, 0.08)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="cylinder-material"
+                        diffuseColor="new BABYLON.Color3(0.35, 0.45, 0.9)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="box-mesh" width="2.5" height="2.5" depth="2.5"
+                        position="new BABYLON.Vector3(-3, 1.25, 0)" material="box-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="sphere-mesh" diameter="2.5"
+                        position="new BABYLON.Vector3(0, 1.25, 0)" material="sphere-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="cylinder-mesh" height="2.5" diameter="2" tessellation="32"
+                        position="new BABYLON.Vector3(3, 1.25, 0)" material="cylinder-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground-mesh" width="10" height="6"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="material-status">
+                    <strong>3 Materials · 3 Meshes</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Independent Materials
+                    </h2>
+
+                    <p class="example-section-description">
+                        Each material is declared independently and assigned to its corresponding mesh by reference.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Material Assignment
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Box</strong> - box-material
+                            </p>
+
+                            <p>
+                                <strong>Sphere</strong> - sphere-material
+                            </p>
+
+                            <p>
+                                <strong>Cylinder</strong> - cylinder-material
+                            </p>
+
+                            <p>
+                                <strong>Ground</strong> - default material
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Multiple material elements can coexist in the same scene, with each mesh referencing its
+                        required material by ID.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    type="StandardMaterial"
+    id="box-material"
+    diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="sphere-material"
+    diffuseColor="new BABYLON.Color3(1, 0.56, 0.08)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="cylinder-material"
+    diffuseColor="new BABYLON.Color3(0.35, 0.45, 0.9)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Box"
+    id="box-mesh"
+    width="2.5"
+    height="2.5"
+    depth="2.5"
+    position="new BABYLON.Vector3(-3, 1.25, 0)"
+    material="box-material"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="sphere-mesh"
+    diameter="2.5"
+    position="new BABYLON.Vector3(0, 1.25, 0)"
+    material="sphere-material"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Cylinder"
+    id="cylinder-mesh"
+    height="2.5"
+    diameter="2"
+    tessellation="32"
+    position="new BABYLON.Vector3(3, 1.25, 0)"
+    material="cylinder-material"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-materials');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

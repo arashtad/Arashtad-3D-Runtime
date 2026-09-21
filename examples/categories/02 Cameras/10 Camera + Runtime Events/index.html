@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Camera controlled by Babylon.js native object triggers.">
+    <meta name="keywords" content="Camera, Events">
+    <title>Camera + Runtime Events | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .camera-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#cameras">Cameras</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>25</span>
+                    <span>/</span>
+                    <span>Cameras</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    25 · Cameras
+                </div>
+
+                <h1>Camera + Runtime Events</h1>
+
+                <p>
+                    Control an ArcRotateCamera directly from interactive scene
+                    objects using Babylon.js native action triggers.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Camera</span>
+                    <span class="example-badge">Native Triggers</span>
+                    <span class="example-badge">OnPickTrigger</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo camera-demo">
+
+                <canvas id="camera-runtime-events" clearColor="new BABYLON.Color4(0.04, 0.055, 0.05, 1)">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(65), 12, new BABYLON.Vector3(0, 0, 0)"
+                        lowerBetaLimit="BABYLON.Tools.ToRadians(20)" upperBetaLimit="BABYLON.Tools.ToRadians(85)"
+                        lowerRadiusLimit="5" upperRadiusLimit="18" inertia="0.8">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="sun" args="new BABYLON.Vector3(-1, -2, -1)"
+                        intensity="1.5" position="new BABYLON.Vector3(5, 8, 5)">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="center-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="left-material"
+                        diffuseColor="new BABYLON.Color3(1, 0.45, 0.05)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="right-material"
+                        diffuseColor="new BABYLON.Color3(0.2, 0.45, 1)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="zoom-in-material"
+                        diffuseColor="new BABYLON.Color3(0.25, 0.8, 0.35)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="zoom-out-material"
+                        diffuseColor="new BABYLON.Color3(0.8, 0.25, 0.3)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="center" size="2" material="center-material"
+                        position="new BABYLON.Vector3(0, 0, 0)"
+                        OnPickTrigger="camera.alpha = BABYLON.Tools.ToRadians(45); camera.radius = 12;">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="left" size="1.5" material="left-material"
+                        position="new BABYLON.Vector3(-4, 0, 0)"
+                        OnPickTrigger="camera.alpha -= BABYLON.Tools.ToRadians(45);">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="right" size="1.5" material="right-material"
+                        position="new BABYLON.Vector3(4, 0, 0)"
+                        OnPickTrigger="camera.alpha += BABYLON.Tools.ToRadians(45);">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="front" size="1.5" material="zoom-in-material"
+                        position="new BABYLON.Vector3(0, 0, 4)"
+                        OnPickTrigger="camera.radius = Math.max(5, camera.radius - 2);">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="back" size="1.5" material="zoom-out-material"
+                        position="new BABYLON.Vector3(0, 0, -4)"
+                        OnPickTrigger="camera.radius = Math.min(18, camera.radius + 2);">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="14" height="14"
+                        position="new BABYLON.Vector3(0, -1, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Babylon.js native object triggers can directly control
+                            the registered camera without using runtime action tags.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Native Pick Triggers
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each interactive mesh uses
+                                <code>OnPickTrigger</code> directly on the
+                                runtime mesh element.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Camera Orbit
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The orange and blue controls change the camera's
+                                <code>alpha</code>, rotating the view around
+                                the scene.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Camera Zoom
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The green and red controls modify the camera's
+                                <code>radius</code>, creating zoom-in and
+                                zoom-out controls directly inside the scene.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Babylon.js native ActionManager triggers are declared directly on the interactive meshes.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="camera-runtime-events"
+    clearColor="new BABYLON.Color4(0.04, 0.055, 0.05, 1)"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(65), 12, new BABYLON.Vector3(0, 0, 0)"
+        lowerBetaLimit="BABYLON.Tools.ToRadians(20)"
+        upperBetaLimit="BABYLON.Tools.ToRadians(85)"
+        lowerRadiusLimit="5"
+        upperRadiusLimit="18"
+        inertia="0.8"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        type="DirectionalLight"
+        id="sun"
+        args="new BABYLON.Vector3(-1, -2, -1)"
+        intensity="1.5"
+        position="new BABYLON.Vector3(5, 8, 5)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="center-material"
+        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="left-material"
+        diffuseColor="new BABYLON.Color3(1, 0.45, 0.05)"
+        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="right-material"
+        diffuseColor="new BABYLON.Color3(0.2, 0.45, 1)"
+        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="zoom-in-material"
+        diffuseColor="new BABYLON.Color3(0.25, 0.8, 0.35)"
+        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="zoom-out-material"
+        diffuseColor="new BABYLON.Color3(0.8, 0.25, 0.3)"
+        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="center"
+        size="2"
+        material="center-material"
+        position="new BABYLON.Vector3(0, 0, 0)"
+        OnPickTrigger="camera.alpha = BABYLON.Tools.ToRadians(45); camera.radius = 12;"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="left"
+        size="1.5"
+        material="left-material"
+        position="new BABYLON.Vector3(-4, 0, 0)"
+        OnPickTrigger="camera.alpha -= BABYLON.Tools.ToRadians(45);"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="right"
+        size="1.5"
+        material="right-material"
+        position="new BABYLON.Vector3(4, 0, 0)"
+        OnPickTrigger="camera.alpha += BABYLON.Tools.ToRadians(45);"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="front"
+        size="1.5"
+        material="zoom-in-material"
+        position="new BABYLON.Vector3(0, 0, 4)"
+        OnPickTrigger="camera.radius = Math.max(5, camera.radius - 2);"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="back"
+        size="1.5"
+        material="zoom-out-material"
+        position="new BABYLON.Vector3(0, 0, -4)"
+        OnPickTrigger="camera.radius = Math.min(18, camera.radius + 2);"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Ground"
+        id="ground"
+        width="14"
+        height="14"
+        position="new BABYLON.Vector3(0, -1, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('camera-runtime-events');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('camera-runtime-events');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Light + Shadows example.">
+    <meta name="keywords" content="Lighting, Shadows">
+    <title>Light + Shadows | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .light-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#lights">Lights</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>36</span>
+                    <span>/</span>
+                    <span>Lights</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    36 · Lights
+                </div>
+
+                <h1>Light + Shadows</h1>
+
+                <p>
+                    Combine a directional light with a shadow generator,
+                    shadow casters, and a shadow receiver to create realistic
+                    shadows in a declarative 3D scene.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Light</span>
+                    <span class="example-badge">Shadows</span>
+                    <span class="example-badge">ShadowGenerator</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo light-demo">
+
+                <canvas id="light-shadows">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="1.57, 1.05, 11, new BABYLON.Vector3(0, 0.5, 0)" lowerRadiusLimit="7" upperRadiusLimit="16"
+                        lowerBetaLimit="0.65" upperBetaLimit="1.45" wheelPrecision="60" inertia="0.8">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.15" diffuse="new BABYLON.Color3(0.1, 0.18, 0.28)"
+                        groundColor="new BABYLON.Color3(0.008, 0.012, 0.018)"
+                        specular="new BABYLON.Color3(0.06, 0.08, 0.1)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="shadowLight" args="new BABYLON.Vector3(-0.6, -1, 0.45)"
+                        position="new BABYLON.Vector3(6, 9, -6)" intensity="2.8"
+                        diffuse="new BABYLON.Color3(1, 0.42, 0.12)" specular="new BABYLON.Color3(0.45, 0.18, 0.05)">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="boxMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.1, 0.025)"
+                        specularColor="new BABYLON.Color3(0.3, 0.08, 0.02)" roughness="0.78">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="sphereMaterial"
+                        diffuseColor="new BABYLON.Color3(0.035, 0.22, 0.7)"
+                        specularColor="new BABYLON.Color3(0.65, 0.75, 0.9)" roughness="0.3">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="cylinderMaterial"
+                        diffuseColor="new BABYLON.Color3(0.025, 0.48, 0.22)"
+                        specularColor="new BABYLON.Color3(0.1, 0.28, 0.16)" roughness="0.52">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="groundMaterial"
+                        diffuseColor="new BABYLON.Color3(0.005, 0.008, 0.011)"
+                        specularColor="new BABYLON.Color3(0.01, 0.014, 0.018)" roughness="0.96">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="box" size="2.2" position="new BABYLON.Vector3(-2.8, 1.1, 0)"
+                        material="boxMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="sphere" diameter="2.3" segments="48"
+                        position="new BABYLON.Vector3(0, 1.15, 0)" material="sphereMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="cylinder" diameter="2.1" height="2.4" tessellation="48"
+                        position="new BABYLON.Vector3(2.8, 1.2, 0)" material="cylinderMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="30" height="30"
+                        position="new BABYLON.Vector3(0, -0.05, 0)" material="groundMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-shadow light="shadowLight" mapSize="2048" darkness="0.42">
+
+                        <arashtad-caster ref="box">
+                        </arashtad-caster>
+
+                        <arashtad-caster ref="sphere">
+                        </arashtad-caster>
+
+                        <arashtad-caster ref="cylinder">
+                        </arashtad-caster>
+
+                        <arashtad-receiver ref="ground">
+                        </arashtad-receiver>
+
+                    </arashtad-shadow>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            A directional light can cast shadows from selected
+                            meshes onto a receiving surface.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Shadow Light
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The shadow generator is connected to the
+                                <code>shadowLight</code> directional light
+                                through the <code>light</code> attribute.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Shadow Casters
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The box, sphere, and cylinder are registered
+                                as shadow casters using their runtime
+                                references.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Shadow Receiver
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The ground receives shadows through the
+                                <code>arashtad-receiver</code> element.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Shadow Settings
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                A <code>2048</code> shadow map and
+                                <code>0.42</code> darkness provide detailed,
+                                clearly visible shadows.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The shadow configuration references the light and
+                            scene objects through the runtime registry.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-shadow
+    light="shadowLight"
+    mapSize="2048"
+    darkness="0.42"&gt;
+
+    &lt;arashtad-caster ref="box"&gt;
+    &lt;/arashtad-caster&gt;
+
+    &lt;arashtad-caster ref="sphere"&gt;
+    &lt;/arashtad-caster&gt;
+
+    &lt;arashtad-caster ref="cylinder"&gt;
+    &lt;/arashtad-caster&gt;
+
+    &lt;arashtad-receiver ref="ground"&gt;
+    &lt;/arashtad-receiver&gt;
+
+&lt;/arashtad-shadow&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('light-shadows');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

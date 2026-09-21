@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Material Properties">
+    <meta name="keywords" content="Materials, Properties">
+    <title>Material Properties | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .material-demo {
+            position: relative;
+        }
+
+        #material-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Materials / Properties
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Material Configuration
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Material Properties</h1>
+                    <span class="example-badge green">89</span>
+                </div>
+
+                <p>
+                    Configure the appearance of a StandardMaterial using diffuse, specular, emissive, and surface
+                    properties.
+                </p>
+
+            </header>
+
+            <section class="example-demo material-demo">
+
+                <canvas id="material-properties" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 9, new BABYLON.Vector3(0, 1, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="directional-light"
+                        args="new BABYLON.Vector3(-1, -2, -1)" position="new BABYLON.Vector3(4, 6, 4)" intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="property-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.9, 0.9, 0.9)"
+                        emissiveColor="new BABYLON.Color3(0.02, 0.08, 0.07)" specularPower="64">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="material-box" size="2.5" position="new BABYLON.Vector3(0, 1.25, 0)"
+                        material="property-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="8" height="6"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="material-status">
+                    <strong>StandardMaterial</strong><br>
+                    Diffuse · Specular · Emissive · Power
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Material Properties
+                    </h2>
+
+                    <p class="example-section-description">
+                        StandardMaterial properties control the base color, highlights, self-illumination, and
+                        specular response of a mesh.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Properties
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Diffuse Color</strong> - Base surface color.
+                            </p>
+
+                            <p>
+                                <strong>Specular Color</strong> - Color of reflected highlights.
+                            </p>
+
+                            <p>
+                                <strong>Emissive Color</strong> - Adds self-illumination to the material.
+                            </p>
+
+                            <p>
+                                <strong>Specular Power</strong> - Controls the sharpness of the specular highlight.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Material properties are declared directly as attributes on the runtime material element.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    type="StandardMaterial"
+    id="property-material"
+    diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+    specularColor="new BABYLON.Color3(0.9, 0.9, 0.9)"
+    emissiveColor="new BABYLON.Color3(0.02, 0.08, 0.07)"
+    specularPower="64"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Box"
+    id="material-box"
+    size="2.5"
+    position="new BABYLON.Vector3(0, 1.25, 0)"
+    material="property-material"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('material-properties');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

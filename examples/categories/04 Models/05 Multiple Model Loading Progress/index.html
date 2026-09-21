@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Multiple model loading progress with a complete preloader.">
+    <meta name="keywords" content="Models, Loading">
+    <title>Multiple Model Loading Progress | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-demo canvas {
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        .model-demo canvas.loading {
+            opacity: 0;
+        }
+
+        .model-demo canvas.loaded {
+            opacity: 1;
+        }
+
+        #preloader {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #080d0c;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #preloader-spinner {
+            width: 46px;
+            height: 46px;
+            margin-bottom: 22px;
+            border: 3px solid rgba(38, 163, 140, 0.2);
+            border-top-color: #26a38c;
+            border-radius: 50%;
+            animation: preloader-spin 0.9s linear infinite;
+        }
+
+        #loading-label {
+            margin-bottom: 10px;
+            color: #26a38c;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        #loading-counter {
+            margin-bottom: 18px;
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        #loading-track {
+            width: min(280px, 70%);
+            height: 4px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #loading-bar {
+            width: 0;
+            height: 100%;
+            background: #26a38c;
+            transition: width 0.15s ease;
+        }
+
+        @keyframes preloader-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#models">Models</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>42</span>
+                    <span>/</span>
+                    <span>Models</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    42 · Models
+                </div>
+
+                <h1>Multiple Model Loading Progress</h1>
+
+                <p>
+                    Load multiple GLB models while displaying a complete
+                    scene-level preloader driven by the runtime loading progress.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge">Multiple</span>
+                    <span class="example-badge">Preloader</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="multiple-model-loading-progress" class="loading"
+                    clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" OnLoadProgress="
+                            document.getElementById('loading-counter').textContent = progress + '%';
+                            document.getElementById('loading-bar').style.width = progress + '%';
+
+                            if (progress >= 100) {
+                                setTimeout(() => {
+                                    document.getElementById('multiple-model-loading-progress').classList.remove('loading');
+                                    document.getElementById('multiple-model-loading-progress').classList.add('loaded');
+                                    document.getElementById('preloader').classList.add('hidden');
+                                }, 200);
+                            }
+                        "></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 8, new BABYLON.Vector3(0, 1, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-model id="linux-left" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(-1.8, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)"></arashtad-model>
+
+                    <arashtad-model id="linux-center" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)"></arashtad-model>
+
+                    <arashtad-model id="linux-right" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(1.8, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)"></arashtad-model>
+
+                </canvas>
+
+                <div id="preloader">
+
+                    <div id="preloader-spinner"></div>
+
+                    <div id="loading-label">
+                        Loading Scene
+                    </div>
+
+                    <div id="loading-counter">
+                        0%
+                    </div>
+
+                    <div id="loading-track">
+                        <div id="loading-bar"></div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            A complete scene preloader driven by aggregate model loading progress.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Aggregate Progress
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The runtime tracks the loading progress of all
+                                three models and exposes the current value as
+                                <code>progress</code> through
+                                <code>OnLoadProgress</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Preloader
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The callback updates both the percentage and
+                                progress bar. Once loading reaches
+                                <code>100%</code>, the preloader fades away and
+                                the scene becomes visible.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The complete preloader is controlled by the runtime's scene-level progress callback.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="multiple-model-loading-progress"
+    class="loading"
+    clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)"
+&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        OnLoadProgress="
+            document.getElementById('loading-counter').textContent = progress + '%';
+            document.getElementById('loading-bar').style.width = progress + '%';
+
+            if (progress &gt;= 100) {
+                setTimeout(() =&gt; {
+                    document.getElementById('multiple-model-loading-progress').classList.remove('loading');
+                    document.getElementById('multiple-model-loading-progress').classList.add('loaded');
+                    document.getElementById('preloader').classList.add('hidden');
+                }, 200);
+            }
+        "
+    &gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="Math.PI / 2, Math.PI / 2.4, 8, new BABYLON.Vector3(0, 1, 0)"
+        minZ="0.1"
+        maxZ="1000"
+    &gt;&lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"
+    &gt;&lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="linux-left"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(-1.8, -0.5, 0)"
+        scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)"
+    &gt;&lt;/arashtad-model&gt;
+
+    &lt;arashtad-model
+        id="linux-center"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(0, -0.5, 0)"
+        scaling="new BABYLON.Vector3(5, 5, 5)"
+    &gt;&lt;/arashtad-model&gt;
+
+    &lt;arashtad-model
+        id="linux-right"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(1.8, -0.5, 0)"
+        scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)"
+    &gt;&lt;/arashtad-model&gt;
+
+&lt;/canvas&gt;
+
+&lt;div id="preloader"&gt;
+    &lt;div id="preloader-spinner"&gt;&lt;/div&gt;
+    &lt;div id="loading-label"&gt;Loading Scene&lt;/div&gt;
+    &lt;div id="loading-counter"&gt;0%&lt;/div&gt;
+    &lt;div id="loading-track"&gt;
+        &lt;div id="loading-bar"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+&lt;script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('multiple-model-loading-progress');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-model-loading-progress');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

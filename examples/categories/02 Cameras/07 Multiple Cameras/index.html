@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Multiple cameras with an interactive camera switcher.">
+    <meta name="keywords" content="Camera, Multiple">
+    <title>Multiple Cameras - Switcher | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .camera-demo {
+            position: relative;
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .camera-controls {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 290px;
+            z-index: 10;
+            background: rgba(12, 16, 14, 0.94);
+            border: 1px solid #39433f;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .camera-controls-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid #39433f;
+        }
+
+        .camera-controls-label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px;
+            letter-spacing: 1.2px;
+            color: #89928e;
+        }
+
+        .camera-controls-header strong {
+            display: block;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .camera-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: #26a38c;
+        }
+
+        .camera-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #26a38c;
+        }
+
+        .camera-options {
+            padding: 8px;
+        }
+
+        .camera-option {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            min-height: 58px;
+            padding: 9px 10px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .camera-option:hover {
+            background: #1b2421;
+        }
+
+        .camera-option.active {
+            border-color: #26a38c;
+            background: #172722;
+        }
+
+        .camera-option-number {
+            width: 30px;
+            font-size: 11px;
+            color: #69736f;
+        }
+
+        .camera-option.active .camera-option-number {
+            color: #26a38c;
+        }
+
+        .camera-option-info {
+            flex: 1;
+        }
+
+        .camera-option-info strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .camera-option-info small {
+            display: block;
+            font-size: 10px;
+            color: #89928e;
+        }
+
+        .camera-option-check {
+            width: 22px;
+            height: 22px;
+            border: 1px solid #414b47;
+            border-radius: 50%;
+            color: transparent;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+        }
+
+        .camera-option.active .camera-option-check {
+            border-color: #26a38c;
+            background: #26a38c;
+            color: #08100d;
+        }
+
+        .camera-controls-hint {
+            padding: 10px 14px;
+            border-top: 1px solid #39433f;
+            font-size: 10px;
+            line-height: 1.5;
+            color: #69736f;
+        }
+
+        @media (max-width: 700px) {
+            .camera-controls {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#cameras">Cameras</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>20</span>
+                    <span>/</span>
+                    <span>Cameras</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    20 · Cameras
+                </div>
+
+                <h1>Multiple Cameras - Switcher</h1>
+
+                <p>
+                    Create multiple Babylon.js cameras with different positions
+                    and viewing angles, then switch between them interactively.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Camera</span>
+                    <span class="example-badge">Multiple Cameras</span>
+                    <span class="example-badge">Switcher</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo camera-demo">
+
+                <canvas id="multiple-cameras">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="orbit-camera"
+                        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(65), 12, new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-camera type="UniversalCamera" id="front-camera" args="new BABYLON.Vector3(0, 3, -14)"
+                        rotation="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-camera type="UniversalCamera" id="side-camera" args="new BABYLON.Vector3(14, 4, 0)"
+                        rotation="new BABYLON.Vector3(0, BABYLON.Tools.ToRadians(90), 0)">
+                    </arashtad-camera>
+
+                    <arashtad-camera type="UniversalCamera" id="rear-camera" args="new BABYLON.Vector3(0, 5, 14)"
+                        rotation="new BABYLON.Vector3(0, BABYLON.Tools.ToRadians(180), 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="20" height="20">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="camera-controls">
+
+                    <div class="camera-controls-header">
+                        <div>
+                            <span class="camera-controls-label">
+                                ACTIVE CAMERA
+                            </span>
+
+                            <strong id="active-camera-name">
+                                Orbit Camera
+                            </strong>
+                        </div>
+
+                        <span class="camera-status">
+                            <span class="camera-status-dot"></span>
+                            LIVE
+                        </span>
+                    </div>
+
+                    <div class="camera-options">
+
+                        <button type="button" class="camera-option active" data-camera="orbit-camera">
+
+                            <span class="camera-option-number">01</span>
+
+                            <span class="camera-option-info">
+                                <strong>Orbit</strong>
+                                <small>ArcRotateCamera · 45° / 65°</small>
+                            </span>
+
+                            <span class="camera-option-check">✓</span>
+                        </button>
+
+                        <button type="button" class="camera-option" data-camera="front-camera">
+
+                            <span class="camera-option-number">02</span>
+
+                            <span class="camera-option-info">
+                                <strong>Front</strong>
+                                <small>UniversalCamera · Z −14</small>
+                            </span>
+
+                            <span class="camera-option-check">✓</span>
+                        </button>
+
+                        <button type="button" class="camera-option" data-camera="side-camera">
+
+                            <span class="camera-option-number">03</span>
+
+                            <span class="camera-option-info">
+                                <strong>Side</strong>
+                                <small>UniversalCamera · X +14</small>
+                            </span>
+
+                            <span class="camera-option-check">✓</span>
+                        </button>
+
+                        <button type="button" class="camera-option" data-camera="rear-camera">
+
+                            <span class="camera-option-number">04</span>
+
+                            <span class="camera-option-info">
+                                <strong>Rear</strong>
+                                <small>UniversalCamera · Z +14</small>
+                            </span>
+
+                            <span class="camera-option-check">✓</span>
+                        </button>
+
+                    </div>
+
+                    <div class="camera-controls-hint">
+                        Select a camera to change the active viewpoint.
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Multiple cameras can coexist in the same scene and
+                            the active camera can be changed through Babylon.js.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Multiple Cameras
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The scene contains one
+                                <code>ArcRotateCamera</code> and three
+                                <code>UniversalCamera</code> instances, each
+                                positioned at a different angle around the
+                                scene.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Camera Switcher
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Select a camera from the control panel to make
+                                it the active camera. The active camera is
+                                highlighted and reported at the top of the
+                                panel.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Four cameras are declared in the runtime scene and
+                            selected from JavaScript.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="multiple-cameras"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="orbit-camera"
+        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(65), 12, new BABYLON.Vector3(0, 1, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-camera
+        type="UniversalCamera"
+        id="front-camera"
+        args="new BABYLON.Vector3(0, 3, -14)"
+        rotation="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-camera
+        type="UniversalCamera"
+        id="side-camera"
+        args="new BABYLON.Vector3(14, 4, 0)"
+        rotation="new BABYLON.Vector3(0, BABYLON.Tools.ToRadians(90), 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-camera
+        type="UniversalCamera"
+        id="rear-camera"
+        args="new BABYLON.Vector3(0, 5, 14)"
+        rotation="new BABYLON.Vector3(0, BABYLON.Tools.ToRadians(180), 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"
+        position="new BABYLON.Vector3(0, 1, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Ground"
+        id="ground"
+        width="20"
+        height="20"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;div class="camera-controls"&gt;
+
+    &lt;button type="button" data-camera="orbit-camera"&gt;
+        Orbit
+    &lt;/button&gt;
+
+    &lt;button type="button" data-camera="front-camera"&gt;
+        Front
+    &lt;/button&gt;
+
+    &lt;button type="button" data-camera="side-camera"&gt;
+        Side
+    &lt;/button&gt;
+
+    &lt;button type="button" data-camera="rear-camera"&gt;
+        Rear
+    &lt;/button&gt;
+
+&lt;/div&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('multiple-cameras');
+    const scene = await ready(canvas);
+
+    const buttons = document.querySelectorAll('.camera-option');
+    const activeCameraName =
+        document.getElementById('active-camera-name');
+
+    function switchCamera(name) {
+        const camera = scene.getCameraByName(name);
+
+        if (!camera) {
+            return;
+        }
+
+        if (scene.activeCamera && scene.activeCamera !== camera) {
+            scene.activeCamera.detachControl(canvas);
+        }
+
+        scene.activeCamera = camera;
+        camera.attachControl(canvas, true);
+
+        buttons.forEach(button =&gt; {
+            const active = button.dataset.camera === name;
+
+            button.classList.toggle('active', active);
+
+            if (active) {
+                activeCameraName.textContent =
+                    button.querySelector(
+                        '.camera-option-info strong'
+                    ).textContent;
+            }
+        });
+    }
+
+    buttons.forEach(button =&gt; {
+        button.addEventListener('click', () =&gt; {
+            switchCamera(button.dataset.camera);
+        });
+    });
+
+    switchCamera('orbit-camera');
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-cameras');
+        const scene = await ready(canvas);
+
+        const buttons = document.querySelectorAll('.camera-option');
+        const activeCameraName =
+            document.getElementById('active-camera-name');
+
+        function switchCamera(name) {
+            const camera = scene.getCameraByName(name);
+
+            if (!camera) {
+                return;
+            }
+
+            if (scene.activeCamera && scene.activeCamera !== camera) {
+                scene.activeCamera.detachControl(canvas);
+            }
+
+            scene.activeCamera = camera;
+            camera.attachControl(canvas, true);
+
+            buttons.forEach(button => {
+                const active = button.dataset.camera === name;
+
+                button.classList.toggle('active', active);
+
+                if (active) {
+                    activeCameraName.textContent =
+                        button.querySelector(
+                            '.camera-option-info strong'
+                        ).textContent;
+                }
+            });
+        }
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                switchCamera(button.dataset.camera);
+            });
+        });
+
+        switchCamera('orbit-camera');
+    </script>
+
+</body>
+
+</html>

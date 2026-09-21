@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Basic Runtime example.">
+    <meta name="keywords" content="Runtime">
+    <title>Basic Runtime | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+    <style>
+        .runtime-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .runtime-overlay {
+            position: absolute;
+            z-index: 5;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(90%, 720px);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .runtime-overlay h2 {
+            margin: 0;
+            color: #edf5f2;
+            font-size: clamp(30px, 5vw, 58px);
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+
+        .runtime-overlay h2 span {
+            color: #26a38c;
+        }
+
+        .runtime-overlay p {
+            margin: 18px 0 0;
+            color: #b1c3bd;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .runtime-corner {
+            position: absolute;
+            z-index: 5;
+            right: 18px;
+            bottom: 18px;
+            color: #728981;
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#fundamentals">Fundamentals</a>
+                    <a href="#source">Source</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>03</span>
+                    <span>/</span>
+                    <span>Fundamentals</span>
+                </div>
+
+                <div class="example-eyebrow">03 · Fundamentals</div>
+
+                <h1>Basic Runtime</h1>
+
+                <p>
+                    Initialize Arashtad 3D Runtime with the runtime configuration
+                    element and create a complete declarative Babylon.js scene.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Runtime</span>
+                    <span class="example-badge">Initialization</span>
+                    <span class="example-badge">Scene</span>
+                </div>
+            </header>
+
+            <section class="example-demo runtime-demo">
+
+                <canvas id="runtime-demo">
+
+                    <arashtad-runtime></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="1.57" beta="1.2" radius="8"
+                        target="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="runtime-overlay">
+                    <h2>Runtime <span>Ready</span></h2>
+                    <p>
+                        The runtime configuration is declared directly inside
+                        the canvas and initializes the Babylon.js scene.
+                    </p>
+                </div>
+
+                <div class="runtime-corner">
+                    ARASHTAD 3D RUNTIME · 03
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">What this demonstrates</h2>
+                        <p class="example-section-description">
+                            The basic Arashtad 3D Runtime configuration element and runtime initialization flow.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Runtime</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li><code>&lt;arashtad-runtime&gt;</code></li>
+                                <li>Runtime configuration</li>
+                                <li>Canvas integration</li>
+                                <li>Scene creation</li>
+                                <li>Declarative scene processing</li>
+                                <li>Active camera assignment</li>
+                                <li>Render loop initialization</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Runtime API</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <div class="example-code"><code>await ready(canvas);</code></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">Source</h2>
+                        <p class="example-section-description">
+                            The runtime configuration is declared inside the canvas while JavaScript only starts the
+                            runtime.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="runtime-demo"&gt;
+
+    &lt;arashtad-runtime&gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        alpha="1.57"
+        beta="1.2"
+        radius="8"
+        target="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        direction="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('runtime-demo');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('runtime-demo');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

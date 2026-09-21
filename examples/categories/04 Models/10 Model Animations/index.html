@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Model Animations">
+    <meta name="keywords" content="Models, Animation">
+    <title>Model Animations | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            position: relative;
+        }
+
+        #model-animation-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #model-animation-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        #model-animation-controls button {
+            padding: 8px 14px;
+            border: 1px solid #26a38c;
+            border-radius: 4px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #model-animation-controls button:hover {
+            background: #26a38c;
+        }
+
+        #model-animation-list {
+            margin-top: 16px;
+            color: #bbb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Models / Model Animations
+                </div>
+
+                <div class="example-eyebrow">
+                    Model System
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Model Animations</h1>
+                    <span class="example-badge green">47</span>
+                </div>
+
+                <p>
+                    Control imported model animations through the Arashtad 3D Runtime
+                    model animation API.
+                </p>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="model-animations" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, -0.2, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-model id="model_1" src="../../../assets/3d/linux-animated.glb"
+                        position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(1.5, 1.5, 1.5)"></arashtad-model>
+
+                </canvas>
+
+                <div id="model-animation-status">
+                    <strong>Model animations:</strong> loading...
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Animation Controls
+                    </h2>
+
+                    <p class="example-section-description">
+                        Play, pause, resume, stop, and change the playback speed of
+                        imported model animations.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Playback
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <div id="model-animation-controls">
+
+                                <button type="button" id="play-animation">
+                                    Play
+                                </button>
+
+                                <button type="button" id="pause-animation">
+                                    Pause
+                                </button>
+
+                                <button type="button" id="resume-animation">
+                                    Resume
+                                </button>
+
+                                <button type="button" id="stop-animation">
+                                    Stop
+                                </button>
+
+                                <button type="button" id="slow-animation">
+                                    0.5×
+                                </button>
+
+                                <button type="button" id="normal-animation">
+                                    1×
+                                </button>
+
+                                <button type="button" id="fast-animation">
+                                    2×
+                                </button>
+
+                                <button type="button" id="very-fast-animation">
+                                    5×
+                                </button>
+
+                            </div>
+
+                            <div id="model-animation-list">
+                                Loading animation information...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Model animation methods are available through the runtime
+                        model target and can be executed with runtime actions.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-model
+    id="model_1"
+    src="../../../assets/3d/linux-animated.glb"
+&gt;
+    &lt;action execute="console.log(target.getAnimations())" /&gt;
+    &lt;action execute="target.playAnimation(0)" /&gt;
+    &lt;action execute="target.playAnimation('happy')" /&gt;
+    &lt;action execute="target.pauseAnimation()" /&gt;
+    &lt;action execute="target.pauseAnimation(0)" /&gt;
+    &lt;action execute="target.resumeAnimation()" /&gt;
+    &lt;action execute="target.resumeAnimation(0)" /&gt;
+    &lt;action execute="target.stopAnimation()" /&gt;
+    &lt;action execute="target.stopAnimation(0)" /&gt;
+    &lt;action execute="target.setAnimationSpeed(20)" /&gt;
+    &lt;action execute="target.setAnimationSpeed(0.5, 0)" /&gt;
+&lt;/arashtad-model&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('model-animations');
+        const scene = await ready(canvas);
+
+        const modelRoot = scene.getTransformNodeByName('model_1-root');
+        const animations = modelRoot.getAnimations();
+
+        const status = document.getElementById('model-animation-status');
+        const list = document.getElementById('model-animation-list');
+
+        if (!animations.length) {
+
+            status.innerHTML =
+                '<strong>Model animations:</strong> 0';
+
+            list.textContent =
+                'This model does not contain animation groups.';
+
+        } else {
+
+            status.innerHTML =
+                '<strong>Model animations:</strong> ' +
+                animations.length;
+
+            list.innerHTML = animations.map((name, index) =>
+                '<div>' + index + ': ' + name + '</div>'
+            ).join('');
+
+        }
+
+        document.getElementById('play-animation').addEventListener('click', () => {
+
+            modelRoot.playAnimation(0);
+
+            status.innerHTML =
+                '<strong>Animation:</strong> playing';
+
+        });
+
+        document.getElementById('pause-animation').addEventListener('click', () => {
+
+            modelRoot.pauseAnimation();
+
+            status.innerHTML =
+                '<strong>Animation:</strong> paused';
+
+        });
+
+        document.getElementById('resume-animation').addEventListener('click', () => {
+
+            modelRoot.resumeAnimation();
+
+            status.innerHTML =
+                '<strong>Animation:</strong> resumed';
+
+        });
+
+        document.getElementById('stop-animation').addEventListener('click', () => {
+
+            modelRoot.stopAnimation();
+
+            status.innerHTML =
+                '<strong>Animation:</strong> stopped';
+
+        });
+
+        document.getElementById('slow-animation').addEventListener('click', () => {
+
+            modelRoot.setAnimationSpeed(0.5);
+
+            status.innerHTML =
+                '<strong>Animation speed:</strong> 0.5×';
+
+        });
+
+        document.getElementById('normal-animation').addEventListener('click', () => {
+
+            modelRoot.setAnimationSpeed(1);
+
+            status.innerHTML =
+                '<strong>Animation speed:</strong> 1×';
+
+        });
+
+        document.getElementById('fast-animation').addEventListener('click', () => {
+
+            modelRoot.setAnimationSpeed(2);
+
+            status.innerHTML =
+                '<strong>Animation speed:</strong> 2×';
+
+        });
+
+        document.getElementById('very-fast-animation').addEventListener('click', () => {
+
+            modelRoot.setAnimationSpeed(5);
+
+            status.innerHTML =
+                '<strong>Animation speed:</strong> 5×';
+
+        });
+
+    </script>
+
+</body>
+
+</html>

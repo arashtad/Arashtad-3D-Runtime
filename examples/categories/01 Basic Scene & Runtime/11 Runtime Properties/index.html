@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Runtime Properties example.">
+    <meta name="keywords" content="Runtime, Properties">
+    <title>Runtime Properties | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .runtime-properties-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .runtime-properties-info {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 5;
+            max-width: 430px;
+            padding: 14px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 4px;
+            background: rgba(10, 18, 15, 0.9);
+            color: #fff;
+            font-family: monospace;
+            font-size: 11px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .runtime-properties-info strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #26a38c;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .runtime-properties-status {
+            color: #ff9000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#fundamentals">Fundamentals</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>11</span>
+                    <span>/</span>
+                    <span>Fundamentals</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    11 · Fundamentals
+                </div>
+
+                <h1>Runtime Properties</h1>
+
+                <p>
+                    Configure the runtime itself with resize handling,
+                    environment properties, JavaScript native triggers,
+                    and Babylon.js native triggers directly on
+                    <code>&lt;arashtad-runtime&gt;</code>.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Runtime</span>
+                    <span class="example-badge">Properties</span>
+                    <span class="example-badge">Environment</span>
+                    <span class="example-badge">Triggers</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo runtime-properties-demo">
+
+                <canvas id="runtime-properties"
+                    on-click="document.getElementById('runtime-status').textContent = 'Canvas click trigger';">
+
+                    <arashtad-runtime resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="true" environmentBackgroundBlur="0.1"
+                        environmentRotationY="1"
+                        on-click="document.getElementById('runtime-status').textContent = 'Runtime DOM click trigger';"
+                        onpointerdown="document.getElementById('runtime-status').textContent = 'Runtime Babylon pointerdown trigger';"
+                        OnLoadProgress="document.getElementById('runtime-status').textContent = 'Loading: ' + progress + '%';"
+                        OnLoadError="document.getElementById('runtime-status').textContent = 'Runtime load error';">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="BABYLON.Tools.ToRadians(90), BABYLON.Tools.ToRadians(65), 8, new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="runtime-properties-info">
+                    <strong>Runtime Properties &amp; Triggers</strong>
+                    resize="engine.resize()" <br>
+                    environment="../../../assets/environments/room.hdr" <br>
+                    environmentIntensity="1" <br>
+                    environmentBackground="true" <br>
+                    environmentBackgroundBlur="0.1" <br>
+                    environmentRotationY="1" <br>
+                    on-click="..." <br>
+                    onpointerdown="..." <br>
+                    OnLoadProgress="..." <br>
+                    OnLoadError="..." <br>
+                    <span class="runtime-properties-status" id="runtime-status">
+                        RUNTIME INITIALIZING
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Runtime-level configuration and triggers declared
+                            directly on the runtime element.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Runtime Properties
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li>Canvas resize expression</li>
+                                <li>Environment texture</li>
+                                <li>Environment intensity</li>
+                                <li>Environment background</li>
+                                <li>Environment background blur</li>
+                                <li>Environment rotation</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Runtime Triggers
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li>Native JavaScript DOM trigger</li>
+                                <li>Babylon.js pointer observable</li>
+                                <li>Runtime load progress</li>
+                                <li>Runtime load error</li>
+                                <li>Inline JavaScript execution</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            All runtime properties and runtime-level triggers
+                            are declared on <code>&lt;arashtad-runtime&gt;</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="runtime-properties"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        environment="../../../assets/environments/room.hdr"
+        environmentIntensity="1"
+        environmentBackground="true"
+        environmentBackgroundBlur="0.1"
+        environmentRotationY="1"
+        on-click="document.getElementById('runtime-status').textContent = 'Runtime DOM click trigger';"
+        onpointerdown="document.getElementById('runtime-status').textContent = 'Runtime Babylon pointerdown trigger';"
+        OnLoadProgress="document.getElementById('runtime-status').textContent = 'Loading: ' + progress + '%';"
+        OnLoadError="document.getElementById('runtime-status').textContent = 'Runtime load error';"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="BABYLON.Tools.ToRadians(90), BABYLON.Tools.ToRadians(65), 8, new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('runtime-properties');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('runtime-properties');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

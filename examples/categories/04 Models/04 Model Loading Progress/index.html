@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Model loading progress example.">
+    <meta name="keywords" content="Models, Loading">
+    <title>Model Loading Progress | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+        }
+
+        .loading-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 10px 14px;
+            border: 1px solid rgba(38, 163, 140, 0.45);
+            border-radius: 6px;
+            background: rgba(5, 10, 9, 0.9);
+            color: #26a38c;
+            font: 600 13px/1.4 monospace;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#models">Models</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>41</span>
+                    <span>/</span>
+                    <span>Models</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    41 · Models
+                </div>
+
+                <h1>Model Loading Progress</h1>
+
+                <p>
+                    Monitor the loading progress of a model through the runtime
+                    and display the current aggregate loading percentage.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge">Loading</span>
+                    <span class="example-badge">Progress</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="model-loading-progress">
+
+                    <arashtad-runtime resize="engine.resize()" OnLoadProgress="
+                            const counter = document.getElementById('model-progress');
+                            counter.textContent = progress + '%';
+                        "></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6.5, new BABYLON.Vector3(0, -0.1, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-model id="linux" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)">
+                    </arashtad-model>
+
+                </canvas>
+
+                <div class="loading-status" id="model-progress">
+                    0%
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Runtime-level progress reporting while models are loaded.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                OnLoadProgress
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The runtime accepts an <code>OnLoadProgress</code>
+                                handler on <code>arashtad-runtime</code>.
+                                The handler receives the current aggregate
+                                <code>progress</code> value.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Aggregate Progress
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The runtime tracks model loading progress and
+                                reports a single percentage for the scene.
+                                The value reaches <code>100</code> when loading
+                                and model processing are complete.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The runtime progress callback updates the loading indicator.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="model-loading-progress"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        OnLoadProgress="
+            const counter = document.getElementById('model-progress');
+            counter.textContent = progress + '%';
+        "
+    &gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="Math.PI / 2, Math.PI / 2.4, 6.5, new BABYLON.Vector3(0, -0.1, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="linux"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(0, -0.5, 0)"
+        scaling="new BABYLON.Vector3(5, 5, 5)"&gt;
+    &lt;/arashtad-model&gt;
+
+&lt;/canvas&gt;
+
+&lt;div class="loading-status" id="model-progress"&gt;
+    0%
+&lt;/div&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+&lt;script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('model-loading-progress');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('model-loading-progress');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

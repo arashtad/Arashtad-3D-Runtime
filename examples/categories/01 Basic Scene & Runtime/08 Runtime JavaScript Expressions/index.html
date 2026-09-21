@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - JavaScript Expressions example.">
+    <meta name="keywords" content="Runtime, JavaScript">
+    <title>Runtime JavaScript Expressions | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+    <style>
+        .expression-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .expression-corner {
+            position: absolute;
+            z-index: 5;
+            right: 18px;
+            bottom: 18px;
+            color: #728981;
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+        <header class="example-header">
+            <div class="example-header-inner">
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#fundamentals">Fundamentals</a>
+                    <a href="#source">Source</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="example-main">
+            <header class="example-page-header">
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>08</span>
+                    <span>/</span>
+                    <span>Fundamentals</span>
+                </div>
+
+                <div class="example-eyebrow">08 · Fundamentals</div>
+
+                <h1>Runtime JavaScript Expressions</h1>
+
+                <p>
+                    Use JavaScript expressions directly in runtime attributes to construct
+                    vectors, colors, angles, and other Babylon.js values declaratively.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Runtime</span>
+                    <span class="example-badge">Expressions</span>
+                    <span class="example-badge">Babylon.js</span>
+                    <span class="example-badge">Properties</span>
+                </div>
+            </header>
+
+            <section class="example-demo expression-demo">
+                <canvas id="expression-demo">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="BABYLON.Tools.ToRadians(90)"
+                        beta="BABYLON.Tools.ToRadians(70)" radius="8" target="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" direction="new BABYLON.Vector3(0, 1, 0)"
+                        diffuse="new BABYLON.Color3(0.3, 0.8, 0.7)" intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 0, 0)" rotation="new BABYLON.Vector3(
+                            BABYLON.Tools.ToRadians(30),
+                            0,
+                            0
+                        )">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="expression-corner">
+                    ARASHTAD 3D RUNTIME · 08
+                </div>
+            </section>
+
+            <section class="example-section">
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">What this demonstrates</h2>
+                        <p class="example-section-description">
+                            Runtime attributes can contain JavaScript expressions that are evaluated
+                            when the scene is constructed.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Expressions</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li>JavaScript expression evaluation</li>
+                                <li>Babylon.js Vector3 construction</li>
+                                <li>Babylon.js Color3 construction</li>
+                                <li>Static Babylon.js method calls</li>
+                                <li>Runtime property parsing</li>
+                                <li>Declarative scene construction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Examples</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <div class="example-code">
+                                <code>new BABYLON.Vector3(0, 0, 0)</code>
+                            </div>
+
+                            <div class="example-code">
+                                <code>new BABYLON.Color3(0.3, 0.8, 0.7)</code>
+                            </div>
+
+                            <div class="example-code">
+                                <code>BABYLON.Tools.ToRadians(90)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="example-section" id="source">
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">Source</h2>
+                        <p class="example-section-description">
+                            Values such as vectors, colors, and angles can be written directly
+                            inside runtime attributes as JavaScript expressions.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="expression-demo"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        alpha="BABYLON.Tools.ToRadians(90)"
+        beta="BABYLON.Tools.ToRadians(70)"
+        radius="8"
+        target="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        direction="new BABYLON.Vector3(0, 1, 0)"
+        diffuse="new BABYLON.Color3(0.3, 0.8, 0.7)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"
+        position="new BABYLON.Vector3(0, 0, 0)"
+        rotation="new BABYLON.Vector3(
+            BABYLON.Tools.ToRadians(30),
+            0,
+            0
+        )"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('expression-demo');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+            </section>
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('expression-demo');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

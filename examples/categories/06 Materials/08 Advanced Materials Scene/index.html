@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Advanced Materials Scene">
+    <meta name="keywords" content="Materials, Advanced">
+    <title>Advanced Materials Scene | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .material-demo {
+            position: relative;
+        }
+
+        #material-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Materials / Advanced
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Material Composition
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Advanced Materials Scene</h1>
+                    <span class="example-badge green">93</span>
+                </div>
+
+                <p>
+                    Combine externally defined materials, mesh-local materials, and material references applied to
+                    imported model meshes.
+                </p>
+
+            </header>
+
+            <section class="example-demo material-demo">
+
+                <canvas id="advanced-materials" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3.2, 13, new BABYLON.Vector3(0, 1.5, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <!-- Material defined outside a mesh -->
+                    <arashtad-material type="StandardMaterial" id="external-box-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)" specularPower="64">
+                    </arashtad-material>
+
+                    <!-- Second external material -->
+                    <arashtad-material type="StandardMaterial" id="external-model-material"
+                        diffuseColor="new BABYLON.Color3(0.35, 0.45, 0.9)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)" specularPower="64">
+                    </arashtad-material>
+
+                    <!-- Mesh using an external material reference -->
+                    <arashtad-mesh type="Box" id="external-material-mesh" width="3" height="3" depth="3"
+                        position="new BABYLON.Vector3(-3.5, 1.5, 0)" material="external-box-material">
+                    </arashtad-mesh>
+
+                    <!-- Mesh containing its own material -->
+                    <arashtad-mesh type="Sphere" id="inline-material-mesh" diameter="3"
+                        position="new BABYLON.Vector3(0.3, 1.5, 0)">
+
+                        <arashtad-material type="StandardMaterial" id="inline-sphere-material"
+                            diffuseColor="new BABYLON.Color3(1, 0.56, 0.08)"
+                            specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)" specularPower="64">
+                        </arashtad-material>
+
+                    </arashtad-mesh>
+
+                    <!-- Imported model -->
+                    <arashtad-model id="external-material-model" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(3.5, 0, 0)" scaling="new BABYLON.Vector3(5, 5, 5)">
+
+                        <!-- Apply an external material to an imported model mesh by reference -->
+                        <arashtad-mesh ref="black" material="external-model-material">
+                        </arashtad-mesh>
+
+                    </arashtad-model>
+
+                    <arashtad-mesh type="Ground" id="ground-mesh" width="12" height="7"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="material-status">
+                    <strong>External + Inline + Model Mesh Materials</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Material Configurations
+                    </h2>
+
+                    <p class="example-section-description">
+                        The scene demonstrates external material references, materials declared inside mesh elements,
+                        and material references applied directly to imported model meshes.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Configurations
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Box</strong> - Uses an externally defined material reference.
+                            </p>
+
+                            <p>
+                                <strong>Sphere</strong> - Contains its material declaration inside the mesh element.
+                            </p>
+
+                            <p>
+                                <strong>Model mesh</strong> - Uses a material reference on an imported mesh identified
+                                by its runtime reference.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Materials can be defined independently and referenced by meshes. Materials can also be nested
+                        inside mesh elements, while imported model meshes can be targeted through their runtime
+                        references.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    type="StandardMaterial"
+    id="external-box-material"
+    diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"
+    specularPower="64"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Box"
+    id="external-material-mesh"
+    width="3"
+    height="3"
+    depth="3"
+    position="new BABYLON.Vector3(-3.5, 1.5, 0)"
+    material="external-box-material"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="inline-material-mesh"
+    diameter="3"
+    position="new BABYLON.Vector3(0.3, 1.5, 0)"&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="inline-sphere-material"
+        diffuseColor="new BABYLON.Color3(1, 0.56, 0.08)"
+        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"
+        specularPower="64"&gt;
+    &lt;/arashtad-material&gt;
+
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="external-model-material"
+    diffuseColor="new BABYLON.Color3(0.35, 0.45, 0.9)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"
+    specularPower="64"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-model
+    id="external-material-model"
+    src="../../../assets/3d/linux.glb"
+    position="new BABYLON.Vector3(3.5, 0, 0)"
+    scaling="new BABYLON.Vector3(5, 5, 5)"&gt;
+
+    &lt;arashtad-mesh
+        ref="black"
+        material="external-model-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/arashtad-model&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('advanced-materials');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

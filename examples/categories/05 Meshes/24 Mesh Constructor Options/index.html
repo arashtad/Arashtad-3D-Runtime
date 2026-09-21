@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Mesh Constructor Options">
+    <meta name="keywords" content="Mesh, MeshBuilder">
+    <title>Mesh Constructor Options | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #constructor-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Constructor Options
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Mesh Construction
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Mesh Constructor Options</h1>
+                    <span class="example-badge green">82</span>
+                </div>
+
+                <p>
+                    Pass constructor options directly to a Babylon.js MeshBuilder factory through the runtime.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="mesh-constructor" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 9, new BABYLON.Vector3(0, 1.5, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Cylinder" id="constructor-mesh" args="{
+                            height: 4,
+                            diameter: 2.5,
+                            tessellation: 8
+                        }" position="new BABYLON.Vector3(0, 2, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="constructor-status">
+                    <strong>Height: 4 · Diameter: 2.5 · Tessellation: 8</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Constructor Options
+                    </h2>
+
+                    <p class="example-section-description">
+                        The <code>args</code> attribute supplies the complete options object used by the MeshBuilder
+                        factory.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Cylinder Options
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Height: <strong>4</strong>
+                            </p>
+
+                            <p>
+                                Diameter: <strong>2.5</strong>
+                            </p>
+
+                            <p>
+                                Tessellation: <strong>8</strong>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The runtime parses the <code>args</code> expression and passes the resulting options object to
+                        the corresponding MeshBuilder factory.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Cylinder"
+    id="constructor-mesh"
+    args="{
+        height: 4,
+        diameter: 2.5,
+        tessellation: 8
+    }"
+    position="new BABYLON.Vector3(0, 2, 0)"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('mesh-constructor');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

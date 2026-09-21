@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - HDR Environment">
+    <meta name="keywords" content="Environment, HDR">
+    <title>HDR Environment | Arashtad 3D Runtime</title>
+
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .environment-demo {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Environment / HDR Environment
+                </div>
+
+                <div class="example-eyebrow">
+                    Image-Based Environment Lighting
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>HDR Environment</h1>
+                    <span class="example-badge green">112</span>
+                </div>
+
+                <p>
+                    Use a high dynamic range environment to illuminate a 3D scene
+                    and provide realistic environment reflections and background
+                    imagery through the <strong>arashtad-runtime</strong> element.
+                </p>
+
+            </header>
+
+            <section class="example-demo environment-demo">
+
+                <canvas id="hdr-environment-scene" clearColor="new BABYLON.Color4(0.003, 0.006, 0.012, 1)">
+
+                    <!-- HDR Environment -->
+
+                    <arashtad-runtime resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="true">
+                    </arashtad-runtime>
+
+                    <!-- Camera -->
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.55, 12, new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <!-- Lighting -->
+
+                    <arashtad-light type="HemisphericLight" id="ambient-light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.5">
+                    </arashtad-light>
+
+                    <!-- Materials -->
+
+                    <arashtad-material type="StandardMaterial" id="metal-material"
+                        diffuseColor="new BABYLON.Color3(0.12, 0.14, 0.16)" specularColor="new BABYLON.Color3(1, 1, 1)"
+                        specularPower="128">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="accent-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        emissiveColor="new BABYLON.Color3(0.02, 0.08, 0.06)" specularColor="new BABYLON.Color3(1, 1, 1)"
+                        specularPower="96">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="ground-material"
+                        diffuseColor="new BABYLON.Color3(0.018, 0.025, 0.035)"
+                        specularColor="new BABYLON.Color3(0.35, 0.35, 0.35)">
+                    </arashtad-material>
+
+                    <!-- Main Objects -->
+
+                    <arashtad-mesh type="Sphere" id="metal-sphere" diameter="2.6" segments="64"
+                        position="new BABYLON.Vector3(-2.4, 1.4, 0)" material="metal-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="accent-box" size="2.4" position="new BABYLON.Vector3(2.4, 1.2, 0)"
+                        material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="center-cylinder" height="2.8" diameter="2" tessellation="64"
+                        position="new BABYLON.Vector3(0, 1.4, 0)" material="metal-material">
+                    </arashtad-mesh>
+
+                    <!-- Ground -->
+
+                    <arashtad-mesh type="Ground" id="ground" width="12" height="8" material="ground-material">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        HDR Environment
+                    </h2>
+
+                    <p class="example-section-description">
+                        An HDR environment provides high dynamic range image-based
+                        lighting for the scene.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                HDR File
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Set the <code>environment</code> attribute to the
+                                HDR file that should be used by the runtime.
+                            </p>
+
+                            <pre><code>&lt;arashtad-runtime
+    environment="../../../assets/environments/room.hdr"&gt;
+&lt;/arashtad-runtime&gt;</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment Lighting
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The environment contributes lighting to the scene.
+                                Its strength is controlled with
+                                <code>environmentIntensity</code>.
+                            </p>
+
+                            <pre><code>environmentIntensity="1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Environment Background
+                    </h2>
+
+                    <p class="example-section-description">
+                        The HDR image can also be displayed directly as the
+                        scene background.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Enable Background
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Set <code>environmentBackground</code> to
+                                <code>true</code> to display the HDR environment
+                                behind the scene.
+                            </p>
+
+                            <pre><code>environmentBackground="true"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Complete Setup
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <pre><code>&lt;arashtad-runtime
+    resize="engine.resize()"
+    environment="../../../assets/environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"&gt;
+&lt;/arashtad-runtime&gt;</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        HDR Reflections
+                    </h2>
+
+                    <p class="example-section-description">
+                        Materials in the scene can respond to the environment,
+                        making reflective and specular surfaces useful for
+                        demonstrating HDR lighting.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Reflective Surface
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The metallic sphere uses a strong specular
+                                response so the HDR environment contributes
+                                visible highlights across its surface.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Scene Objects
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Different materials can be placed in the same
+                                environment to observe how their surface
+                                properties respond to the HDR lighting.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The HDR environment is configured directly through
+                        <code>arashtad-runtime</code>.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-runtime
+    resize="engine.resize()"
+    environment="../../../assets/environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"&gt;
+&lt;/arashtad-runtime&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="metal-material"
+    diffuseColor="new BABYLON.Color3(0.12, 0.14, 0.16)"
+    specularColor="new BABYLON.Color3(1, 1, 1)"
+    specularPower="128"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="metal-sphere"
+    diameter="2.6"
+    segments="64"
+    position="new BABYLON.Vector3(-2.4, 1.4, 0)"
+    material="metal-material"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('hdr-environment-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

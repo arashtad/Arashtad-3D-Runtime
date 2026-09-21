@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - multiple cinematic lights example.">
+    <meta name="keywords" content="Lighting, Multiple">
+    <title>Multiple Lights | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .light-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#lights">Lights</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>31</span>
+                    <span>/</span>
+                    <span>Lights</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    31 · Lights
+                </div>
+
+                <h1>Multiple Lights</h1>
+
+                <p>
+                    Combine multiple colored lights with different directions,
+                    intensities, and color temperatures to create a dark,
+                    cinematic, mysterious 3D environment.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Light</span>
+                    <span class="example-badge">Multiple Lights</span>
+                    <span class="example-badge">Cinematic</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo light-demo">
+
+                <canvas id="multiple-lights">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="1.57, 1.15, 9, new BABYLON.Vector3(0, -2, -5)" lowerRadiusLimit="6" upperRadiusLimit="14"
+                        lowerBetaLimit="0.7" upperBetaLimit="1.45" wheelPrecision="60" inertia="0.8">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.18" diffuse="new BABYLON.Color3(0.12, 0.2, 0.3)"
+                        groundColor="new BABYLON.Color3(0.015, 0.02, 0.025)"
+                        specular="new BABYLON.Color3(0.08, 0.08, 0.1)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="key" args="new BABYLON.Vector3(-0.45, -0.8, 0.35)"
+                        position="new BABYLON.Vector3(5, 7, -6)" intensity="2.1"
+                        diffuse="new BABYLON.Color3(1, 0.3, 0.08)" specular="new BABYLON.Color3(0.35, 0.15, 0.05)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="rim" args="new BABYLON.Vector3(0.55, -0.7, -0.45)"
+                        position="new BABYLON.Vector3(-6, 6, 5)" intensity="2.6"
+                        diffuse="new BABYLON.Color3(0.08, 0.3, 1)" specular="new BABYLON.Color3(0.08, 0.15, 0.4)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="greenFill" args="new BABYLON.Vector3(0.65, -0.55, 0.6)"
+                        position="new BABYLON.Vector3(-7, 4, -4)" intensity="1.4"
+                        diffuse="new BABYLON.Color3(0.04, 0.65, 0.35)" specular="new BABYLON.Color3(0.05, 0.2, 0.12)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="purpleBack"
+                        args="new BABYLON.Vector3(-0.35, -0.65, -0.7)" position="new BABYLON.Vector3(4, 5, 8)"
+                        intensity="1.8" diffuse="new BABYLON.Color3(0.42, 0.08, 0.75)"
+                        specular="new BABYLON.Color3(0.18, 0.05, 0.3)">
+                    </arashtad-light>
+
+                    <arashtad-model id="linux" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(0, 0, 0)" scaling="new BABYLON.Vector3(1.15, 1.15, 1.15)">
+                    </arashtad-model>
+
+                    <arashtad-material type="StandardMaterial" id="groundMaterial"
+                        diffuseColor="new BABYLON.Color3(0.008, 0.012, 0.016)"
+                        specularColor="new BABYLON.Color3(0.015, 0.02, 0.025)" roughness="0.92">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="accentMaterial"
+                        diffuseColor="new BABYLON.Color3(0.015, 0.07, 0.055)"
+                        emissiveColor="new BABYLON.Color3(0.005, 0.025, 0.02)"
+                        specularColor="new BABYLON.Color3(0.04, 0.08, 0.07)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="platform" width="4.8" height="0.18" depth="4.8"
+                        position="new BABYLON.Vector3(0, -1.02, 0)" material="groundMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="accent-platform" diameter="3.8" height="0.08"
+                        position="new BABYLON.Vector3(0, -0.88, 0)" material="accentMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="front-marker" width="0.5" height="0.04" depth="0.08"
+                        position="new BABYLON.Vector3(0, -0.82, -2.1)" material="accentMaterial">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Multiple declarative lights can be combined to build
+                            complex lighting environments without creating the
+                            lights manually in JavaScript.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Ambient Light
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                A low-intensity
+                                <code>HemisphericLight</code> provides subtle
+                                ambient illumination while preserving the dark
+                                atmosphere.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Cinematic Colors
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Warm orange, cool blue, green, and purple
+                                <code>DirectionalLight</code> sources create
+                                contrasting areas of illumination around the
+                                model.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Dark Environment
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                A nearly black ground material and very low
+                                ambient contribution keep the scene dark while
+                                allowing the colored lights to define the model.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Linux Model
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The Linux model is loaded declaratively with
+                                <code>arashtad-model</code> and positioned close
+                                to the camera for a stronger presentation.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Multiple lights, a model, and materials are defined
+                            directly inside the canvas.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="multiple-lights"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="1.57, 1.15, 9, new BABYLON.Vector3(0, -2, -5)"
+        lowerRadiusLimit="6"
+        upperRadiusLimit="14"
+        lowerBetaLimit="0.7"
+        upperBetaLimit="1.45"
+        wheelPrecision="60"
+        inertia="0.8"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="ambient"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="0.18"
+        diffuse="new BABYLON.Color3(0.12, 0.2, 0.3)"
+        groundColor="new BABYLON.Color3(0.015, 0.02, 0.025)"
+        specular="new BABYLON.Color3(0.08, 0.08, 0.1)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        type="DirectionalLight"
+        id="key"
+        args="new BABYLON.Vector3(-0.45, -0.8, 0.35)"
+        position="new BABYLON.Vector3(5, 7, -6)"
+        intensity="2.1"
+        diffuse="new BABYLON.Color3(1, 0.3, 0.08)"
+        specular="new BABYLON.Color3(0.35, 0.15, 0.05)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        type="DirectionalLight"
+        id="rim"
+        args="new BABYLON.Vector3(0.55, -0.7, -0.45)"
+        position="new BABYLON.Vector3(-6, 6, 5)"
+        intensity="2.6"
+        diffuse="new BABYLON.Color3(0.08, 0.3, 1)"
+        specular="new BABYLON.Color3(0.08, 0.15, 0.4)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        type="DirectionalLight"
+        id="greenFill"
+        args="new BABYLON.Vector3(0.65, -0.55, 0.6)"
+        position="new BABYLON.Vector3(-7, 4, -4)"
+        intensity="1.4"
+        diffuse="new BABYLON.Color3(0.04, 0.65, 0.35)"
+        specular="new BABYLON.Color3(0.05, 0.2, 0.12)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        type="DirectionalLight"
+        id="purpleBack"
+        args="new BABYLON.Vector3(-0.35, -0.65, -0.7)"
+        position="new BABYLON.Vector3(4, 5, 8)"
+        intensity="1.8"
+        diffuse="new BABYLON.Color3(0.42, 0.08, 0.75)"
+        specular="new BABYLON.Color3(0.18, 0.05, 0.3)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="linux"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(0, 0, 0)"
+        scaling="new BABYLON.Vector3(1.15, 1.15, 1.15)"&gt;
+    &lt;/arashtad-model&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="groundMaterial"
+        diffuseColor="new BABYLON.Color3(0.008, 0.012, 0.016)"
+        specularColor="new BABYLON.Color3(0.015, 0.02, 0.025)"
+        roughness="0.92"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        type="StandardMaterial"
+        id="accentMaterial"
+        diffuseColor="new BABYLON.Color3(0.015, 0.07, 0.055)"
+        emissiveColor="new BABYLON.Color3(0.005, 0.025, 0.02)"
+        specularColor="new BABYLON.Color3(0.04, 0.08, 0.07)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="platform"
+        width="4.8"
+        height="0.18"
+        depth="4.8"
+        position="new BABYLON.Vector3(0, -1.02, 0)"
+        material="groundMaterial"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Cylinder"
+        id="accent-platform"
+        diameter="3.8"
+        height="0.08"
+        position="new BABYLON.Vector3(0, -0.88, 0)"
+        material="accentMaterial"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="front-marker"
+        width="0.5"
+        height="0.04"
+        depth="0.08"
+        position="new BABYLON.Vector3(0, -0.82, -2.1)"
+        material="accentMaterial"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-lights');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Light References example.">
+    <meta name="keywords" content="Lighting, References">
+    <title>Light References | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .light-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#lights">Lights</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>32</span>
+                    <span>/</span>
+                    <span>Lights</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    32 · Lights
+                </div>
+
+                <h1>Light References</h1>
+
+                <p>
+                    Create multiple lights declaratively and use runtime
+                    references to reuse a light object from another scene
+                    element.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Light</span>
+                    <span class="example-badge">References</span>
+                    <span class="example-badge">Registry</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo light-demo">
+
+                <canvas id="light-references">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="1.57, 1.15, 9, new BABYLON.Vector3(0, 0.7, 0)" lowerRadiusLimit="6" upperRadiusLimit="14"
+                        lowerBetaLimit="0.7" upperBetaLimit="1.45" wheelPrecision="60" inertia="0.8">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.3" diffuse="new BABYLON.Color3(0.12, 0.22, 0.3)"
+                        groundColor="new BABYLON.Color3(0.02, 0.025, 0.035)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="keyLight" args="new BABYLON.Vector3(-0.5, -1, 0.4)"
+                        position="new BABYLON.Vector3(5, 7, -5)" intensity="2.4"
+                        diffuse="new BABYLON.Color3(1, 0.32, 0.08)" specular="new BABYLON.Color3(0.4, 0.15, 0.05)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="rimLight" args="new BABYLON.Vector3(0.5, -0.8, -0.5)"
+                        position="new BABYLON.Vector3(-5, 6, 5)" intensity="2"
+                        diffuse="new BABYLON.Color3(0.08, 0.35, 1)" specular="new BABYLON.Color3(0.08, 0.15, 0.4)">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="groundMaterial"
+                        diffuseColor="new BABYLON.Color3(0.008, 0.012, 0.016)"
+                        specularColor="new BABYLON.Color3(0.015, 0.02, 0.025)" roughness="0.92">
+                    </arashtad-material>
+
+                    <arashtad-model id="linux" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, 0, 0)"
+                        scaling="new BABYLON.Vector3(1.15, 1.15, 1.15)">
+                    </arashtad-model>
+
+                    <arashtad-mesh type="Ground" id="ground" width="30" height="30"
+                        position="new BABYLON.Vector3(0, -1.15, 0)" material="groundMaterial">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="reference-demo" size="2.2"
+                        position="new BABYLON.Vector3(0, 1.5, 2.5)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Runtime references provide access to previously
+                            created objects through their registered IDs.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Light ID
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The directional light is registered under
+                                <code>keyLight</code> when it is created.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Reference
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Another runtime element can use
+                                <code>ref="keyLight"</code> to resolve the
+                                existing light object instead of constructing
+                                another one.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The light is created once and then resolved through
+                            its runtime reference.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-light
+    type="DirectionalLight"
+    id="keyLight"
+    args="new BABYLON.Vector3(-0.5, -1, 0.4)"
+    position="new BABYLON.Vector3(5, 7, -5)"
+    intensity="2.4"
+    diffuse="new BABYLON.Color3(1, 0.32, 0.08)"
+    specular="new BABYLON.Color3(0.4, 0.15, 0.05)"&gt;
+&lt;/arashtad-light&gt;
+
+&lt;arashtad-mesh
+    type="Ground"
+    id="ground"
+    width="30"
+    height="30"
+    position="new BABYLON.Vector3(0, -1.15, 0)"
+    material="groundMaterial"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('light-references');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

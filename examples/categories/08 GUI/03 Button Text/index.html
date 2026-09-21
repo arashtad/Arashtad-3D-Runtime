@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Button Text">
+    <meta name="keywords" content="GUI, Button">
+    <title>Button Text | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .gui-demo {
+            position: relative;
+        }
+
+        #gui-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / GUI / Button
+                </div>
+
+                <div class="example-eyebrow">
+                    GUI Button Text
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Button Text</h1>
+                    <span class="example-badge green">104</span>
+                </div>
+
+                <p>
+                    Set the visible text of a Babylon.js GUI Button using the runtime text attribute.
+                </p>
+
+            </header>
+
+            <section class="example-demo gui-demo">
+
+                <canvas id="button-text" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 10, new BABYLON.Vector3(0, 0, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-gui id="ui" type="AdvancedDynamicTexture">
+                    </arashtad-gui>
+
+                    <arashtad-gui id="button" type="Button" parent="ui" text="CHANGE TEXT" width="'220px'"
+                        height="'60px'" color="'white'" background="'#26a38c'" fontSize="24" cornerRadius="10"
+                        OnPointerClick="
+                            button.textBlock.text = 'TEXT CHANGED';
+                            document.getElementById('gui-status').innerHTML =
+                                '<strong>Button Text</strong><br>The button text was changed.';
+                        ">
+                    </arashtad-gui>
+
+                </canvas>
+
+                <div id="gui-status">
+                    <strong>Button Text</strong><br>
+                    The button displays its configured text.
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Button Text
+                    </h2>
+
+                    <p class="example-section-description">
+                        The <code>text</code> attribute sets the initial visible text of a GUI Button. The button also
+                        exposes its internal text block, allowing its displayed text to be changed after creation.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Text Configuration
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The button is created with <code>text="CHANGE TEXT"</code>.
+                            </p>
+
+                            <p>
+                                Its click action changes the displayed text through
+                                <code>button.textBlock.text</code>.
+                            </p>
+
+                            <p>
+                                This demonstrates both declarative button text and runtime text modification.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The Button text is defined with the runtime <code>text</code> attribute and can be changed
+                        through the Button's text block.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-gui
+    id="button"
+    type="Button"
+    parent="ui"
+    text="CHANGE TEXT"
+    width="'220px'"
+    height="'60px'"
+    color="'white'"
+    background="'#26a38c'"
+    fontSize="24"
+    cornerRadius="10"
+    OnPointerClick="
+        button.textBlock.text = 'TEXT CHANGED';
+    "&gt;
+&lt;/arashtad-gui&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/gui/babylon.gui.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('button-text');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

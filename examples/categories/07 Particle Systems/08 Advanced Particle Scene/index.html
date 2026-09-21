@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Advanced Particle Scene">
+    <meta name="keywords" content="Particles, Advanced">
+    <title>Advanced Particle Scene | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .advanced-particle-demo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #particle-controls {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            z-index: 10;
+            width: min(320px, calc(100% - 48px));
+            padding: 18px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 8px;
+            background: rgba(8, 12, 18, 0.94);
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.5;
+            backdrop-filter: blur(8px);
+        }
+
+        #particle-controls h3 {
+            margin: 0 0 4px;
+            font-size: 16px;
+        }
+
+        #particle-controls p {
+            margin: 0 0 14px;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .particle-presets {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .particle-preset,
+        .particle-action {
+            min-height: 42px;
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .particle-preset:hover,
+        .particle-action:hover {
+            border-color: rgba(38, 163, 140, 0.65);
+        }
+
+        .particle-preset.active {
+            border-color: #26a38c;
+            background: rgba(38, 163, 140, 0.16);
+        }
+
+        .particle-control-row {
+            margin-top: 12px;
+        }
+
+        .particle-control-row label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .particle-control-row input {
+            width: 100%;
+        }
+
+        .particle-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        #particle-info {
+            position: absolute;
+            right: 24px;
+            bottom: 24px;
+            z-index: 10;
+            max-width: 340px;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        #particle-info strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #26a38c;
+        }
+
+        @media (max-width: 700px) {
+            #particle-controls {
+                top: 12px;
+                left: 12px;
+                width: min(290px, calc(100% - 24px));
+            }
+
+            #particle-info {
+                right: 12px;
+                bottom: 12px;
+                max-width: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Particle Systems / Advanced
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Particle System Showcase
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Advanced Particle Scene</h1>
+                    <span class="example-badge green">101</span>
+                </div>
+
+                <p>
+                    Explore an interactive particle scene where presets dynamically transform emission, size, lifetime,
+                    gravity, direction, rotation, and color properties.
+                </p>
+
+            </header>
+
+            <section class="example-demo advanced-particle-demo">
+
+                <canvas id="advanced-particles" clearColor="new BABYLON.Color4(0.004, 0.008, 0.014, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.8, 15, new BABYLON.Vector3(0, 1.8, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient-light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.7">
+                    </arashtad-light>
+
+                    <arashtad-light type="PointLight" id="scene-light" args="new BABYLON.Vector3(0, 4, 0)"
+                        intensity="4">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Cylinder" id="emitter-base" height="0.25" diameter="3" tessellation="48"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="emitter-ring" diameter="3.8" thickness="0.08" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.18, 0)" rotation="new BABYLON.Vector3(Math.PI / 2, 0, 0)">
+                    </arashtad-mesh>
+
+                    <arashtad-particlesystem id="primary-particles" type="ParticleSystem" capacity="3500"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0.2, 0)" minEmitBox="new BABYLON.Vector3(-0.9, 0, -0.9)"
+                        maxEmitBox="new BABYLON.Vector3(0.9, 0.15, 0.9)" emitRate="260" minSize="0.12" maxSize="0.7"
+                        minLifeTime="0.6" maxLifeTime="2.2" minEmitPower="0.5" maxEmitPower="2.2"
+                        direction1="new BABYLON.Vector3(-0.8, 1.5, -0.8)"
+                        direction2="new BABYLON.Vector3(0.8, 3.5, 0.8)" gravity="new BABYLON.Vector3(0, 0.4, 0)"
+                        minAngularSpeed="-2" maxAngularSpeed="2" color1="new BABYLON.Color4(0.1, 0.8, 0.65, 1)"
+                        color2="new BABYLON.Color4(0.2, 1, 0.8, 0.9)"
+                        colorDead="new BABYLON.Color4(0.01, 0.05, 0.04, 0)">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="spark-particles" type="ParticleSystem" capacity="1800"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0.25, 0)" minEmitBox="new BABYLON.Vector3(-0.7, 0, -0.7)"
+                        maxEmitBox="new BABYLON.Vector3(0.7, 0.1, 0.7)" emitRate="140" minSize="0.04" maxSize="0.22"
+                        minLifeTime="0.3" maxLifeTime="1.1" minEmitPower="1" maxEmitPower="4"
+                        direction1="new BABYLON.Vector3(-1, 1, -1)" direction2="new BABYLON.Vector3(1, 4, 1)"
+                        gravity="new BABYLON.Vector3(0, -1.5, 0)" minAngularSpeed="-4" maxAngularSpeed="4"
+                        color1="new BABYLON.Color4(1, 0.35, 0.05, 1)" color2="new BABYLON.Color4(1, 0.9, 0.25, 1)"
+                        colorDead="new BABYLON.Color4(0.15, 0.02, 0, 0)">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="mist-particles" type="ParticleSystem" capacity="2200"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0.25, 0)" minEmitBox="new BABYLON.Vector3(-1.1, 0, -1.1)"
+                        maxEmitBox="new BABYLON.Vector3(1.1, 0.2, 1.1)" emitRate="90" minSize="0.4" maxSize="1.5"
+                        minLifeTime="2" maxLifeTime="5" minEmitPower="0.1" maxEmitPower="0.5"
+                        direction1="new BABYLON.Vector3(-0.4, 0.2, -0.4)" direction2="new BABYLON.Vector3(0.4, 1, 0.4)"
+                        gravity="new BABYLON.Vector3(0, 0.1, 0)" minAngularSpeed="-0.5" maxAngularSpeed="0.5"
+                        color1="new BABYLON.Color4(0.15, 0.7, 0.65, 0.45)"
+                        color2="new BABYLON.Color4(0.5, 1, 0.9, 0.25)"
+                        colorDead="new BABYLON.Color4(0.02, 0.08, 0.08, 0)">
+                    </arashtad-particlesystem>
+
+                </canvas>
+
+                <div id="particle-controls">
+
+                    <h3>Particle Control</h3>
+
+                    <p>
+                        Switch the entire particle behavior in real time.
+                    </p>
+
+                    <div class="particle-presets">
+
+                        <button type="button" class="particle-preset active" data-preset="energy">
+                            Energy
+                        </button>
+
+                        <button type="button" class="particle-preset" data-preset="fire">
+                            Fire
+                        </button>
+
+                        <button type="button" class="particle-preset" data-preset="storm">
+                            Storm
+                        </button>
+
+                        <button type="button" class="particle-preset" data-preset="smoke">
+                            Smoke
+                        </button>
+
+                    </div>
+
+                    <div class="particle-control-row">
+
+                        <label for="emission-rate">
+                            <span>Emission Rate</span>
+                            <span id="emission-value">260</span>
+                        </label>
+
+                        <input id="emission-rate" type="range" min="20" max="600" step="10" value="260">
+
+                    </div>
+
+                    <div class="particle-control-row">
+
+                        <label for="particle-size">
+                            <span>Maximum Size</span>
+                            <span id="size-value">0.70</span>
+                        </label>
+
+                        <input id="particle-size" type="range" min="0.05" max="2" step="0.05" value="0.7">
+
+                    </div>
+
+                    <div class="particle-control-row">
+
+                        <label for="particle-power">
+                            <span>Maximum Power</span>
+                            <span id="power-value">2.20</span>
+                        </label>
+
+                        <input id="particle-power" type="range" min="0.1" max="5" step="0.1" value="2.2">
+
+                    </div>
+
+                    <div class="particle-actions">
+
+                        <button type="button" class="particle-action" id="toggle-particles">
+                            Pause
+                        </button>
+
+                        <button type="button" class="particle-action" id="burst-particles">
+                            Burst
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div id="particle-info">
+                    <strong id="preset-name">ENERGY FIELD</strong>
+                    <span id="preset-description">
+                        High-energy upward particles with fast motion, rotation, and a bright cyan emission.
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        One System, Many Behaviors
+                    </h2>
+
+                    <p class="example-section-description">
+                        The scene demonstrates how the same ParticleSystem properties can produce dramatically
+                        different effects. Use the controls above to modify the live particle systems without
+                        rebuilding the scene.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Runtime Properties
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Emission</strong> - Change the number of particles emitted per second.
+                            </p>
+
+                            <p>
+                                <strong>Size</strong> - Change the maximum particle size while the simulation is
+                                running.
+                            </p>
+
+                            <p>
+                                <strong>Power</strong> - Control the maximum velocity applied to newly emitted
+                                particles.
+                            </p>
+
+                            <p>
+                                <strong>Lifetime</strong> - Presets demonstrate how short and long particle lifetimes
+                                completely change the density of an effect.
+                            </p>
+
+                            <p>
+                                <strong>Direction</strong> - Each preset changes the direction vectors to create
+                                fountains, flames, storms, or rising mist.
+                            </p>
+
+                            <p>
+                                <strong>Gravity</strong> - Positive, negative, and near-zero gravity produce
+                                fundamentally different particle motion.
+                            </p>
+
+                            <p>
+                                <strong>Rotation</strong> - Angular speed adds another dimension of movement to the
+                                particle simulation.
+                            </p>
+
+                            <p>
+                                <strong>Color</strong> - Multiple color stages control the visual transition of
+                                particles throughout their lifetime.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The initial scene is declarative. JavaScript is used only for runtime interaction, allowing
+                        the same Babylon.js ParticleSystem properties to be changed through the controls.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-particlesystem
+    id="primary-particles"
+    type="ParticleSystem"
+    capacity="3500"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(0, 0.2, 0)"
+    minEmitBox="new BABYLON.Vector3(-0.9, 0, -0.9)"
+    maxEmitBox="new BABYLON.Vector3(0.9, 0.15, 0.9)"
+    emitRate="260"
+    minSize="0.12"
+    maxSize="0.7"
+    minLifeTime="0.6"
+    maxLifeTime="2.2"
+    minEmitPower="0.5"
+    maxEmitPower="2.2"
+    direction1="new BABYLON.Vector3(-0.8, 1.5, -0.8)"
+    direction2="new BABYLON.Vector3(0.8, 3.5, 0.8)"
+    gravity="new BABYLON.Vector3(0, 0.4, 0)"
+    minAngularSpeed="-2"
+    maxAngularSpeed="2"
+    color1="new BABYLON.Color4(0.1, 0.8, 0.65, 1)"
+    color2="new BABYLON.Color4(0.2, 1, 0.8, 0.9)"
+    colorDead="new BABYLON.Color4(0.01, 0.05, 0.04, 0)"&gt;
+&lt;/arashtad-particlesystem&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('advanced-particles');
+    const scene = await ready(canvas);
+
+    const particles = scene.particleSystems.find(
+        system =&gt; system.name === 'primary-particles'
+    );
+
+    particles.emitRate = 420;
+    particles.maxSize = 1.2;
+    particles.maxEmitPower = 3;
+    particles.gravity = new BABYLON.Vector3(0, 0.8, 0);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('advanced-particles');
+        const scene = await ready(canvas);
+
+        const primary = scene.particleSystems.find(
+            system => system.name === 'primary-particles'
+        );
+
+        const sparks = scene.particleSystems.find(
+            system => system.name === 'spark-particles'
+        );
+
+        const mist = scene.particleSystems.find(
+            system => system.name === 'mist-particles'
+        );
+
+        const pointLight = scene.lights.find(
+            light => light.name === 'scene-light'
+        );
+
+        const emissionRate = document.getElementById('emission-rate');
+        const particleSize = document.getElementById('particle-size');
+        const particlePower = document.getElementById('particle-power');
+
+        const emissionValue = document.getElementById('emission-value');
+        const sizeValue = document.getElementById('size-value');
+        const powerValue = document.getElementById('power-value');
+
+        const presetName = document.getElementById('preset-name');
+        const presetDescription = document.getElementById('preset-description');
+
+        const toggleButton = document.getElementById('toggle-particles');
+        const burstButton = document.getElementById('burst-particles');
+
+        const presets = {
+            energy: {
+                name: 'ENERGY FIELD',
+                description: 'High-energy upward particles with fast motion, rotation, and a bright cyan emission.',
+                emission: 260,
+                size: 0.7,
+                power: 2.2,
+                primary: {
+                    minLifeTime: 0.6,
+                    maxLifeTime: 2.2,
+                    gravity: new BABYLON.Vector3(0, 0.4, 0),
+                    direction1: new BABYLON.Vector3(-0.8, 1.5, -0.8),
+                    direction2: new BABYLON.Vector3(0.8, 3.5, 0.8),
+                    minAngularSpeed: -2,
+                    maxAngularSpeed: 2,
+                    color1: new BABYLON.Color4(0.1, 0.8, 0.65, 1),
+                    color2: new BABYLON.Color4(0.2, 1, 0.8, 0.9),
+                    colorDead: new BABYLON.Color4(0.01, 0.05, 0.04, 0)
+                },
+                sparks: {
+                    emitRate: 140,
+                    minLifeTime: 0.3,
+                    maxLifeTime: 1.1,
+                    gravity: new BABYLON.Vector3(0, -1.5, 0)
+                },
+                mist: {
+                    emitRate: 70,
+                    minLifeTime: 2,
+                    maxLifeTime: 5
+                },
+                light: 4
+            },
+
+            fire: {
+                name: 'FIRE CORE',
+                description: 'Dense hot particles rise rapidly while gravity and angular motion create a turbulent flame.',
+                emission: 380,
+                size: 0.85,
+                power: 2.8,
+                primary: {
+                    minLifeTime: 0.3,
+                    maxLifeTime: 1.4,
+                    gravity: new BABYLON.Vector3(0, 1, 0),
+                    direction1: new BABYLON.Vector3(-0.6, 2, -0.6),
+                    direction2: new BABYLON.Vector3(0.6, 4, 0.6),
+                    minAngularSpeed: -3,
+                    maxAngularSpeed: 3,
+                    color1: new BABYLON.Color4(1, 0.08, 0, 1),
+                    color2: new BABYLON.Color4(1, 0.75, 0.05, 1),
+                    colorDead: new BABYLON.Color4(0.2, 0.01, 0, 0)
+                },
+                sparks: {
+                    emitRate: 240,
+                    minLifeTime: 0.2,
+                    maxLifeTime: 0.9,
+                    gravity: new BABYLON.Vector3(0, -2, 0)
+                },
+                mist: {
+                    emitRate: 30,
+                    minLifeTime: 1.5,
+                    maxLifeTime: 3
+                },
+                light: 7
+            },
+
+            storm: {
+                name: 'PARTICLE STORM',
+                description: 'Fast particles are thrown in every direction and pulled downward by strong gravity.',
+                emission: 320,
+                size: 0.45,
+                power: 4.5,
+                primary: {
+                    minLifeTime: 0.5,
+                    maxLifeTime: 1.8,
+                    gravity: new BABYLON.Vector3(0, -2.5, 0),
+                    direction1: new BABYLON.Vector3(-3, 1, -3),
+                    direction2: new BABYLON.Vector3(3, 4, 3),
+                    minAngularSpeed: -6,
+                    maxAngularSpeed: 6,
+                    color1: new BABYLON.Color4(0.15, 0.35, 1, 1),
+                    color2: new BABYLON.Color4(0.5, 0.85, 1, 1),
+                    colorDead: new BABYLON.Color4(0.02, 0.05, 0.2, 0)
+                },
+                sparks: {
+                    emitRate: 300,
+                    minLifeTime: 0.2,
+                    maxLifeTime: 0.8,
+                    gravity: new BABYLON.Vector3(0, -4, 0)
+                },
+                mist: {
+                    emitRate: 120,
+                    minLifeTime: 1,
+                    maxLifeTime: 2.5
+                },
+                light: 5
+            },
+
+            smoke: {
+                name: 'RISING SMOKE',
+                description: 'Large soft particles drift slowly upward with long lifetimes and minimal emission power.',
+                emission: 100,
+                size: 1.5,
+                power: 0.7,
+                primary: {
+                    minLifeTime: 2,
+                    maxLifeTime: 5,
+                    gravity: new BABYLON.Vector3(0, 0.15, 0),
+                    direction1: new BABYLON.Vector3(-0.4, 0.3, -0.4),
+                    direction2: new BABYLON.Vector3(0.4, 1.2, 0.4),
+                    minAngularSpeed: -0.6,
+                    maxAngularSpeed: 0.6,
+                    color1: new BABYLON.Color4(0.25, 0.25, 0.25, 0.55),
+                    color2: new BABYLON.Color4(0.65, 0.65, 0.65, 0.35),
+                    colorDead: new BABYLON.Color4(0.05, 0.05, 0.05, 0)
+                },
+                sparks: {
+                    emitRate: 15,
+                    minLifeTime: 1,
+                    maxLifeTime: 2,
+                    gravity: new BABYLON.Vector3(0, 0.05, 0)
+                },
+                mist: {
+                    emitRate: 160,
+                    minLifeTime: 3,
+                    maxLifeTime: 7
+                },
+                light: 1.8
+            }
+        };
+
+        function applyPreset(name) {
+            const preset = presets[name];
+
+            emissionRate.value = preset.emission;
+            particleSize.value = preset.size;
+            particlePower.value = preset.power;
+
+            primary.emitRate = preset.emission;
+            primary.minSize = preset.size * 0.17;
+            primary.maxSize = preset.size;
+            primary.minEmitPower = preset.power * 0.23;
+            primary.maxEmitPower = preset.power;
+
+            primary.minLifeTime = preset.primary.minLifeTime;
+            primary.maxLifeTime = preset.primary.maxLifeTime;
+            primary.gravity = preset.primary.gravity;
+            primary.direction1 = preset.primary.direction1;
+            primary.direction2 = preset.primary.direction2;
+            primary.minAngularSpeed = preset.primary.minAngularSpeed;
+            primary.maxAngularSpeed = preset.primary.maxAngularSpeed;
+            primary.color1 = preset.primary.color1;
+            primary.color2 = preset.primary.color2;
+            primary.colorDead = preset.primary.colorDead;
+
+            sparks.emitRate = preset.sparks.emitRate;
+            sparks.minLifeTime = preset.sparks.minLifeTime;
+            sparks.maxLifeTime = preset.sparks.maxLifeTime;
+            sparks.gravity = preset.sparks.gravity;
+
+            mist.emitRate = preset.mist.emitRate;
+            mist.minLifeTime = preset.mist.minLifeTime;
+            mist.maxLifeTime = preset.mist.maxLifeTime;
+
+            pointLight.intensity = preset.light;
+
+            emissionValue.textContent = String(preset.emission);
+            sizeValue.textContent = Number(preset.size).toFixed(2);
+            powerValue.textContent = Number(preset.power).toFixed(2);
+
+            presetName.textContent = preset.name;
+            presetDescription.textContent = preset.description;
+
+            document.querySelectorAll('.particle-preset').forEach(button => {
+                button.classList.toggle(
+                    'active',
+                    button.dataset.preset === name
+                );
+            });
+        }
+
+        emissionRate.addEventListener('input', () => {
+            const value = Number(emissionRate.value);
+
+            primary.emitRate = value;
+            emissionValue.textContent = String(value);
+        });
+
+        particleSize.addEventListener('input', () => {
+            const value = Number(particleSize.value);
+
+            primary.maxSize = value;
+            primary.minSize = Math.max(0.02, value * 0.17);
+
+            sizeValue.textContent = value.toFixed(2);
+        });
+
+        particlePower.addEventListener('input', () => {
+            const value = Number(particlePower.value);
+
+            primary.maxEmitPower = value;
+            primary.minEmitPower = Math.max(0.05, value * 0.23);
+
+            powerValue.textContent = value.toFixed(2);
+        });
+
+        document.querySelectorAll('.particle-preset').forEach(button => {
+            button.addEventListener('click', () => {
+                applyPreset(button.dataset.preset);
+            });
+        });
+
+        toggleButton.addEventListener('click', () => {
+            const paused = primary.isStarted();
+
+            if (paused) {
+                primary.stop();
+                sparks.stop();
+                mist.stop();
+                toggleButton.textContent = 'Resume';
+            } else {
+                primary.start();
+                sparks.start();
+                mist.start();
+                toggleButton.textContent = 'Pause';
+            }
+        });
+
+        burstButton.addEventListener('click', () => {
+            const previousRate = primary.emitRate;
+
+            primary.emitRate = Math.max(previousRate, 600);
+
+            window.setTimeout(() => {
+                primary.emitRate = previousRate;
+            }, 350);
+        });
+
+        applyPreset('energy');
+    </script>
+
+</body>
+
+</html>

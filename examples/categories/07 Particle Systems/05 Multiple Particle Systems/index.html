@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Multiple Particle Systems">
+    <meta name="keywords" content="Particles, Multiple">
+    <title>Multiple Particle Systems | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .particle-demo {
+            position: relative;
+        }
+
+        #particle-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Particle Systems / Multiple
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Particle Composition
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Multiple Particle Systems</h1>
+                    <span class="example-badge green">98</span>
+                </div>
+
+                <p>
+                    Combine multiple independent ParticleSystem elements in a single scene, each with its own emitter,
+                    capacity, emission settings, movement, and appearance.
+                </p>
+
+            </header>
+
+            <section class="example-demo particle-demo">
+
+                <canvas id="multiple-particles" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 15, new BABYLON.Vector3(0, 1.5, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-particlesystem id="fire" type="ParticleSystem" capacity="2000"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(-3.5, 0, 0)" minEmitBox="new BABYLON.Vector3(-0.5, 0, -0.5)"
+                        maxEmitBox="new BABYLON.Vector3(0.5, 0.1, 0.5)" emitRate="300" minSize="0.1" maxSize="0.8"
+                        minLifeTime="0.3" maxLifeTime="1.2" minEmitPower="0.5" maxEmitPower="2"
+                        direction1="new BABYLON.Vector3(-0.5, 2, -0.5)" direction2="new BABYLON.Vector3(0.5, 4, 0.5)"
+                        gravity="new BABYLON.Vector3(0, 1, 0)" minAngularSpeed="-2" maxAngularSpeed="2"
+                        color1="new BABYLON.Color4(1, 0.2, 0, 1)" color2="new BABYLON.Color4(1, 0.8, 0, 1)"
+                        colorDead="new BABYLON.Color4(0.2, 0, 0, 0)">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="particles" type="ParticleSystem" capacity="1000"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0, 0)" emitRate="100" minSize="0.2" maxSize="0.5"
+                        minLifeTime="1" maxLifeTime="2" direction1="new BABYLON.Vector3(-1, 1, 0)"
+                        direction2="new BABYLON.Vector3(1, 2, 0)" minEmitPower="1" maxEmitPower="2"
+                        color1="new BABYLON.Color4(0.2, 0.8, 1, 1)" color2="new BABYLON.Color4(0.2, 1, 0.8, 1)"
+                        colorDead="new BABYLON.Color4(0, 0.2, 0.2, 0)">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="smoke" type="ParticleSystem" capacity="1500"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(3.5, 0, 0)" minEmitBox="new BABYLON.Vector3(-0.4, 0, -0.4)"
+                        maxEmitBox="new BABYLON.Vector3(0.4, 0.1, 0.4)" emitRate="120" minSize="0.4" maxSize="1.5"
+                        minLifeTime="2" maxLifeTime="5" minEmitPower="0.2" maxEmitPower="0.8"
+                        direction1="new BABYLON.Vector3(-0.3, 1, -0.3)" direction2="new BABYLON.Vector3(0.3, 2, 0.3)"
+                        gravity="new BABYLON.Vector3(0, 0.2, 0)" minAngularSpeed="-0.5" maxAngularSpeed="0.5"
+                        color1="new BABYLON.Color4(0.25, 0.25, 0.25, 0.7)"
+                        color2="new BABYLON.Color4(0.6, 0.6, 0.6, 0.5)"
+                        colorDead="new BABYLON.Color4(0.05, 0.05, 0.05, 0)">
+                    </arashtad-particlesystem>
+
+                </canvas>
+
+                <div id="particle-status">
+                    <strong>3 Independent Particle Systems</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Multiple Particle Systems
+                    </h2>
+
+                    <p class="example-section-description">
+                        Multiple ParticleSystem elements can coexist in the same runtime scene. Each system is created
+                        independently and can use different capacities, emitters, rates, directions, lifetimes,
+                        sizes, gravity, rotation, and colors.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Particle Systems
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Fire</strong> - 2,000 capacity with high emission, gravity, rotation, and
+                                short lifetimes.
+                            </p>
+
+                            <p>
+                                <strong>Particles</strong> - 1,000 capacity with moderate emission and directional
+                                movement.
+                            </p>
+
+                            <p>
+                                <strong>Smoke</strong> - 1,500 capacity with larger particles, longer lifetimes, low
+                                emission power, and light gravity.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Each ParticleSystem is declared as an independent runtime element. All systems are initialized
+                        as part of the same scene.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-particlesystem
+    id="fire"
+    type="ParticleSystem"
+    capacity="2000"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(-3.5, 0, 0)"
+    minEmitBox="new BABYLON.Vector3(-0.5, 0, -0.5)"
+    maxEmitBox="new BABYLON.Vector3(0.5, 0.1, 0.5)"
+    emitRate="300"
+    minSize="0.1"
+    maxSize="0.8"
+    minLifeTime="0.3"
+    maxLifeTime="1.2"
+    minEmitPower="0.5"
+    maxEmitPower="2"
+    direction1="new BABYLON.Vector3(-0.5, 2, -0.5)"
+    direction2="new BABYLON.Vector3(0.5, 4, 0.5)"
+    gravity="new BABYLON.Vector3(0, 1, 0)"
+    minAngularSpeed="-2"
+    maxAngularSpeed="2"
+    color1="new BABYLON.Color4(1, 0.2, 0, 1)"
+    color2="new BABYLON.Color4(1, 0.8, 0, 1)"
+    colorDead="new BABYLON.Color4(0.2, 0, 0, 0)"&gt;
+&lt;/arashtad-particlesystem&gt;
+
+&lt;arashtad-particlesystem
+    id="particles"
+    type="ParticleSystem"
+    capacity="1000"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(0, 0, 0)"
+    emitRate="100"
+    minSize="0.2"
+    maxSize="0.5"
+    minLifeTime="1"
+    maxLifeTime="2"
+    direction1="new BABYLON.Vector3(-1, 1, 0)"
+    direction2="new BABYLON.Vector3(1, 2, 0)"
+    minEmitPower="1"
+    maxEmitPower="2"
+    color1="new BABYLON.Color4(0.2, 0.8, 1, 1)"
+    color2="new BABYLON.Color4(0.2, 1, 0.8, 1)"
+    colorDead="new BABYLON.Color4(0, 0.2, 0.2, 0)"&gt;
+&lt;/arashtad-particlesystem&gt;
+
+&lt;arashtad-particlesystem
+    id="smoke"
+    type="ParticleSystem"
+    capacity="1500"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(3.5, 0, 0)"
+    minEmitBox="new BABYLON.Vector3(-0.4, 0, -0.4)"
+    maxEmitBox="new BABYLON.Vector3(0.4, 0.1, 0.4)"
+    emitRate="120"
+    minSize="0.4"
+    maxSize="1.5"
+    minLifeTime="2"
+    maxLifeTime="5"
+    minEmitPower="0.2"
+    maxEmitPower="0.8"
+    direction1="new BABYLON.Vector3(-0.3, 1, -0.3)"
+    direction2="new BABYLON.Vector3(0.3, 2, 0.3)"
+    gravity="new BABYLON.Vector3(0, 0.2, 0)"
+    minAngularSpeed="-0.5"
+    maxAngularSpeed="0.5"
+    color1="new BABYLON.Color4(0.25, 0.25, 0.25, 0.7)"
+    color2="new BABYLON.Color4(0.6, 0.6, 0.6, 0.5)"
+    colorDead="new BABYLON.Color4(0.05, 0.05, 0.05, 0)"&gt;
+&lt;/arashtad-particlesystem&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-particles');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

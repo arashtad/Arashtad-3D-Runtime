@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Light + Materials example.">
+    <meta name="keywords" content="Lighting, Materials">
+    <title>Light + Materials | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .light-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#lights">Lights</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>35</span>
+                    <span>/</span>
+                    <span>Lights</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    35 · Lights
+                </div>
+
+                <h1>Light + Materials</h1>
+
+                <p>
+                    Combine multiple lights with different material properties
+                    to show how diffuse, specular, emissive, and roughness
+                    settings affect a Babylon.js scene.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Light</span>
+                    <span class="example-badge">Materials</span>
+                    <span class="example-badge">StandardMaterial</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo light-demo">
+
+                <canvas id="light-materials">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="1.57, 1.12, 12, new BABYLON.Vector3(0, 0.8, 0)" lowerRadiusLimit="7" upperRadiusLimit="17"
+                        lowerBetaLimit="0.65" upperBetaLimit="1.45" wheelPrecision="60" inertia="0.8">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.18" diffuse="new BABYLON.Color3(0.12, 0.2, 0.3)"
+                        groundColor="new BABYLON.Color3(0.01, 0.015, 0.02)"
+                        specular="new BABYLON.Color3(0.08, 0.1, 0.12)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="warmLight" args="new BABYLON.Vector3(-0.5, -0.85, 0.35)"
+                        position="new BABYLON.Vector3(6, 8, -5)" intensity="2.5"
+                        diffuse="new BABYLON.Color3(1, 0.3, 0.08)" specular="new BABYLON.Color3(0.5, 0.18, 0.05)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="coolLight" args="new BABYLON.Vector3(0.5, -0.75, -0.45)"
+                        position="new BABYLON.Vector3(-6, 6, 5)" intensity="2.2"
+                        diffuse="new BABYLON.Color3(0.08, 0.3, 1)" specular="new BABYLON.Color3(0.08, 0.16, 0.45)">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="matDiffuse"
+                        diffuseColor="new BABYLON.Color3(0.75, 0.12, 0.04)"
+                        specularColor="new BABYLON.Color3(0.18, 0.08, 0.03)" roughness="0.9">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="matGlossy"
+                        diffuseColor="new BABYLON.Color3(0.03, 0.2, 0.65)"
+                        specularColor="new BABYLON.Color3(0.9, 0.95, 1)" roughness="0.18">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="matMetallic"
+                        diffuseColor="new BABYLON.Color3(0.18, 0.2, 0.22)"
+                        specularColor="new BABYLON.Color3(0.95, 0.95, 0.95)" roughness="0.3">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="matEmissive"
+                        diffuseColor="new BABYLON.Color3(0.02, 0.08, 0.06)"
+                        emissiveColor="new BABYLON.Color3(0.0, 0.65, 0.38)"
+                        specularColor="new BABYLON.Color3(0.12, 0.2, 0.16)" roughness="0.45">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="groundMaterial"
+                        diffuseColor="new BABYLON.Color3(0.006, 0.009, 0.012)"
+                        specularColor="new BABYLON.Color3(0.015, 0.018, 0.022)" roughness="0.95">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="diffuseBox" size="2.2" position="new BABYLON.Vector3(-3.6, 1.1, 0)"
+                        material="matDiffuse">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="glossySphere" diameter="2.3" segments="48"
+                        position="new BABYLON.Vector3(-1.2, 1.15, 0)" material="matGlossy">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="metallicCylinder" diameter="2.2" height="2.5" tessellation="48"
+                        position="new BABYLON.Vector3(1.4, 1.25, 0)" material="matMetallic">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="emissiveTorus" diameter="2.5" thickness="0.48" tessellation="48"
+                        position="new BABYLON.Vector3(3.7, 1.15, 0)" rotation="new BABYLON.Vector3(Math.PI / 2, 0, 0)"
+                        material="matEmissive">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="30" height="30"
+                        position="new BABYLON.Vector3(0, -0.05, 0)" material="groundMaterial">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Lighting and material properties work together to
+                            produce very different surface responses.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Diffuse
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The diffuse material emphasizes the base surface
+                                color with a relatively low specular response.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Glossy
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                A low <code>roughness</code> value and bright
+                                <code>specularColor</code> produce stronger
+                                highlights from the directional lights.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Metallic Look
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                A dark diffuse surface combined with a strong
+                                specular response creates a reflective,
+                                metal-like appearance.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Emissive
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                <code>emissiveColor</code> adds a self-lit color
+                                contribution that remains visible alongside
+                                the scene lighting.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Materials are created once and assigned to the
+                            declarative meshes through runtime references.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-light
+    type="DirectionalLight"
+    id="warmLight"
+    args="new BABYLON.Vector3(-0.5, -0.85, 0.35)"
+    position="new BABYLON.Vector3(6, 8, -5)"
+    intensity="2.5"
+    diffuse="new BABYLON.Color3(1, 0.3, 0.08)"
+    specular="new BABYLON.Color3(0.5, 0.18, 0.05)"&gt;
+&lt;/arashtad-light&gt;
+
+&lt;arashtad-light
+    type="DirectionalLight"
+    id="coolLight"
+    args="new BABYLON.Vector3(0.5, -0.75, -0.45)"
+    position="new BABYLON.Vector3(-6, 6, 5)"
+    intensity="2.2"
+    diffuse="new BABYLON.Color3(0.08, 0.3, 1)"
+    specular="new BABYLON.Color3(0.08, 0.16, 0.45)"&gt;
+&lt;/arashtad-light&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="matGlossy"
+    diffuseColor="new BABYLON.Color3(0.03, 0.2, 0.65)"
+    specularColor="new BABYLON.Color3(0.9, 0.95, 1)"
+    roughness="0.18"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="matEmissive"
+    diffuseColor="new BABYLON.Color3(0.02, 0.08, 0.06)"
+    emissiveColor="new BABYLON.Color3(0.0, 0.65, 0.38)"
+    specularColor="new BABYLON.Color3(0.12, 0.2, 0.16)"
+    roughness="0.45"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="glossySphere"
+    diameter="2.3"
+    segments="48"
+    position="new BABYLON.Vector3(-1.2, 1.15, 0)"
+    material="matGlossy"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Torus"
+    id="emissiveTorus"
+    diameter="2.5"
+    thickness="0.48"
+    tessellation="48"
+    position="new BABYLON.Vector3(3.7, 1.15, 0)"
+    rotation="new BABYLON.Vector3(Math.PI / 2, 0, 0)"
+    material="matEmissive"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('light-materials');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

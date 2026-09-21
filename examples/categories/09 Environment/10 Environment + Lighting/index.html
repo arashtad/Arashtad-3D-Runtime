@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Environment + Lighting">
+    <meta name="keywords" content="Environment, Lighting">
+    <title>Environment + Lighting | Arashtad 3D Runtime</title>
+
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .environment-lighting-demo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .environment-lighting-demo canvas {
+            display: block;
+            width: 100%;
+            height: 620px;
+        }
+
+        .environment-lighting-info {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 2;
+            max-width: 390px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(8, 12, 11, 0.88);
+            color: #fff;
+        }
+
+        .environment-lighting-info strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #26a38c;
+            font-size: 14px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .environment-lighting-info span {
+            display: block;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Environment / Environment + Lighting
+                </div>
+
+                <div class="example-eyebrow">
+                    Image-Based Environment + Scene Lighting
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Environment + Lighting</h1>
+                    <span class="example-badge green">120</span>
+                </div>
+
+                <p>
+                    Combines an HDR environment with explicit Babylon.js lights.
+                    The environment provides image-based lighting while additional
+                    lights provide direct illumination and control over the scene.
+                </p>
+
+            </header>
+
+            <section class="example-demo environment-lighting-demo">
+
+                <canvas id="environment-lighting-scene" clearColor="new BABYLON.Color4(0.025, 0.035, 0.032, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="0.8" environmentBackground="true" environmentBackgroundBlur="0.12">
+                    </arashtad-runtime>
+
+                    <arashtad-camera id="camera" type="ArcRotateCamera" alpha="1.57" beta="1.15" radius="12"
+                        target="new BABYLON.Vector3(0, 1.2, 0)" lowerRadiusLimit="5" upperRadiusLimit="20"
+                        wheelDeltaPercentage="0.01">
+                    </arashtad-camera>
+
+                    <arashtad-light id="hemispheric-light" type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)" intensity="0.45">
+                    </arashtad-light>
+
+                    <arashtad-light id="directional-light" type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -0.75)" position="new BABYLON.Vector3(4, 7, 4)"
+                        intensity="2.0">
+                    </arashtad-light>
+
+                    <arashtad-material id="metal-material" type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.16, 0.18, 0.18)" specularColor="new BABYLON.Color3(1, 1, 1)">
+                    </arashtad-material>
+
+                    <arashtad-material id="accent-material" type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-material id="dark-material" type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.035, 0.045, 0.042)"
+                        specularColor="new BABYLON.Color3(0.45, 0.45, 0.45)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Sphere" id="environment-sphere" diameter="2.8" segments="48"
+                        position="new BABYLON.Vector3(0, 1.8, 0)" material="metal-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="accent-box" width="2.2" height="2.2" depth="2.2"
+                        position="new BABYLON.Vector3(-3.2, 1.1, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="dark-cylinder" height="2.4" diameter="2.2" tessellation="48"
+                        position="new BABYLON.Vector3(3.2, 1.2, 0)" material="dark-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="14" height="14"
+                        position="new BABYLON.Vector3(0, -0.01, 0)" material="dark-material">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="environment-lighting-info">
+                    <strong>Environment + Direct Lighting</strong>
+                    <span>
+                        The HDR environment supplies image-based illumination while
+                        the hemispheric and directional lights provide additional
+                        direct scene lighting.
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Two Lighting Sources</h2>
+                    <p class="example-section-description">
+                        An environment and explicit Babylon.js lights can operate
+                        together in the same scene.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Environment Lighting</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The HDR environment contributes image-based lighting
+                                to the scene. Its strength is controlled by
+                                <code>environmentIntensity</code>.
+                            </p>
+
+                            <p>
+                                The environment can also remain visible as the
+                                scene background through
+                                <code>environmentBackground="true"</code>.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Explicit Lights</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The scene also contains a
+                                <code>HemisphericLight</code> and a
+                                <code>DirectionalLight</code>.
+                            </p>
+
+                            <p>
+                                These lights add direct illumination independently
+                                of the HDR environment.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Lighting Configuration</h2>
+                    <p class="example-section-description">
+                        The environment and explicit lights have separate controls.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Environment</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <code>environment="../../../assets/environments/room.hdr"</code>
+                                loads the HDR environment.
+                            </p>
+
+                            <p>
+                                <code>environmentIntensity="0.8"</code>
+                                controls the strength of the environment lighting.
+                            </p>
+
+                            <p>
+                                <code>environmentBackground="true"</code>
+                                displays the HDR environment around the objects.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Direct Lighting</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The hemispheric light provides broad ambient-style
+                                illumination from its configured direction.
+                            </p>
+
+                            <p>
+                                The directional light provides directional
+                                illumination with its own position, direction,
+                                and intensity.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Source</h2>
+                    <p class="example-section-description">
+                        Complete environment and lighting configuration.
+                    </p>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="environment-lighting-scene"
+    clearColor="new BABYLON.Color4(0.025, 0.035, 0.032, 1)"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        environment="../../../assets/environments/room.hdr"
+        environmentIntensity="0.8"
+        environmentBackground="true"
+        environmentBackgroundBlur="0.12"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        id="camera"
+        type="ArcRotateCamera"
+        alpha="1.57"
+        beta="1.15"
+        radius="12"
+        target="new BABYLON.Vector3(0, 1.2, 0)"
+        lowerRadiusLimit="5"
+        upperRadiusLimit="20"
+        wheelDeltaPercentage="0.01"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        id="hemispheric-light"
+        type="HemisphericLight"
+        direction="new BABYLON.Vector3(0, 1, 0)"
+        intensity="0.45"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        id="directional-light"
+        type="DirectionalLight"
+        direction="new BABYLON.Vector3(-0.5, -1, -0.75)"
+        position="new BABYLON.Vector3(4, 7, 4)"
+        intensity="2.0"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-material
+        id="metal-material"
+        type="StandardMaterial"
+        diffuseColor="new BABYLON.Color3(0.16, 0.18, 0.18)"
+        specularColor="new BABYLON.Color3(1, 1, 1)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        id="accent-material"
+        type="StandardMaterial"
+        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        id="dark-material"
+        type="StandardMaterial"
+        diffuseColor="new BABYLON.Color3(0.035, 0.045, 0.042)"
+        specularColor="new BABYLON.Color3(0.45, 0.45, 0.45)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-mesh
+        type="Sphere"
+        id="environment-sphere"
+        diameter="2.8"
+        segments="48"
+        position="new BABYLON.Vector3(0, 1.8, 0)"
+        material="metal-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="accent-box"
+        width="2.2"
+        height="2.2"
+        depth="2.2"
+        position="new BABYLON.Vector3(-3.2, 1.1, 0)"
+        material="accent-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Cylinder"
+        id="dark-cylinder"
+        height="2.4"
+        diameter="2.2"
+        tessellation="48"
+        position="new BABYLON.Vector3(3.2, 1.2, 0)"
+        material="dark-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Ground"
+        id="ground"
+        width="14"
+        height="14"
+        position="new BABYLON.Vector3(0, -0.01, 0)"
+        material="dark-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('environment-lighting-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

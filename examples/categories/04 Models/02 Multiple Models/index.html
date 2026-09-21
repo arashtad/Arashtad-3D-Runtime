@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Multiple models example.">
+    <meta name="keywords" content="Models, Multiple">
+    <title>Multiple Models | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#models">Models</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>39</span>
+                    <span>/</span>
+                    <span>Models</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    39 · Models
+                </div>
+
+                <h1>Multiple Models</h1>
+
+                <p>
+                    Load multiple GLB models declaratively and arrange them
+                    independently inside the same Babylon.js scene.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge">Multiple</span>
+                    <span class="example-badge">GLB</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="multiple-models">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-model id="linux-left" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(-1.8, -0.5, 0)" scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)">
+                    </arashtad-model>
+
+                    <arashtad-model id="linux-center" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(0, -0.5, 0)" scaling="new BABYLON.Vector3(5, 5, 5)">
+                    </arashtad-model>
+
+                    <arashtad-model id="linux-right" src="../../../assets/3d/linux.glb"
+                        position="new BABYLON.Vector3(1.8, -0.5, 0)" scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)">
+                    </arashtad-model>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Multiple independent model instances in one scene.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Multiple Instances
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each <code>arashtad-model</code> loads its own
+                                GLB instance into the same Babylon.js scene.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Independent Transforms
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each model has its own
+                                <code>position</code> and <code>scaling</code>,
+                                allowing the instances to be arranged independently.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Three independent GLB model instances are declared in the same canvas.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="multiple-models"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="linux-left"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(-1.8, -0.5, 0)"
+        scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)"&gt;
+    &lt;/arashtad-model&gt;
+
+    &lt;arashtad-model
+        id="linux-center"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(0, -0.5, 0)"
+        scaling="new BABYLON.Vector3(5, 5, 5)"&gt;
+    &lt;/arashtad-model&gt;
+
+    &lt;arashtad-model
+        id="linux-right"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(1.8, -0.5, 0)"
+        scaling="new BABYLON.Vector3(3.5, 3.5, 3.5)"&gt;
+    &lt;/arashtad-model&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+&lt;script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('multiple-models');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-models');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Material Reference">
+    <meta name="keywords" content="Materials, References">
+    <title>Material Reference | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .material-demo {
+            position: relative;
+        }
+
+        #material-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Materials / Reference
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Material Reuse
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Material Reference</h1>
+                    <span class="example-badge green">87</span>
+                </div>
+
+                <p>
+                    Create one material and reference it from multiple independent runtime meshes.
+                </p>
+
+            </header>
+
+            <section class="example-demo material-demo">
+
+                <canvas id="material-reference" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 10, new BABYLON.Vector3(0, 1, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="shared-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="left-box" size="2" position="new BABYLON.Vector3(-2.4, 1, 0)"
+                        material="shared-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="center-sphere" diameter="2" segments="32"
+                        position="new BABYLON.Vector3(0, 1, 0)" material="shared-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="right-cylinder" height="2" diameter="1.8" tessellation="32"
+                        position="new BABYLON.Vector3(2.4, 1, 0)" material="shared-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="8" height="6"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="material-status">
+                    <strong>1 Shared Material</strong><br>
+                    Used by 3 Meshes
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Referencing a Material
+                    </h2>
+
+                    <p class="example-section-description">
+                        A material can be declared once and assigned to multiple meshes using the material reference.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Shared Material
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Material</strong> - StandardMaterial
+                            </p>
+
+                            <p>
+                                <strong>Reference</strong> - shared-material
+                            </p>
+
+                            <p>
+                                <strong>Meshes</strong> - Box, Sphere, Cylinder
+                            </p>
+
+                            <p>
+                                <strong>Diffuse Color</strong> - Teal
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The same material reference is assigned to three different mesh types.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    type="StandardMaterial"
+    id="shared-material"
+    diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Box"
+    id="left-box"
+    size="2"
+    position="new BABYLON.Vector3(-2.4, 1, 0)"
+    material="shared-material"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="center-sphere"
+    diameter="2"
+    segments="32"
+    position="new BABYLON.Vector3(0, 1, 0)"
+    material="shared-material"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Cylinder"
+    id="right-cylinder"
+    height="2"
+    diameter="1.8"
+    tessellation="32"
+    position="new BABYLON.Vector3(2.4, 1, 0)"
+    material="shared-material"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('material-reference');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

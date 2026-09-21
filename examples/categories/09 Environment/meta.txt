@@ -1,0 +1,1 @@
+Configure HDR and prefiltered environments and their presentation.

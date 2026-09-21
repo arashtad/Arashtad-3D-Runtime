@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Particle Systems + Models">
+    <meta name="keywords" content="Particles, Models">
+    <title>Particle Systems + Models | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .particle-model-demo {
+            position: relative;
+        }
+
+        #particle-model-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Particle Systems / Models
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Particle Model Composition
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Particle Systems + Models</h1>
+                    <span class="example-badge green">100</span>
+                </div>
+
+                <p>
+                    Combine imported 3D models with independent particle systems to create dynamic effects around
+                    runtime model elements.
+                </p>
+
+            </header>
+
+            <section class="example-demo particle-model-demo">
+
+                <canvas id="particles-model" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 14, new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient-light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="model-light" args="new BABYLON.Vector3(-0.5, -1, -0.5)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-model id="model" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, 0, 0)"
+                        scaling="new BABYLON.Vector3(4, 4, 4)">
+                    </arashtad-model>
+
+                    <arashtad-particlesystem id="particles" type="ParticleSystem" capacity="1500"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0.2, 0)" minEmitBox="new BABYLON.Vector3(-0.8, 0, -0.8)"
+                        maxEmitBox="new BABYLON.Vector3(0.8, 0.2, 0.8)" emitRate="180" minSize="0.1" maxSize="0.5"
+                        minLifeTime="0.8" maxLifeTime="2" minEmitPower="0.4" maxEmitPower="1.4"
+                        direction1="new BABYLON.Vector3(-0.5, 1.5, -0.5)"
+                        direction2="new BABYLON.Vector3(0.5, 2.5, 0.5)" gravity="new BABYLON.Vector3(0, 0.3, 0)"
+                        minAngularSpeed="-1" maxAngularSpeed="1" color1="new BABYLON.Color4(0.1, 0.8, 0.65, 1)"
+                        color2="new BABYLON.Color4(0.2, 1, 0.8, 0.9)"
+                        colorDead="new BABYLON.Color4(0.02, 0.1, 0.08, 0)">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="secondary-particles" type="ParticleSystem" capacity="700"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 1.5, 0)" emitRate="60" minSize="0.08" maxSize="0.25"
+                        minLifeTime="1" maxLifeTime="2.5" minEmitPower="0.2" maxEmitPower="0.8"
+                        direction1="new BABYLON.Vector3(-0.3, 0.5, -0.3)"
+                        direction2="new BABYLON.Vector3(0.3, 1.2, 0.3)" gravity="new BABYLON.Vector3(0, 0.1, 0)"
+                        color1="new BABYLON.Color4(1, 0.55, 0.1, 0.8)" color2="new BABYLON.Color4(1, 0.85, 0.3, 0.7)"
+                        colorDead="new BABYLON.Color4(0.1, 0.03, 0, 0)">
+                    </arashtad-particlesystem>
+
+                </canvas>
+
+                <div id="particle-model-status">
+                    <strong>1 Model · 2 Particle Systems · 2 Lights</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Particle Effects Around Models
+                    </h2>
+
+                    <p class="example-section-description">
+                        Imported models and particle systems can coexist as independent runtime elements. Particle
+                        emitters can be positioned around a model to create atmospheric, energetic, or environmental
+                        effects.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Scene Components
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>3D Model</strong> - The Linux GLB model is imported through the runtime model
+                                element.
+                            </p>
+
+                            <p>
+                                <strong>Primary Particles</strong> - A larger particle system surrounds the base of
+                                the model.
+                            </p>
+
+                            <p>
+                                <strong>Secondary Particles</strong> - A smaller particle system creates additional
+                                particles around the upper part of the model.
+                            </p>
+
+                            <p>
+                                <strong>Lighting</strong> - Hemispheric and directional lights illuminate the model
+                                and scene.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Models, lights, and particle systems can be declared independently and composed together in
+                        the same runtime scene.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-light
+    type="HemisphericLight"
+    id="ambient-light"
+    args="new BABYLON.Vector3(0, 1, 0)"
+    intensity="1.2"&gt;
+&lt;/arashtad-light&gt;
+
+&lt;arashtad-light
+    type="DirectionalLight"
+    id="model-light"
+    args="new BABYLON.Vector3(-0.5, -1, -0.5)"
+    intensity="2"&gt;
+&lt;/arashtad-light&gt;
+
+&lt;arashtad-model
+    id="model"
+    src="../../../assets/3d/linux.glb"
+    position="new BABYLON.Vector3(0, 0, 0)"
+    scaling="new BABYLON.Vector3(4, 4, 4)"&gt;
+&lt;/arashtad-model&gt;
+
+&lt;arashtad-particlesystem
+    id="particles"
+    type="ParticleSystem"
+    capacity="1500"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(0, 0.2, 0)"
+    minEmitBox="new BABYLON.Vector3(-0.8, 0, -0.8)"
+    maxEmitBox="new BABYLON.Vector3(0.8, 0.2, 0.8)"
+    emitRate="180"
+    minSize="0.1"
+    maxSize="0.5"
+    minLifeTime="0.8"
+    maxLifeTime="2"
+    minEmitPower="0.4"
+    maxEmitPower="1.4"
+    direction1="new BABYLON.Vector3(-0.5, 1.5, -0.5)"
+    direction2="new BABYLON.Vector3(0.5, 2.5, 0.5)"
+    gravity="new BABYLON.Vector3(0, 0.3, 0)"
+    minAngularSpeed="-1"
+    maxAngularSpeed="1"
+    color1="new BABYLON.Color4(0.1, 0.8, 0.65, 1)"
+    color2="new BABYLON.Color4(0.2, 1, 0.8, 0.9)"
+    colorDead="new BABYLON.Color4(0.02, 0.1, 0.08, 0)"&gt;
+&lt;/arashtad-particlesystem&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('particles-model');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Mesh Enabled State">
+    <meta name="keywords" content="Mesh, Properties">
+    <title>Mesh Enabled State | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #enabled-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .visibility-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .visibility-control input {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Enabled State
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Mesh Control
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Mesh Enabled State</h1>
+                    <span class="example-badge green">77</span>
+                </div>
+
+                <p>
+                    Enable or disable a mesh at runtime using its Babylon.js enabled state.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="mesh-enabled" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 8, new BABYLON.Vector3(0, 0, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="enabled-mesh" size="2" position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="enabled-status">
+                    <strong>Enabled</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Enable or Disable the Mesh
+                    </h2>
+
+                    <p class="example-section-description">
+                        Toggle the mesh's enabled state without changing its visibility property.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Mesh State
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <label class="visibility-control">
+                                <input type="checkbox" id="enabled-toggle" checked>
+                                <span id="enabled-label">Enabled</span>
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The switch changes the mesh's enabled state through the Babylon.js scene.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="enabled-mesh"
+    size="2"
+    position="new BABYLON.Vector3(0, 0, 0)"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('mesh-enabled');
+
+    const scene = await ready(canvas);
+
+    const mesh = scene.meshes.find(
+        mesh =&gt; mesh.name === 'enabled-mesh'
+    );
+
+    const toggle = document.getElementById('enabled-toggle');
+    const label = document.getElementById('enabled-label');
+    const status = document.getElementById('enabled-status');
+
+    toggle.addEventListener('change', () =&gt; {
+        mesh.setEnabled(toggle.checked);
+
+        label.textContent = toggle.checked ? 'Enabled' : 'Disabled';
+        status.innerHTML = `&lt;strong&gt;${toggle.checked ? 'Enabled' : 'Disabled'}&lt;/strong&gt;`;
+    });
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('mesh-enabled');
+
+        const scene = await ready(canvas);
+
+        const mesh = scene.meshes.find(
+            mesh => mesh.name === 'enabled-mesh'
+        );
+
+        const toggle = document.getElementById('enabled-toggle');
+        const label = document.getElementById('enabled-label');
+        const status = document.getElementById('enabled-status');
+
+        toggle.addEventListener('change', () => {
+            mesh.setEnabled(toggle.checked);
+
+            label.textContent = toggle.checked ? 'Enabled' : 'Disabled';
+            status.innerHTML = `<strong>${toggle.checked ? 'Enabled' : 'Disabled'}</strong>`;
+        });
+    </script>
+
+</body>
+
+</html>

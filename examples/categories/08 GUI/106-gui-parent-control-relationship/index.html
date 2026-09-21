@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - GUI Parent/Control Relationship">
+    <title>GUI Parent/Control Relationship | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .gui-demo {
+            position: relative;
+        }
+
+        #gui-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / GUI / Hierarchy
+                </div>
+
+                <div class="example-eyebrow">
+                    GUI Parent / Control Relationship
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>GUI Parent/Control Relationship</h1>
+                    <span class="example-badge green">106</span>
+                </div>
+
+                <p>
+                    Attach a GUI control to an AdvancedDynamicTexture using the runtime parent relationship.
+                </p>
+
+            </header>
+
+            <section class="example-demo gui-demo">
+
+                <canvas id="gui-hierarchy" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 10, new BABYLON.Vector3(0, 0, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-gui id="ui" type="AdvancedDynamicTexture">
+                    </arashtad-gui>
+
+                    <arashtad-gui id="button" type="Button" parent="ui" text="GUI CONTROL" width="'240px'"
+                        height="'70px'" color="'white'" background="'#26a38c'" fontSize="24" cornerRadius="10"
+                        verticalAlignment="1" horizontalAlignment="1" OnPointerClick="
+                            document.getElementById('gui-status').innerHTML =
+                                '<strong>Parent / Control</strong><br>The Button belongs to the GUI root.';
+                        ">
+                    </arashtad-gui>
+
+                </canvas>
+
+                <div id="gui-status">
+                    <strong>Parent / Control</strong><br>
+                    The Button is attached to the GUI root.
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        GUI Hierarchy
+                    </h2>
+
+                    <p class="example-section-description">
+                        GUI controls are attached to an AdvancedDynamicTexture through the
+                        <code>parent</code> attribute. The parent establishes where the control belongs in the GUI
+                        hierarchy.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Parent / Control
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The AdvancedDynamicTexture has the runtime ID <code>ui</code>.
+                            </p>
+
+                            <p>
+                                The Button has the runtime ID <code>button</code> and declares
+                                <code>parent="ui"</code>.
+                            </p>
+
+                            <p>
+                                This creates the following relationship:
+                            </p>
+
+                            <p>
+                                <code>ui</code> → <code>button</code>
+                            </p>
+
+                            <p>
+                                The Button is therefore created as a control belonging to the GUI root rather than as
+                                an independent scene object.
+                            </p>
+
+                            <p>
+                                Clicking the Button confirms that the control has been created and attached to its GUI
+                                parent.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The <code>parent</code> attribute connects the Button to the AdvancedDynamicTexture.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-gui
+    id="ui"
+    type="AdvancedDynamicTexture"&gt;
+&lt;/arashtad-gui&gt;
+
+&lt;arashtad-gui
+    id="button"
+    type="Button"
+    parent="ui"
+    text="GUI CONTROL"
+    width="'240px'"
+    height="'70px'"
+    color="'white'"
+    background="'#26a38c'"
+    fontSize="24"
+    cornerRadius="10"&gt;
+&lt;/arashtad-gui&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/gui/babylon.gui.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('gui-hierarchy');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

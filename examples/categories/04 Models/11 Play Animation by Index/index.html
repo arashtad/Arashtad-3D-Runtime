@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Play Animation by Exact Name">
+    <meta name="keywords" content="Models, Animation">
+    <title>Play Animation by Exact Name | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            position: relative;
+        }
+
+        #animation-name-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #animation-name-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        #animation-name-controls button {
+            padding: 8px 14px;
+            border: 1px solid #26a38c;
+            border-radius: 4px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #animation-name-controls button:hover {
+            background: #26a38c;
+        }
+
+        #animation-name-list {
+            margin-top: 16px;
+            color: #bbb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Models / Animation Control
+                </div>
+
+                <div class="example-eyebrow">
+                    Model Animation System
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Play Animation by Exact Name</h1>
+                    <span class="example-badge green">49</span>
+                </div>
+
+                <p>
+                    Start a specific imported model animation by its exact
+                    animation group name.
+                </p>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="animation-name" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-model id="model_1" src="../../../assets/3d/linux-animated.glb"
+                        position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)"></arashtad-model>
+
+                </canvas>
+
+                <div id="animation-name-status">
+                    <strong>Animation:</strong> loading...
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Animation Names
+                    </h2>
+
+                    <p class="example-section-description">
+                        The runtime accepts an exact animation group name with
+                        <code>playAnimation()</code>.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Available Animations
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <div id="animation-name-controls">
+                                <button type="button" id="play-animation-happy">
+                                    Play happy
+                                </button>
+
+                                <button type="button" id="play-animation-foot">
+                                    Play foot
+                                </button>
+
+                                <button type="button" id="play-animation-head">
+                                    Play head
+                                </button>
+                            </div>
+
+                            <div id="animation-name-list">
+                                Loading animation information...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Pass the exact animation group name to
+                        <code>playAnimation()</code> to select an animation.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-model
+    id="model_1"
+    src="../../../assets/3d/linux-animated.glb"
+    position="new BABYLON.Vector3(0, -0.5, 0)"
+    scaling="new BABYLON.Vector3(5, 5, 5)"
+&gt;&lt;/arashtad-model&gt;
+
+&lt;script type="module"&gt;
+
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('animation-name');
+    const scene = await ready(canvas);
+
+    const modelRoot =
+        scene.getTransformNodeByName('model_1-root');
+
+    modelRoot.playAnimation('happy');
+
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('animation-name');
+        const scene = await ready(canvas);
+
+        const modelRoot =
+            scene.getTransformNodeByName('model_1-root');
+
+        const animations =
+            modelRoot.getAnimations();
+
+        const status =
+            document.getElementById('animation-name-status');
+
+        const list =
+            document.getElementById('animation-name-list');
+
+        const buttons = {
+            happy: document.getElementById('play-animation-happy'),
+            foot: document.getElementById('play-animation-foot'),
+            head: document.getElementById('play-animation-head')
+        };
+
+        if (!animations.length) {
+
+            status.innerHTML =
+                '<strong>Animations:</strong> 0';
+
+            list.textContent =
+                'This model does not contain animation groups.';
+
+            Object.values(buttons).forEach(button => {
+                button.disabled = true;
+            });
+
+        } else {
+
+            status.innerHTML =
+                '<strong>Animations:</strong> ' +
+                animations.length;
+
+            list.innerHTML = animations.map(
+                name =>
+                    '<div>' +
+                    name +
+                    '</div>'
+            ).join('');
+
+            Object.entries(buttons).forEach(
+                ([name, button]) => {
+
+                    if (!animations.includes(name)) {
+                        button.disabled = true;
+                        return;
+                    }
+
+                    button.addEventListener(
+                        'click',
+                        () => {
+
+                            modelRoot.playAnimation(name);
+
+                            status.innerHTML =
+                                '<strong>Playing animation:</strong> ' +
+                                name;
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

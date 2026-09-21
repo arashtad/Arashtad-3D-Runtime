@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Multiple GUI Controls">
+    <meta name="keywords" content="GUI, Multiple">
+    <title>Multiple GUI Controls | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .gui-demo {
+            position: relative;
+        }
+
+        #gui-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / GUI / Controls
+                </div>
+
+                <div class="example-eyebrow">
+                    Multiple GUI Controls
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Multiple GUI Controls</h1>
+                    <span class="example-badge green">107</span>
+                </div>
+
+                <p>
+                    Build a GUI with multiple independent controls and use them to interact with a 3D scene.
+                </p>
+
+            </header>
+
+            <section class="example-demo gui-demo">
+
+                <canvas id="multiple-gui-controls" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3.2, 11, new BABYLON.Vector3(0, 1, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.4">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="directional-light"
+                        args="new BABYLON.Vector3(-1, -2, -1)" position="new BABYLON.Vector3(4, 6, 4)" intensity="1.8">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="object-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)"
+                        emissiveColor="new BABYLON.Color3(0.02, 0.08, 0.06)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="ground-material"
+                        diffuseColor="new BABYLON.Color3(0.035, 0.045, 0.055)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="main-object" size="2.5" position="new BABYLON.Vector3(0, 1.5, 0)"
+                        material="object-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="ground" height="0.3" diameter="8" tessellation="48"
+                        position="new BABYLON.Vector3(0, -0.15, 0)" material="ground-material">
+                    </arashtad-mesh>
+
+                    <arashtad-gui id="ui" type="AdvancedDynamicTexture">
+                    </arashtad-gui>
+
+                    <arashtad-gui id="rotate-button" type="Button" parent="ui" text="ROTATE" width="'150px'"
+                        height="'52px'" color="'white'" background="'#26a38c'" fontSize="20" cornerRadius="8"
+                        top="'24px'" left="'24px'" verticalAlignment="0" horizontalAlignment="0" OnPointerClick="
+                            refs['main-object'].rotation.y += Math.PI / 4;
+                            document.getElementById('gui-status').innerHTML =
+                                '<strong>ROTATE</strong><br>3D object rotated 45°.';
+                        ">
+                    </arashtad-gui>
+
+                    <arashtad-gui id="scale-button" type="Button" parent="ui" text="SCALE" width="'150px'"
+                        height="'52px'" color="'white'" background="'#ff9000'" fontSize="20" cornerRadius="8"
+                        top="'84px'" left="'24px'" verticalAlignment="0" horizontalAlignment="0" OnPointerClick="
+                            refs['main-object'].scaling.scaleInPlace(1.2);
+                            document.getElementById('gui-status').innerHTML =
+                                '<strong>SCALE</strong><br>3D object enlarged.';
+                        ">
+                    </arashtad-gui>
+
+                    <arashtad-gui id="reset-button" type="Button" parent="ui" text="RESET" width="'150px'"
+                        height="'52px'" color="'white'" background="'#303b46'" fontSize="20" cornerRadius="8"
+                        top="'144px'" left="'24px'" verticalAlignment="0" horizontalAlignment="0" OnPointerClick="
+                            refs['main-object'].rotation = new BABYLON.Vector3(0, 0, 0);
+                            refs['main-object'].scaling = new BABYLON.Vector3(1, 1, 1);
+                            document.getElementById('gui-status').innerHTML =
+                                '<strong>RESET</strong><br>3D object restored.';
+                        ">
+                    </arashtad-gui>
+
+                </canvas>
+
+                <div id="gui-status">
+                    <strong>3 GUI Controls</strong><br>
+                    Use the controls to manipulate the 3D object.
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Multiple GUI Controls
+                    </h2>
+
+                    <p class="example-section-description">
+                        An AdvancedDynamicTexture can contain multiple independent controls. Each Button has its own
+                        properties and pointer action while sharing the same GUI root.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                GUI Control Hierarchy
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                All three buttons use <code>parent="ui"</code>, so they belong to the same
+                                AdvancedDynamicTexture.
+                            </p>
+
+                            <p>
+                                <code>ROTATE</code> changes the 3D object's Y rotation.
+                            </p>
+
+                            <p>
+                                <code>SCALE</code> enlarges the 3D object.
+                            </p>
+
+                            <p>
+                                <code>RESET</code> restores the object's original rotation and scale.
+                            </p>
+
+                            <p>
+                                The GUI therefore acts as a control layer for the 3D scene.
+                            </p>
+
+                            <p>
+                                Because the mesh ID contains a hyphen, the runtime reference is accessed as
+                                <code>refs['main-object']</code>.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Multiple Button controls can share one AdvancedDynamicTexture and independently manipulate
+                        runtime scene objects.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-gui
+    id="ui"
+    type="AdvancedDynamicTexture"&gt;
+&lt;/arashtad-gui&gt;
+
+&lt;arashtad-gui
+    id="rotate-button"
+    type="Button"
+    parent="ui"
+    text="ROTATE"
+    width="'150px'"
+    height="'52px'"
+    color="'white'"
+    background="'#26a38c'"
+    fontSize="20"
+    cornerRadius="8"
+    top="'24px'"
+    left="'24px'"
+    verticalAlignment="0"
+    horizontalAlignment="0"
+    OnPointerClick="
+        refs['main-object'].rotation.y += Math.PI / 4;
+    "&gt;
+&lt;/arashtad-gui&gt;
+
+&lt;arashtad-gui
+    id="scale-button"
+    type="Button"
+    parent="ui"
+    text="SCALE"
+    width="'150px'"
+    height="'52px'"
+    color="'white'"
+    background="'#ff9000'"
+    fontSize="20"
+    cornerRadius="8"
+    top="'84px'"
+    left="'24px'"
+    verticalAlignment="0"
+    horizontalAlignment="0"
+    OnPointerClick="
+        refs['main-object'].scaling.scaleInPlace(1.2);
+    "&gt;
+&lt;/arashtad-gui&gt;
+
+&lt;arashtad-gui
+    id="reset-button"
+    type="Button"
+    parent="ui"
+    text="RESET"
+    width="'150px'"
+    height="'52px'"
+    color="'white'"
+    background="'#303b46'"
+    fontSize="20"
+    cornerRadius="8"
+    top="'144px'"
+    left="'24px'"
+    verticalAlignment="0"
+    horizontalAlignment="0"
+    OnPointerClick="
+        refs['main-object'].rotation = new BABYLON.Vector3(0, 0, 0);
+        refs['main-object'].scaling = new BABYLON.Vector3(1, 1, 1);
+    "&gt;
+&lt;/arashtad-gui&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/gui/babylon.gui.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('multiple-gui-controls');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Canvas example.">
+    <meta name="keywords" content="Canvas">
+    <title>Canvas | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+    <style>
+        .canvas-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .canvas-message {
+            position: absolute;
+            z-index: 5;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(90%, 620px);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .canvas-message h2 {
+            margin: 0;
+            color: #edf5f2;
+            font-size: clamp(30px, 5vw, 58px);
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+
+        .canvas-message h2 span {
+            color: #26a38c;
+        }
+
+        .canvas-message p {
+            margin: 18px 0 0;
+            color: #b1c3bd;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .canvas-corner {
+            position: absolute;
+            z-index: 5;
+            right: 18px;
+            bottom: 18px;
+            color: #728981;
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#fundamentals">Fundamentals</a>
+                    <a href="#source">Source</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>02</span>
+                    <span>/</span>
+                    <span>Fundamentals</span>
+                </div>
+
+                <div class="example-eyebrow">02 · Fundamentals</div>
+
+                <h1>Canvas</h1>
+
+                <p>
+                    Provide the HTML canvas that Arashtad 3D Runtime uses as the
+                    rendering surface for a Babylon.js scene.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Canvas</span>
+                    <span class="example-badge">HTML</span>
+                    <span class="example-badge">WebGL</span>
+                </div>
+            </header>
+
+            <section class="example-demo canvas-demo">
+                <canvas id="canvas-demo"></canvas>
+
+                <div class="canvas-message">
+                    <h2>HTML <span>Canvas</span></h2>
+                    <p>
+                        This canvas is the rendering surface supplied to the runtime.
+                    </p>
+                </div>
+
+                <div class="canvas-corner">
+                    ARASHTAD 3D RUNTIME · 02
+                </div>
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">What this demonstrates</h2>
+                        <p class="example-section-description">
+                            The HTML canvas element used as the foundation of an Arashtad 3D Runtime scene.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Canvas</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li>HTML canvas element</li>
+                                <li>Canvas element ID</li>
+                                <li>Canvas sizing</li>
+                                <li>WebGL rendering surface</li>
+                                <li>Runtime canvas integration</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Runtime API</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <div class="example-code"><code>ready(canvas);</code></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">Source</h2>
+                        <p class="example-section-description">
+                            The canvas is created in HTML and passed to the runtime through <code>ready()</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="canvas-demo"&gt;&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('canvas-demo');
+
+    ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('canvas-demo');
+
+        ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Advanced Mesh Scene">
+    <meta name="keywords" content="Mesh, Advanced, Scene">
+    <title>Advanced Mesh Scene | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #mesh-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Advanced Scene
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Mesh Interactions
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Advanced Mesh Scene</h1>
+                    <span class="example-badge green">85</span>
+                </div>
+
+                <p>
+                    Use mesh triggers to control materials, mesh transforms, lighting, and camera properties directly
+                    from an interactive runtime scene.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="advanced-mesh-scene" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="1.57" beta="1.2" radius="12"
+                        target="new BABYLON.Vector3(0, 0, 0)" fov="0.4" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="hemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)" intensity="0.8" diffuse="new BABYLON.Color3(1, 1, 1)"
+                        groundColor="new BABYLON.Color3(0.15, 0.15, 0.15)">
+                    </arashtad-light>
+
+                    <arashtad-light type="DirectionalLight" id="directionalLight"
+                        direction="new BABYLON.Vector3(-1, -2, -1)" position="new BABYLON.Vector3(5, 8, 5)"
+                        intensity="2" diffuse="new BABYLON.Color3(1, 1, 1)">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="boxMaterial"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="sphereMaterial"
+                        diffuseColor="new BABYLON.Color3(0.95, 0.45, 0.08)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="cylinderMaterial"
+                        diffuseColor="new BABYLON.Color3(0.25, 0.45, 0.85)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="groundMaterial"
+                        diffuseColor="new BABYLON.Color3(0.18, 0.18, 0.18)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(-3, 1, 0)"
+                        material="boxMaterial" isPickable="true" OnPickTrigger="
+                            box.material.diffuseColor =
+                                new BABYLON.Color3(
+                                    Math.random(),
+                                    Math.random(),
+                                    Math.random()
+                                );
+                        ">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="sphere" diameter="2" segments="32"
+                        position="new BABYLON.Vector3(0, 1, 0)" material="sphereMaterial" isPickable="true"
+                        OnPickTrigger="
+                            sphere.scaling.x =
+                                sphere.scaling.x === 1 ? 1.5 : 1;
+
+                            sphere.scaling.y =
+                                sphere.scaling.y === 1 ? 1.5 : 1;
+
+                            sphere.scaling.z =
+                                sphere.scaling.z === 1 ? 1.5 : 1;
+                        ">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="cylinder" height="2.5" diameter="1.8" tessellation="32"
+                        position="new BABYLON.Vector3(3, 1.25, 0)" material="cylinderMaterial" isPickable="true"
+                        OnPickTrigger="
+                            directionalLight.diffuse =
+                                directionalLight.diffuse.equals(
+                                    new BABYLON.Color3(1, 0.2, 0.1)
+                                )
+                                ? new BABYLON.Color3(1, 1, 1)
+                                : new BABYLON.Color3(1, 0.2, 0.1);
+
+                            directionalLight.intensity =
+                                directionalLight.intensity === 2
+                                    ? 0.5
+                                    : 2;
+                        ">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="14" height="8"
+                        position="new BABYLON.Vector3(0, 0, 0)" material="groundMaterial" isPickable="true"
+                        OnPickTrigger="
+                            camera.alpha =
+                                camera.alpha === 1.57
+                                    ? 2.2
+                                    : 1.57;
+
+                            camera.beta = 1.15;
+
+                            camera.radius =
+                                camera.radius === 12
+                                    ? 9
+                                    : 12;
+                        ">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="mesh-status">
+                    <strong>4 Interactive Meshes</strong><br>
+                    Box · Sphere · Cylinder · Ground
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Interactive Mesh Controls
+                    </h2>
+
+                    <p class="example-section-description">
+                        Each mesh uses a native runtime trigger to modify another part of the scene or its own
+                        properties.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Interactions
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Box</strong> - Changes its material color randomly.
+                            </p>
+
+                            <p>
+                                <strong>Sphere</strong> - Toggles its scale.
+                            </p>
+
+                            <p>
+                                <strong>Cylinder</strong> - Changes directional light color and intensity.
+                            </p>
+
+                            <p>
+                                <strong>Ground</strong> - Changes the camera angle and radius.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Mesh events can directly access registered runtime objects and Babylon.js properties.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="box"
+    size="2"
+    position="new BABYLON.Vector3(-3, 1, 0)"
+    material="boxMaterial"
+    isPickable="true"
+    OnPickTrigger="
+        box.material.diffuseColor =
+            new BABYLON.Color3(
+                Math.random(),
+                Math.random(),
+                Math.random()
+            );
+    "&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="sphere"
+    diameter="2"
+    segments="32"
+    position="new BABYLON.Vector3(0, 1, 0)"
+    material="sphereMaterial"
+    isPickable="true"
+    OnPickTrigger="
+        sphere.scaling.x =
+            sphere.scaling.x === 1 ? 1.5 : 1;
+
+        sphere.scaling.y =
+            sphere.scaling.y === 1 ? 1.5 : 1;
+
+        sphere.scaling.z =
+            sphere.scaling.z === 1 ? 1.5 : 1;
+    "&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Cylinder"
+    id="cylinder"
+    height="2.5"
+    diameter="1.8"
+    tessellation="32"
+    position="new BABYLON.Vector3(3, 1.25, 0)"
+    material="cylinderMaterial"
+    isPickable="true"
+    OnPickTrigger="
+        directionalLight.diffuse =
+            directionalLight.diffuse.equals(
+                new BABYLON.Color3(1, 0.2, 0.1)
+            )
+            ? new BABYLON.Color3(1, 1, 1)
+            : new BABYLON.Color3(1, 0.2, 0.1);
+
+        directionalLight.intensity =
+            directionalLight.intensity === 2
+                ? 0.5
+                : 2;
+    "&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Ground"
+    id="ground"
+    width="14"
+    height="8"
+    position="new BABYLON.Vector3(0, 0, 0)"
+    material="groundMaterial"
+    isPickable="true"
+    OnPickTrigger="
+        camera.alpha =
+            camera.alpha === 1.57
+                ? 2.2
+                : 1.57;
+
+        camera.beta = 1.15;
+
+        camera.radius =
+            camera.radius === 12
+                ? 9
+                : 12;
+    "&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('advanced-mesh-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

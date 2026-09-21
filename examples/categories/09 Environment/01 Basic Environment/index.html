@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Basic Environment">
+    <meta name="keywords" content="Environment">
+    <title>Basic Environment | Arashtad 3D Runtime</title>
+
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .environment-demo {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Environment / Basic Environment
+                </div>
+
+                <div class="example-eyebrow">
+                    Environment Configuration
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Basic Environment</h1>
+                    <span class="example-badge green">111</span>
+                </div>
+
+                <p>
+                    Configure an HDR environment for scene lighting, reflections,
+                    background rendering, blur, and environment rotation using
+                    the <strong>arashtad-runtime</strong> element.
+                </p>
+
+            </header>
+
+            <section class="example-demo environment-demo">
+
+                <canvas id="environment-scene" clearColor="new BABYLON.Color4(0.003, 0.006, 0.012, 1)">
+
+                    <!-- Environment -->
+
+                    <arashtad-runtime lazy resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="true" environmentBackgroundBlur="0.1"
+                        environmentRotationY="1">
+                    </arashtad-runtime>
+
+                    <!-- Camera -->
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.55, 11, new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000"
+                        useAutoRotationBehavior="true">
+                    </arashtad-camera>
+
+                    <!-- Lighting -->
+
+                    <arashtad-light type="HemisphericLight" id="ambient-light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.8">
+                    </arashtad-light>
+
+                    <!-- Materials -->
+
+                    <arashtad-material type="StandardMaterial" id="accent-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        emissiveColor="new BABYLON.Color3(0.025, 0.12, 0.09)"
+                        specularColor="new BABYLON.Color3(1, 1, 1)" specularPower="96">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="platform-material"
+                        diffuseColor="new BABYLON.Color3(0.018, 0.025, 0.035)"
+                        specularColor="new BABYLON.Color3(0.2, 0.2, 0.2)">
+                    </arashtad-material>
+
+                    <!-- Main Object -->
+
+                    <arashtad-mesh type="Box" id="center-object" size="2.5" position="new BABYLON.Vector3(0, 1.25, 0)"
+                        material="accent-material">
+                    </arashtad-mesh>
+
+                    <!-- Secondary Objects -->
+
+                    <arashtad-mesh type="Sphere" id="left-object" diameter="1.8"
+                        position="new BABYLON.Vector3(-3, 1, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="right-object" diameter="1.8"
+                        position="new BABYLON.Vector3(3, 1, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <!-- Platform -->
+
+                    <arashtad-mesh type="Cylinder" id="platform" height="0.35" diameter="7" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0, 0)" material="platform-material">
+                    </arashtad-mesh>
+
+                    <!-- Decorative Rings -->
+
+                    <arashtad-mesh type="Torus" id="ring-one" diameter="5.5" thickness="0.04" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.25, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="ring-two" diameter="4.2" thickness="0.025" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.3, 0)" material="accent-material"
+                        rotation="new BABYLON.Vector3(Math.PI / 2, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        HDR Environment
+                    </h2>
+
+                    <p class="example-section-description">
+                        An HDR environment can provide image-based lighting,
+                        reflections, and a visible environment background for the scene.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment File
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The <code>environment</code> attribute points directly
+                                to the HDR environment file.
+                            </p>
+
+                            <pre><code>&lt;arashtad-runtime
+    environment="../../../assets/environments/room.hdr"&gt;
+&lt;/arashtad-runtime&gt;</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment Intensity
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <code>environmentIntensity</code> controls the strength
+                                of the environment contribution to the scene.
+                            </p>
+
+                            <pre><code>environmentIntensity="1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Environment Background
+                    </h2>
+
+                    <p class="example-section-description">
+                        The same HDR environment can be rendered as the visible
+                        background behind the scene.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Background
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Set <code>environmentBackground</code> to
+                                <code>true</code> to display the environment
+                                behind the scene.
+                            </p>
+
+                            <pre><code>environmentBackground="true"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Background Blur
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <code>environmentBackgroundBlur</code> controls
+                                the amount of blur applied to the environment
+                                background.
+                            </p>
+
+                            <pre><code>environmentBackgroundBlur="0.1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Environment Rotation
+                    </h2>
+
+                    <p class="example-section-description">
+                        Rotate the environment independently from the geometry
+                        in the scene.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Y-Axis Rotation
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Use <code>environmentRotationY</code> to rotate
+                                the environment around the Y axis.
+                            </p>
+
+                            <pre><code>environmentRotationY="1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Lazy Loading
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The <code>lazy</code> attribute enables the
+                                runtime's lazy-loading behavior.
+                            </p>
+
+                            <pre><code>&lt;arashtad-runtime
+    lazy
+    resize="engine.resize()"
+    environment="../../../assets/environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"
+    environmentBackgroundBlur="0.1"
+    environmentRotationY="1"&gt;
+&lt;/arashtad-runtime&gt;</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The environment is configured declaratively through
+                        the runtime element.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-runtime
+    lazy
+    resize="engine.resize()"
+    environment="../../../assets/environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"
+    environmentBackgroundBlur="0.1"
+    environmentRotationY="1"&gt;
+&lt;/arashtad-runtime&gt;
+
+&lt;arashtad-camera
+    type="ArcRotateCamera"
+    id="camera"
+    args="Math.PI / 2, Math.PI / 2.55, 11, new BABYLON.Vector3(0, 1.2, 0)"
+    minZ="0.1"
+    maxZ="1000"
+    useAutoRotationBehavior="true"&gt;
+&lt;/arashtad-camera&gt;
+
+&lt;arashtad-light
+    type="HemisphericLight"
+    id="ambient-light"
+    args="new BABYLON.Vector3(0, 1, 0)"
+    intensity="0.8"&gt;
+&lt;/arashtad-light&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('environment-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

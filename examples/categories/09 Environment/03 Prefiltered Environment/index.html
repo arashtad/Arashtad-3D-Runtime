@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Prefiltered Environment">
+    <meta name="keywords" content="Environment, ENV">
+    <title>Prefiltered Environment | Arashtad 3D Runtime</title>
+
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .environment-demo {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Environment / Prefiltered Environment
+                </div>
+
+                <div class="example-eyebrow">
+                    Prefiltered Environment Texture
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Prefiltered Environment</h1>
+                    <span class="example-badge green">113</span>
+                </div>
+
+                <p>
+                    Use an HDR environment texture as the source for
+                    environment lighting, reflections, and background rendering.
+                </p>
+
+            </header>
+
+            <section class="example-demo environment-demo">
+
+                <canvas id="prefiltered-environment-scene" clearColor="new BABYLON.Color4(0.003, 0.006, 0.012, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="true">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="Math.PI / 2" beta="Math.PI / 2.55"
+                        radius="12" target="new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000"
+                        useAutoRotationBehavior="true">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient-light" direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.5">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="metal-material"
+                        diffuseColor="new BABYLON.Color3(0.12, 0.14, 0.16)" specularColor="new BABYLON.Color3(1, 1, 1)"
+                        specularPower="128">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="accent-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        emissiveColor="new BABYLON.Color3(0.02, 0.08, 0.06)" specularColor="new BABYLON.Color3(1, 1, 1)"
+                        specularPower="96">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="dark-material"
+                        diffuseColor="new BABYLON.Color3(0.025, 0.035, 0.045)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)" specularPower="128">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="ground-material"
+                        diffuseColor="new BABYLON.Color3(0.018, 0.025, 0.035)"
+                        specularColor="new BABYLON.Color3(0.35, 0.35, 0.35)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Sphere" id="metal-sphere" diameter="2.6" segments="64"
+                        position="new BABYLON.Vector3(-2.8, 1.4, 0)" material="metal-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="accent-sphere" diameter="2.2" segments="64"
+                        position="new BABYLON.Vector3(0, 1.2, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="dark-box" size="2.3" position="new BABYLON.Vector3(2.8, 1.15, 0)"
+                        material="dark-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="platform" height="0.35" diameter="8" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0, 0)" material="ground-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="ring-one" diameter="6.5" thickness="0.04" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.25, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="ring-two" diameter="5" thickness="0.025" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.3, 0)" rotation="new BABYLON.Vector3(Math.PI / 2, 0, 0)"
+                        material="accent-material">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Prefiltered Environment
+                    </h2>
+                    <p class="example-section-description">
+                        An HDR environment texture provides the source data for
+                        environment lighting and reflections.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment Texture
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>environment</code> attribute points
+                                to the HDR environment texture.
+                            </p>
+
+                            <pre><code>&lt;arashtad-runtime
+    environment="../../../assets/environments/room.hdr"&gt;
+&lt;/arashtad-runtime&gt;</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment Intensity
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Control the strength of the environment
+                                contribution with <code>environmentIntensity</code>.
+                            </p>
+
+                            <pre><code>environmentIntensity="1"</code></pre>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Environment Background
+                    </h2>
+
+                    <p class="example-section-description">
+                        The same environment can be displayed as the visible
+                        background of the scene.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Enable Background
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Set <code>environmentBackground</code> to
+                                <code>true</code> to display the environment
+                                behind the scene.
+                            </p>
+
+                            <pre><code>environmentBackground="true"</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Complete Configuration
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <pre><code>&lt;arashtad-runtime
+    resize="engine.resize()"
+    environment="../../../assets/environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"&gt;
+&lt;/arashtad-runtime&gt;</code></pre>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Material Response
+                    </h2>
+
+                    <p class="example-section-description">
+                        Different materials respond differently to the same
+                        environment illumination and reflection data.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Metallic Surface
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The metallic sphere uses a strong specular
+                                response to make the environment highlights
+                                visible.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Multiple Surfaces
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The scene uses metallic, colored, and dark
+                                materials to demonstrate different responses
+                                to the environment.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Source</h2>
+
+                    <p class="example-section-description">
+                        The environment is configured declaratively through
+                        <code>arashtad-runtime</code>.
+                    </p>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-runtime
+    resize="engine.resize()"
+    environment="../../../assets/environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"&gt;
+&lt;/arashtad-runtime&gt;
+
+&lt;arashtad-material
+    type="StandardMaterial"
+    id="metal-material"
+    diffuseColor="new BABYLON.Color3(0.12, 0.14, 0.16)"
+    specularColor="new BABYLON.Color3(1, 1, 1)"
+    specularPower="128"&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="metal-sphere"
+    diameter="2.6"
+    segments="64"
+    position="new BABYLON.Vector3(-2.8, 1.4, 0)"
+    material="metal-material"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('prefiltered-environment-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

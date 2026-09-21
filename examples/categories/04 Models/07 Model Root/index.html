@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Model root and imported model hierarchy.">
+    <meta name="keywords" content="Models, Hierarchy">
+    <title>Model Root | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-demo canvas {
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        .model-demo canvas.loading {
+            opacity: 0;
+        }
+
+        .model-demo canvas.loaded {
+            opacity: 1;
+        }
+
+        #preloader {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #080d0c;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #preloader-spinner {
+            width: 46px;
+            height: 46px;
+            margin-bottom: 22px;
+            border: 3px solid rgba(38, 163, 140, 0.2);
+            border-top-color: #26a38c;
+            border-radius: 50%;
+            animation: preloader-spin 0.9s linear infinite;
+        }
+
+        #loading-label {
+            margin-bottom: 10px;
+            color: #26a38c;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        #loading-counter {
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        #model-root-status {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            max-width: calc(100% - 40px);
+            padding: 10px 14px;
+            border: 1px solid rgba(38, 163, 140, 0.45);
+            background: rgba(8, 13, 12, 0.88);
+            color: #26a38c;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            pointer-events: none;
+        }
+
+        @keyframes preloader-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>Models</span>
+                    <span>/</span>
+                    <span>44</span>
+                </div>
+
+                <div class="example-eyebrow">Model System</div>
+
+                <h1>Model Root</h1>
+
+                <p class="example-page-description">
+                    Understand the runtime-created root of an imported model and access
+                    individual meshes contained inside the imported model hierarchy.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge green">Root</span>
+                    <span class="example-badge green">Hierarchy</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="model-root" class="loading" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" OnLoadProgress="
+                            document.getElementById('loading-counter').textContent = progress + '%';
+                            document.getElementById('loading-bar').style.width = progress + '%';
+
+                            if (progress >= 100) {
+                                setTimeout(() => {
+                                    document.getElementById('model-root').classList.remove('loading');
+                                    document.getElementById('model-root').classList.add('loaded');
+                                    document.getElementById('preloader').classList.add('hidden');
+                                }, 200);
+                            }
+                        "></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 8, new BABYLON.Vector3(0, 1, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-model id="linux" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)">
+
+                        <arashtad-mesh ref="black" OnPickTrigger="
+                                document.getElementById('model-root-status').textContent =
+                                    'Selected mesh: black';
+                            "></arashtad-mesh>
+
+                        <arashtad-mesh ref="white" OnPickTrigger="
+                                document.getElementById('model-root-status').textContent =
+                                    'Selected mesh: white';
+                            "></arashtad-mesh>
+
+                        <arashtad-mesh ref="orange" OnPickTrigger="
+                                document.getElementById('model-root-status').textContent =
+                                    'Selected mesh: orange';
+                            "></arashtad-mesh>
+
+                    </arashtad-model>
+
+                </canvas>
+
+                <div id="model-root-status">
+                    Select a Linux model part.
+                </div>
+
+                <div id="preloader">
+
+                    <div id="preloader-spinner"></div>
+
+                    <div id="loading-label">
+                        Loading Model
+                    </div>
+
+                    <div id="loading-counter">
+                        0%
+                    </div>
+
+                    <div id="loading-track">
+                        <div id="loading-bar"></div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Runtime Model Hierarchy</h2>
+
+                    <p class="example-section-description">
+                        When a model is imported, Arashtad 3D Runtime creates a
+                        TransformNode root for the imported model. The imported model
+                        hierarchy remains beneath that runtime root.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Hierarchy</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <pre class="example-code"><code>linux-root
+└── root
+    ├── black
+    ├── white
+    └── orange</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Child Mesh References</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The imported meshes can be referenced by their actual
+                                Babylon mesh names. In this model those names are
+                                <code>black</code>, <code>white</code>, and
+                                <code>orange</code>.
+                            </p>
+
+                            <p>
+                                Click any visible Linux component in the scene to see
+                                which imported mesh received the event.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Nested Mesh References</h2>
+
+                    <p class="example-section-description">
+                        Mesh references can be placed inside the model element. The
+                        runtime resolves the imported mesh and applies the requested
+                        properties or events to it.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Black</div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                References the imported <code>black</code> mesh.
+                                Picking it updates the status display.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">White</div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                References the imported <code>white</code> mesh.
+                                Picking it updates the status display.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Orange</div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                References the imported <code>orange</code> mesh.
+                                Picking it updates the status display.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Source</h2>
+
+                    <p class="example-section-description">
+                        The complete runtime markup for the model root example.
+                    </p>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-model
+    id="linux"
+    src="../../../assets/3d/linux.glb"
+    position="new BABYLON.Vector3(0, -0.5, 0)"
+    scaling="new BABYLON.Vector3(5, 5, 5)"
+&gt;
+
+    &lt;arashtad-mesh
+        ref="black"
+        OnPickTrigger="
+            document.getElementById('model-root-status').textContent =
+                'Selected mesh: black';
+        "
+    &gt;&lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        ref="white"
+        OnPickTrigger="
+            document.getElementById('model-root-status').textContent =
+                'Selected mesh: white';
+        "
+    &gt;&lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        ref="orange"
+        OnPickTrigger="
+            document.getElementById('model-root-status').textContent =
+                'Selected mesh: orange';
+        "
+    &gt;&lt;/arashtad-mesh&gt;
+
+&lt;/arashtad-model&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime</span>
+                <span>MIT License</span>
+                <span>Version 1.0.0</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('model-root');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

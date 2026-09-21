@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Sphere">
+    <meta name="keywords" content="Mesh, Sphere">
+    <title>Sphere | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #sphere-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Sphere
+                </div>
+
+                <div class="example-eyebrow">
+                    MeshBuilder Geometry
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Sphere</h1>
+                    <span class="example-badge green">58</span>
+                </div>
+
+                <p>
+                    Create a sphere mesh using Babylon.js MeshBuilder through the
+                    Arashtad 3D Runtime.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="sphere" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, 0, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-mesh type="Sphere" id="sphere-mesh" diameter="2" segments="32"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="sphere-status">
+                    <strong>Mesh:</strong> Sphere
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Sphere Parameters
+                    </h2>
+
+                    <p class="example-section-description">
+                        The runtime passes the mesh attributes to Babylon.js
+                        MeshBuilder as sphere creation options.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Geometry
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The <code>diameter</code> attribute controls the
+                                overall size of the sphere, while <code>segments</code>
+                                controls its geometric subdivisions.
+                            </p>
+
+                            <p>
+                                Additional MeshBuilder options can be supplied
+                                directly as runtime attributes.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Create a sphere with <code>type="Sphere"</code> and provide
+                        its geometry options as attributes.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh type="Sphere" id="sphere-mesh"
+    diameter="2"
+    segments="32"
+    position="new BABYLON.Vector3(0, 0, 0)"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('sphere');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Camera and 3D model example.">
+    <meta name="keywords" content="Camera, Models">
+    <title>Camera + Model | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .camera-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#cameras">Cameras</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>23</span>
+                    <span>/</span>
+                    <span>Cameras</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    23 · Cameras
+                </div>
+
+                <h1>Camera + Model</h1>
+
+                <p>
+                    Load a 3D model declaratively and position an ArcRotateCamera
+                    around it for an interactive model-viewing scene.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Camera</span>
+                    <span class="example-badge">Model</span>
+                    <span class="example-badge">ArcRotateCamera</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo camera-demo">
+
+                <canvas id="camera-model">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(70), 6, new BABYLON.Vector3(0, 0.5, 0)"
+                        lowerRadiusLimit="3" upperRadiusLimit="12">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-model id="model_1" src="../../../assets/3d/linux.glb"></arashtad-model>
+
+                    <arashtad-mesh type="Ground" id="ground" width="12" height="12">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Combining a declarative camera with a runtime-loaded
+                            3D model.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Camera
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>ArcRotateCamera</code> orbits around
+                                the model target and allows the viewer to rotate
+                                and zoom the scene.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Model
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>arashtad-model</code> tag loads the
+                                GLB model through Babylon.js
+                                <code>SceneLoader</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            A camera, light, model, and ground are declared
+                            directly inside the runtime canvas.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="camera-model"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(70), 6, new BABYLON.Vector3(0, 0.5, 0)"
+        lowerRadiusLimit="3"
+        upperRadiusLimit="12"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="model"
+        src="../../../assets/3d/linux.glb"&gt;
+    &lt;/arashtad-model&gt;
+
+    &lt;arashtad-mesh
+        type="Ground"
+        id="ground"
+        width="12"
+        height="12"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('camera-model');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('camera-model');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

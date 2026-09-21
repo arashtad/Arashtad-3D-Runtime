@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Basic ParticleSystem">
+    <meta name="keywords" content="Particles">
+    <title>Basic ParticleSystem | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .particle-demo {
+            position: relative;
+        }
+
+        #particle-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Particle Systems / Basic
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Particle System
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Basic ParticleSystem</h1>
+                    <span class="example-badge green">94</span>
+                </div>
+
+                <p>
+                    Create a basic Babylon.js particle system declaratively with an emitter, particle texture,
+                    emission settings, lifetime, size, direction, and power controls.
+                </p>
+
+            </header>
+
+            <section class="example-demo particle-demo">
+
+                <canvas id="basic-particles" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 9, new BABYLON.Vector3(0, 1, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-particlesystem id="particles" type="ParticleSystem" capacity="1000"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0, 0)" emitRate="100" minSize="0.2" maxSize="0.5"
+                        minLifeTime="1" maxLifeTime="2" direction1="new BABYLON.Vector3(-1, 1, 0)"
+                        direction2="new BABYLON.Vector3(1, 2, 0)" minEmitPower="1" maxEmitPower="2">
+                    </arashtad-particlesystem>
+
+                </canvas>
+
+                <div id="particle-status">
+                    <strong>1,000 Particles · 100 / sec</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Basic Particle System
+                    </h2>
+
+                    <p class="example-section-description">
+                        A ParticleSystem can be configured entirely through runtime attributes. The particle texture,
+                        emitter, emission rate, particle size, lifetime, direction, and emission power define the
+                        resulting particle effect.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Configuration
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Capacity</strong> - 1,000 particles
+                            </p>
+
+                            <p>
+                                <strong>Texture</strong> - <code>../../../assets/textures/flare.png</code>
+                            </p>
+
+                            <p>
+                                <strong>Emission Rate</strong> - 100 particles per second
+                            </p>
+
+                            <p>
+                                <strong>Size</strong> - 0.2 to 0.5
+                            </p>
+
+                            <p>
+                                <strong>Lifetime</strong> - 1 to 2 seconds
+                            </p>
+
+                            <p>
+                                <strong>Direction</strong> - From <code>(-1, 1, 0)</code> to <code>(1, 2, 0)</code>
+                            </p>
+
+                            <p>
+                                <strong>Emission Power</strong> - 1 to 2
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The particle system is created and configured directly through the
+                        <code>arashtad-particlesystem</code> runtime element.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-particlesystem
+    id="particles"
+    type="ParticleSystem"
+    capacity="1000"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(0, 0, 0)"
+    emitRate="100"
+    minSize="0.2"
+    maxSize="0.5"
+    minLifeTime="1"
+    maxLifeTime="2"
+    direction1="new BABYLON.Vector3(-1, 1, 0)"
+    direction2="new BABYLON.Vector3(1, 2, 0)"
+    minEmitPower="1"
+    maxEmitPower="2"&gt;
+&lt;/arashtad-particlesystem&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('basic-particles');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

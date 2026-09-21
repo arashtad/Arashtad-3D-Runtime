@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - DirectionalLight basic example.">
+    <meta name="keywords" content="Lighting, DirectionalLight">
+    <title>DirectionalLight - Basic | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .light-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#lights">Lights</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>29</span>
+                    <span>/</span>
+                    <span>Lights</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    29 · Lights
+                </div>
+
+                <h1>DirectionalLight - Basic</h1>
+
+                <p>
+                    Create a Babylon.js DirectionalLight declaratively and
+                    illuminate a simple 3D scene from a defined direction.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Light</span>
+                    <span class="example-badge">DirectionalLight</span>
+                    <span class="example-badge">Basic</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo light-demo">
+
+                <canvas id="directional-light-basic" clearColor="new BABYLON.Color4(0.04, 0.055, 0.05, 1)">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(65), 8, new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="DirectionalLight" id="light" args="new BABYLON.Vector3(-1, -2, -1)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="8" height="8"
+                        position="new BABYLON.Vector3(0, -1.05, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            The basic declarative setup of a DirectionalLight.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                DirectionalLight
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The runtime resolves
+                                <code>DirectionalLight</code> from Babylon.js
+                                and constructs it from the supplied direction.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Direction
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The light direction is
+                                <code>(-1, -2, -1)</code>, directing the light
+                                toward the scene from above and to one side.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Intensity
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The light uses an intensity of
+                                <code>2</code> to provide strong directional
+                                illumination.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            A DirectionalLight is created using the runtime light tag.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="directional-light-basic"
+    clearColor="new BABYLON.Color4(0.04, 0.055, 0.05, 1)"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(65), 8, new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="DirectionalLight"
+        id="light"
+        args="new BABYLON.Vector3(-1, -2, -1)"
+        intensity="2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"
+        position="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Ground"
+        id="ground"
+        width="8"
+        height="8"
+        position="new BABYLON.Vector3(0, -1.05, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('directional-light-basic');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('directional-light-basic');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

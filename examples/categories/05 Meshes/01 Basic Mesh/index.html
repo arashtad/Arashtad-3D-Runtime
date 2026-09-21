@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Basic Mesh">
+    <meta name="keywords" content="Mesh">
+    <title>Basic Mesh | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Basics
+                </div>
+
+                <div class="example-eyebrow">
+                    Mesh System
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Basic Mesh</h1>
+                    <span class="example-badge green">56</span>
+                </div>
+
+                <p>
+                    Create a basic Babylon.js mesh directly from the runtime
+                    using the declarative mesh element.
+                </p>
+
+            </header>
+
+            <section class="example-demo">
+
+                <canvas id="basic-mesh" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, 0, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Mesh Creation
+                    </h2>
+
+                    <p class="example-section-description">
+                        The <code>arashtad-mesh</code> element creates a mesh
+                        through Babylon.js <code>MeshBuilder</code>.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Box Mesh
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                This example creates a box with a size of
+                                <code>2</code> at the scene origin.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Define the mesh type and its Babylon.js MeshBuilder
+                        options directly as HTML attributes.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="basic-mesh"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera type="ArcRotateCamera" id="camera"
+        args="Math.PI / 2, Math.PI / 2.4, 6, new BABYLON.Vector3(0, 0, 0)"
+        minZ="0.1"
+        maxZ="1000"&gt;&lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light type="HemisphericLight" id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"&gt;&lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh type="Box" id="box"
+        size="2"
+        position="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script type="module"&gt;
+
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('basic-mesh');
+    const scene = await ready(canvas);
+
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas =
+            document.getElementById('basic-mesh');
+
+        await ready(canvas);
+
+    </script>
+
+</body>
+
+</html>

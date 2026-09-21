@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Advanced Environment Scene">
+    <meta name="keywords" content="Environment, Advanced">
+    <title>Advanced Environment Scene | Arashtad 3D Runtime</title>
+
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .advanced-environment-demo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advanced-environment-demo canvas {
+            display: block;
+            width: 100%;
+            height: 620px;
+        }
+
+        .advanced-environment-info {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 2;
+            max-width: 420px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            background: rgba(8, 12, 11, 0.9);
+            color: #fff;
+        }
+
+        .advanced-environment-info strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #26a38c;
+            font-size: 14px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .advanced-environment-info span {
+            display: block;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .advanced-environment-info code {
+            color: #ff9000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Environment / Advanced Environment Scene
+                </div>
+
+                <div class="example-eyebrow">
+                    Production-Style Environment Configuration
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Advanced Environment Scene</h1>
+                    <span class="example-badge green">121</span>
+                </div>
+
+                <p>
+                    Combines HDR environment lighting, background visibility, background
+                    blur, environment intensity, environment rotation, imported geometry,
+                    materials, and explicit scene lighting in one complete environment
+                    configuration.
+                </p>
+
+            </header>
+
+            <section class="example-demo advanced-environment-demo">
+
+                <canvas id="advanced-environment-scene" clearColor="new BABYLON.Color4(0.025, 0.035, 0.032, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="true" environmentBackgroundBlur="0.2"
+                        environmentRotationY="1">
+                    </arashtad-runtime>
+
+                    <arashtad-camera id="camera" type="ArcRotateCamera" alpha="1.57" beta="1.15" radius="13"
+                        target="new BABYLON.Vector3(0, 1.4, 0)" lowerRadiusLimit="5" upperRadiusLimit="22"
+                        wheelDeltaPercentage="0.01">
+                    </arashtad-camera>
+
+                    <arashtad-light id="hemispheric-light" type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)" intensity="0.35">
+                    </arashtad-light>
+
+                    <arashtad-light id="directional-light" type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -0.75)" position="new BABYLON.Vector3(5, 8, 4)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-material id="metal-material" type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.18, 0.2, 0.2)" specularColor="new BABYLON.Color3(1, 1, 1)">
+                    </arashtad-material>
+
+                    <arashtad-material id="accent-material" type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        specularColor="new BABYLON.Color3(0.85, 0.85, 0.85)">
+                    </arashtad-material>
+
+                    <arashtad-material id="dark-material" type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.035, 0.045, 0.042)"
+                        specularColor="new BABYLON.Color3(0.5, 0.5, 0.5)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Sphere" id="main-sphere" diameter="3" segments="48"
+                        position="new BABYLON.Vector3(0, 2.1, 0)" material="metal-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="left-box" width="2.2" height="2.2" depth="2.2"
+                        position="new BABYLON.Vector3(-3.4, 1.1, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="right-cylinder" height="2.5" diameter="2.3" tessellation="48"
+                        position="new BABYLON.Vector3(3.4, 1.25, 0)" material="dark-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="front-ring" diameter="4.8" thickness="0.12" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.9, 2.2)" rotation="new BABYLON.Vector3(1.5708, 0, 0)"
+                        material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="16" height="16"
+                        position="new BABYLON.Vector3(0, -0.01, 0)" material="dark-material">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="advanced-environment-info">
+                    <strong>Advanced HDR Environment</strong>
+                    <span>
+                        Environment intensity, visible background, background blur,
+                        and Y-axis environment rotation work together with direct
+                        scene lighting and material response.
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Advanced Environment Controls</h2>
+                    <p class="example-section-description">
+                        Multiple environment properties can be configured together
+                        on the runtime element.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Environment</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The HDR file is loaded through the
+                                <code>environment</code> attribute.
+                            </p>
+
+                            <p>
+                                <code>environmentIntensity</code> controls the
+                                strength of the environment's lighting contribution.
+                            </p>
+
+                            <p>
+                                <code>environmentBackground</code> determines whether
+                                the HDR environment is visible behind the scene.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Background</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <code>environmentBackgroundBlur</code> controls the
+                                amount of blur applied to the visible environment.
+                            </p>
+
+                            <p>
+                                <code>environmentRotationY</code> rotates the
+                                environment around the Y axis without changing the
+                                geometry of the scene.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Environment and Scene Objects</h2>
+                    <p class="example-section-description">
+                        The environment operates alongside ordinary runtime scene
+                        objects, materials, cameras, and lights.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Materials</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The metallic sphere demonstrates environment response
+                                through its specular properties.
+                            </p>
+
+                            <p>
+                                The accent box, dark cylinder, torus, and ground use
+                                separate StandardMaterial definitions.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Lighting</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The HDR environment provides image-based illumination
+                                while the hemispheric and directional lights add
+                                explicit direct lighting.
+                            </p>
+
+                            <p>
+                                All lighting sources affect the same Babylon.js scene.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Complete Configuration</h2>
+                    <p class="example-section-description">
+                        The environment settings used by this scene.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">HDR</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <code>environment="../../../assets/environments/room.hdr"</code>
+                            </p>
+
+                            <p>
+                                <code>environmentIntensity="1"</code>
+                            </p>
+
+                            <p>
+                                <code>environmentBackground="true"</code>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Background</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <code>environmentBackgroundBlur="0.2"</code>
+                            </p>
+
+                            <p>
+                                <code>environmentRotationY="1"</code>
+                            </p>
+
+                            <p>
+                                The rotation value is expressed in radians.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">Source</h2>
+                    <p class="example-section-description">
+                        Complete advanced environment scene configuration.
+                    </p>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="advanced-environment-scene"
+    clearColor="new BABYLON.Color4(0.025, 0.035, 0.032, 1)"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        environment="../../../assets/environments/room.hdr"
+        environmentIntensity="1"
+        environmentBackground="true"
+        environmentBackgroundBlur="0.2"
+        environmentRotationY="1"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        id="camera"
+        type="ArcRotateCamera"
+        alpha="1.57"
+        beta="1.15"
+        radius="13"
+        target="new BABYLON.Vector3(0, 1.4, 0)"
+        lowerRadiusLimit="5"
+        upperRadiusLimit="22"
+        wheelDeltaPercentage="0.01"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        id="hemispheric-light"
+        type="HemisphericLight"
+        direction="new BABYLON.Vector3(0, 1, 0)"
+        intensity="0.35"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-light
+        id="directional-light"
+        type="DirectionalLight"
+        direction="new BABYLON.Vector3(-0.5, -1, -0.75)"
+        position="new BABYLON.Vector3(5, 8, 4)"
+        intensity="1.5"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-material
+        id="metal-material"
+        type="StandardMaterial"
+        diffuseColor="new BABYLON.Color3(0.18, 0.2, 0.2)"
+        specularColor="new BABYLON.Color3(1, 1, 1)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        id="accent-material"
+        type="StandardMaterial"
+        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+        specularColor="new BABYLON.Color3(0.85, 0.85, 0.85)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-material
+        id="dark-material"
+        type="StandardMaterial"
+        diffuseColor="new BABYLON.Color3(0.035, 0.045, 0.042)"
+        specularColor="new BABYLON.Color3(0.5, 0.5, 0.5)"&gt;
+    &lt;/arashtad-material&gt;
+
+    &lt;arashtad-mesh
+        type="Sphere"
+        id="main-sphere"
+        diameter="3"
+        segments="48"
+        position="new BABYLON.Vector3(0, 2.1, 0)"
+        material="metal-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="left-box"
+        width="2.2"
+        height="2.2"
+        depth="2.2"
+        position="new BABYLON.Vector3(-3.4, 1.1, 0)"
+        material="accent-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Cylinder"
+        id="right-cylinder"
+        height="2.5"
+        diameter="2.3"
+        tessellation="48"
+        position="new BABYLON.Vector3(3.4, 1.25, 0)"
+        material="dark-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Torus"
+        id="front-ring"
+        diameter="4.8"
+        thickness="0.12"
+        tessellation="64"
+        position="new BABYLON.Vector3(0, 0.9, 2.2)"
+        rotation="new BABYLON.Vector3(1.5708, 0, 0)"
+        material="accent-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Ground"
+        id="ground"
+        width="16"
+        height="16"
+        position="new BABYLON.Vector3(0, -0.01, 0)"
+        material="dark-material"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('advanced-environment-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

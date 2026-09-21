@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Basic Scene example.">
+    <meta name="keywords" content="Scene, Runtime">
+    <title>Basic Scene | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+    <style>
+        .basic-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .basic-corner {
+            position: absolute;
+            z-index: 5;
+            right: 18px;
+            bottom: 18px;
+            color: #728981;
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#fundamentals">Fundamentals</a>
+                    <a href="#source">Source</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>01</span>
+                    <span>/</span>
+                    <span>Fundamentals</span>
+                </div>
+
+                <div class="example-eyebrow">01 · Fundamentals</div>
+
+                <h1>Basic Scene</h1>
+
+                <p>
+                    Create a complete Arashtad 3D Runtime scene with a canvas,
+                    camera, light, and a simple mesh.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Runtime</span>
+                    <span class="example-badge">Scene</span>
+                    <span class="example-badge">Camera</span>
+                    <span class="example-badge">Mesh</span>
+                </div>
+            </header>
+
+            <section class="example-demo basic-demo">
+                <canvas id="basic-scene">
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="1.57" beta="1.2" radius="8"
+                        target="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" direction="new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="basic-corner">
+                    ARASHTAD 3D RUNTIME · 01
+                </div>
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">What this demonstrates</h2>
+                        <p class="example-section-description">
+                            The minimum complete declarative 3D scene required to render visible geometry.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Scene</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li>HTML canvas integration</li>
+                                <li>Arashtad 3D Runtime initialization</li>
+                                <li>ArcRotateCamera</li>
+                                <li>HemisphericLight</li>
+                                <li>MeshBuilder Box</li>
+                                <li>Declarative scene construction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Runtime API</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <div class="example-code"><code>ready(canvas);</code></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">Source</h2>
+                        <p class="example-section-description">
+                            The scene is declared directly inside the canvas. JavaScript only initializes the runtime.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="basic-scene"&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        alpha="1.57"
+        beta="1.2"
+        radius="8"
+        target="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        direction="new BABYLON.Vector3(0, 1, 0)"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('basic-scene');
+
+    ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('basic-scene');
+
+        ready(canvas);
+    </script>
+
+</body>
+
+</html>

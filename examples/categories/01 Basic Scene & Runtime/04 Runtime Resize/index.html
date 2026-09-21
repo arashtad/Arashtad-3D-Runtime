@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Runtime Resize example.">
+    <meta name="keywords" content="Runtime, Canvas">
+    <title>Runtime Resize | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+    <style>
+        .resize-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+
+        .resize-overlay {
+            position: absolute;
+            z-index: 5;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(90%, 720px);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .resize-overlay h2 {
+            margin: 0;
+            color: #edf5f2;
+            font-size: clamp(30px, 5vw, 58px);
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+
+        .resize-overlay h2 span {
+            color: #26a38c;
+        }
+
+        .resize-overlay p {
+            margin: 18px 0 0;
+            color: #b1c3bd;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .resize-corner {
+            position: absolute;
+            z-index: 5;
+            right: 18px;
+            bottom: 18px;
+            color: #728981;
+            font-family: monospace;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#fundamentals">Fundamentals</a>
+                    <a href="#source">Source</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>04</span>
+                    <span>/</span>
+                    <span>Fundamentals</span>
+                </div>
+
+                <div class="example-eyebrow">04 · Fundamentals</div>
+
+                <h1>Runtime Resize</h1>
+
+                <p>
+                    Use the runtime resize expression to execute
+                    <code>engine.resize()</code> whenever the canvas changes size.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Runtime</span>
+                    <span class="example-badge">Resize</span>
+                    <span class="example-badge">Engine</span>
+                </div>
+            </header>
+
+            <section class="example-demo resize-demo">
+
+                <canvas id="resize-demo">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="1.57" beta="1.2" radius="8"
+                        target="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="resize-overlay">
+                    <h2>Runtime <span>Resize</span></h2>
+                    <p>
+                        The runtime executes <code>engine.resize()</code> when
+                        the canvas size changes.
+                    </p>
+                </div>
+
+                <div class="resize-corner">
+                    ARASHTAD 3D RUNTIME · 04
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">What this demonstrates</h2>
+                        <p class="example-section-description">
+                            Runtime expressions can directly access the Babylon.js engine.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Runtime</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <ul class="example-feature-list">
+                                <li><code>&lt;arashtad-runtime&gt;</code></li>
+                                <li><code>resize</code> expression</li>
+                                <li><code>engine</code> reference</li>
+                                <li><code>engine.resize()</code></li>
+                                <li>Responsive canvas rendering</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="example-panel">
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">Configuration</h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <div class="example-code"><code>resize="engine.resize()"</code></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">Source</h2>
+                        <p class="example-section-description">
+                            The <code>resize</code> attribute contains the expression executed by the runtime.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="resize-demo"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        alpha="1.57"
+        beta="1.2"
+        radius="8"
+        target="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        direction="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.2"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="box"
+        size="2"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('resize-demo');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('resize-demo');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

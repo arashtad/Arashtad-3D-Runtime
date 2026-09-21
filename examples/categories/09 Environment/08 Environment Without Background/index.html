@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Environment Without Background">
+    <meta name="keywords" content="Environment">
+    <title>Environment Without Background | Arashtad 3D Runtime</title>
+
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .environment-demo {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Environment / Environment Without Background
+                </div>
+
+                <div class="example-eyebrow">
+                    Environment Lighting Without Visible Background
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Environment Without Background</h1>
+                    <span class="example-badge green">118</span>
+                </div>
+
+                <p>
+                    Use an HDR environment for lighting and reflections while
+                    keeping the environment hidden from the visible scene
+                    background.
+                </p>
+
+            </header>
+
+            <section class="example-demo environment-demo">
+
+                <canvas id="environment-without-background-scene"
+                    clearColor="new BABYLON.Color4(0.035, 0.05, 0.045, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="false">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera" alpha="Math.PI / 2" beta="Math.PI / 2.55"
+                        radius="12" target="new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="ambient-light" direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.2">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="metal-material"
+                        diffuseColor="new BABYLON.Color3(0.12, 0.14, 0.16)" specularColor="new BABYLON.Color3(1, 1, 1)"
+                        specularPower="128">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="accent-material"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+                        emissiveColor="new BABYLON.Color3(0.02, 0.08, 0.06)" specularColor="new BABYLON.Color3(1, 1, 1)"
+                        specularPower="96">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="dark-material"
+                        diffuseColor="new BABYLON.Color3(0.025, 0.035, 0.045)"
+                        specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)" specularPower="128">
+                    </arashtad-material>
+
+                    <arashtad-material type="StandardMaterial" id="ground-material"
+                        diffuseColor="new BABYLON.Color3(0.018, 0.025, 0.035)"
+                        specularColor="new BABYLON.Color3(0.35, 0.35, 0.35)">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Sphere" id="metal-sphere" diameter="2.6" segments="64"
+                        position="new BABYLON.Vector3(-2.8, 1.4, 0)" material="metal-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="accent-sphere" diameter="2.2" segments="64"
+                        position="new BABYLON.Vector3(0, 1.2, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="dark-box" size="2.3" position="new BABYLON.Vector3(2.8, 1.15, 0)"
+                        material="dark-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Cylinder" id="platform" height="0.35" diameter="8" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0, 0)" material="ground-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="ring-one" diameter="6.5" thickness="0.04" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.25, 0)" material="accent-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="ring-two" diameter="5" thickness="0.025" tessellation="64"
+                        position="new BABYLON.Vector3(0, 0.3, 0)" rotation="new BABYLON.Vector3(Math.PI / 2, 0, 0)"
+                        material="accent-material">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Environment Without Background
+                    </h2>
+
+                    <p class="example-section-description">
+                        The HDR environment remains available to the scene,
+                        while the visible background is controlled separately.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The environment provides lighting and
+                                reflection information.
+                            </p>
+
+                            <pre><code>environment="../../../assets/environments/room.hdr"
+environmentIntensity="1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Hidden Background
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Set <code>environmentBackground</code> to
+                                <code>false</code> to keep the HDR environment
+                                from being displayed as the background.
+                            </p>
+
+                            <pre><code>environmentBackground="false"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Environment Lighting
+                    </h2>
+
+                    <p class="example-section-description">
+                        Hiding the environment background does not remove the
+                        environment from the scene configuration.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Environment Intensity
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Adjust the environment contribution with
+                                <code>environmentIntensity</code>.
+                            </p>
+
+                            <pre><code>environmentIntensity="1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Scene Background
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                With the environment hidden, the canvas
+                                <code>clearColor</code> provides the visible
+                                background.
+                            </p>
+
+                            <pre><code>clearColor="new BABYLON.Color4(0.035, 0.05, 0.045, 1)"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Environment Rotation
+                    </h2>
+
+                    <p class="example-section-description">
+                        Environment orientation can still be configured even
+                        when the environment is not rendered as the background.
+                    </p>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Rotation
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <pre><code>environmentRotationY="1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Blur
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Background blur has no visible background to
+                                affect when <code>environmentBackground</code>
+                                is disabled.
+                            </p>
+
+                            <pre><code>environmentBackgroundBlur="0.1"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The environment remains enabled while its background
+                        rendering is disabled.
+                    </p>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas
+    id="environment-without-background-scene"
+    clearColor="new BABYLON.Color4(0.035, 0.05, 0.045, 1)"&gt;
+
+    &lt;arashtad-runtime
+        resize="engine.resize()"
+        environment="../../../assets/environments/room.hdr"
+        environmentIntensity="1"
+        environmentBackground="false"&gt;
+    &lt;/arashtad-runtime&gt;
+
+&lt;/canvas&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('environment-without-background-scene');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Mesh Parent">
+    <meta name="keywords" content="Mesh, Hierarchy">
+    <title>Mesh Parent | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #parent-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Parent
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Mesh Hierarchy
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Mesh Parent</h1>
+                    <span class="example-badge green">79</span>
+                </div>
+
+                <p>
+                    Parent a mesh to another mesh so that the child follows the parent's transformations.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="mesh-parent" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 9, new BABYLON.Vector3(0, 1, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="parent-mesh" size="2" position="new BABYLON.Vector3(0, 0, 0)"
+                        OnPickTrigger="rotation.y += 0.5">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Sphere" id="child-mesh" diameter="1" position="new BABYLON.Vector3(0, 2, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="parent-status">
+                    <strong>Child Parent: parent-mesh</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Mesh Hierarchy
+                    </h2>
+
+                    <p class="example-section-description">
+                        The sphere is assigned to the box as its parent after the scene is initialized.
+                        Rotate the box to see the child follow it.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Parent Relationship
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Parent: <strong>parent-mesh</strong>
+                            </p>
+                            <p>
+                                Child: <strong>child-mesh</strong>
+                            </p>
+                            <p>
+                                Click the box in the scene to rotate the parent and its child.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The child mesh is assigned to the parent through the Babylon.js mesh API.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="parent-mesh"
+    size="2"
+    position="new BABYLON.Vector3(0, 0, 0)"
+    OnPickTrigger="rotation.y += 0.5"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Sphere"
+    id="child-mesh"
+    diameter="1"
+    position="new BABYLON.Vector3(0, 2, 0)"&gt;
+&lt;/arashtad-mesh&gt;
+
+const scene = await ready(canvas);
+
+const parent = scene.meshes.find(
+    mesh =&gt; mesh.name === 'parent-mesh'
+);
+
+const child = scene.meshes.find(
+    mesh =&gt; mesh.name === 'child-mesh'
+);
+
+child.parent = parent;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('mesh-parent');
+
+        const scene = await ready(canvas);
+
+        const parent = scene.meshes.find(
+            mesh => mesh.name === 'parent-mesh'
+        );
+
+        const child = scene.meshes.find(
+            mesh => mesh.name === 'child-mesh'
+        );
+
+        child.parent = parent;
+    </script>
+
+</body>
+
+</html>

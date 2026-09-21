@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Nested Material Properties">
+    <meta name="keywords" content="Materials, Properties">
+    <title>Nested Material Properties | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .material-demo {
+            position: relative;
+        }
+
+        #material-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Materials / Nested Properties
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Material Property Access
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Nested Material Properties</h1>
+                    <span class="example-badge green">90</span>
+                </div>
+
+                <p>
+                    Modify nested Babylon.js material properties directly through dot notation in runtime attributes.
+                </p>
+
+            </header>
+
+            <section class="example-demo material-demo">
+
+                <canvas id="nested-material" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3.2, 9, new BABYLON.Vector3(0, 1.2, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-material type="StandardMaterial" id="nested-material" diffuseColor.r="0.15"
+                        diffuseColor.g="0.64" diffuseColor.b="0.55" specularColor.r="0.8" specularColor.g="0.8"
+                        specularColor.b="0.8" emissiveColor.r="0.02" emissiveColor.g="0.08" emissiveColor.b="0.06"
+                        specularPower="64">
+                    </arashtad-material>
+
+                    <arashtad-mesh type="Box" id="nested-material-mesh" width="3" height="3" depth="3"
+                        position="new BABYLON.Vector3(0, 1.5, 0)" material="nested-material">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground-mesh" width="8" height="6"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="material-status">
+                    <strong>Nested Color Properties</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Nested Property Access
+                    </h2>
+
+                    <p class="example-section-description">
+                        Runtime attributes can address properties inside Babylon.js objects using dot notation.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Material Properties
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Diffuse color</strong> - diffuseColor.r, diffuseColor.g, diffuseColor.b
+                            </p>
+
+                            <p>
+                                <strong>Specular color</strong> - specularColor.r, specularColor.g, specularColor.b
+                            </p>
+
+                            <p>
+                                <strong>Emissive color</strong> - emissiveColor.r, emissiveColor.g, emissiveColor.b
+                            </p>
+
+                            <p>
+                                <strong>Specular power</strong> - direct material property
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Nested properties use dot notation in the attribute name. The runtime resolves each property
+                        path and assigns the supplied value.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    type="StandardMaterial"
+    id="nested-material"
+    diffuseColor.r="0.15"
+    diffuseColor.g="0.64"
+    diffuseColor.b="0.55"
+    specularColor.r="0.8"
+    specularColor.g="0.8"
+    specularColor.b="0.8"
+    emissiveColor.r="0.02"
+    emissiveColor.g="0.08"
+    emissiveColor.b="0.06"
+    specularPower="64"&gt;
+&lt;/arashtad-material&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('nested-material');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

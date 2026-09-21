@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Model IDs and references example.">
+    <meta name="keywords" content="Models, References">
+    <title>Model IDs and References | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#models">Models</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>40</span>
+                    <span>/</span>
+                    <span>Models</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    40 · Models
+                </div>
+
+                <h1>Model IDs and References</h1>
+
+                <p>
+                    Give loaded models stable IDs and use runtime references to
+                    connect other scene objects to those models.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge">References</span>
+                    <span class="example-badge">IDs</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="model-ids-references">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 6.5, new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-model id="linux" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, -1.4, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)">
+                    </arashtad-model>
+
+                    <arashtad-mesh type="Box" id="platform" size="2.8" position="new BABYLON.Vector3(0, -1.9, 0)"
+                        scaling="new BABYLON.Vector3(1.8, 0.25, 1.8)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Torus" id="ring" diameter="2.8" thickness="0.08"
+                        position="new BABYLON.Vector3(0, -1.55, 0)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Box" id="reference-marker" size="0.45"
+                        position="new BABYLON.Vector3(0, 2.4, 0)"
+                        OnPickTrigger="linux.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2);">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Model identifiers and runtime registry references.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Model ID
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>linux</code> model is registered using
+                                its <code>id</code>, making it available through
+                                the runtime registry.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Reference
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Runtime expressions can resolve registered
+                                objects by their IDs. The marker uses the
+                                <code>linux</code> reference to modify the
+                                loaded model when picked.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The model ID becomes a runtime reference that can be used by scene expressions.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="model-ids-references"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;
+    &lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera
+        type="ArcRotateCamera"
+        id="camera"
+        args="Math.PI / 2, Math.PI / 2.4, 6.5, new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light
+        type="HemisphericLight"
+        id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-model
+        id="linux"
+        src="../../../assets/3d/linux.glb"
+        position="new BABYLON.Vector3(0, -0.5, 0)"
+        scaling="new BABYLON.Vector3(5, 5, 5)"&gt;
+    &lt;/arashtad-model&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="platform"
+        size="2.8"
+        position="new BABYLON.Vector3(0, -1.9, 0)"
+        scaling="new BABYLON.Vector3(1.8, 0.25, 1.8)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Torus"
+        id="ring"
+        diameter="2.8"
+        thickness="0.08"
+        position="new BABYLON.Vector3(0, -1.55, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        type="Box"
+        id="reference-marker"
+        size="0.45"
+        position="new BABYLON.Vector3(0, 2.4, 0)"
+        OnPickTrigger="linux.scaling = new BABYLON.Vector3(4.2, 4.2, 4.2);"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;
+
+&lt;script src="../../../../lib/babylon/babylon.js"&gt;&lt;/script&gt;
+&lt;script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"&gt;&lt;/script&gt;
+
+&lt;script type="module"&gt;
+    import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+    const canvas = document.getElementById('model-ids-references');
+
+    await ready(canvas);
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('model-ids-references');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

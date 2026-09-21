@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Basic GUI Button">
+    <meta name="keywords" content="GUI, Button">
+    <title>Basic GUI Button | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .gui-demo {
+            position: relative;
+        }
+
+        #gui-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / GUI / Button
+                </div>
+
+                <div class="example-eyebrow">
+                    GUI Controls
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Basic GUI Button</h1>
+                    <span class="example-badge green">103</span>
+                </div>
+
+                <p>
+                    Create an interactive GUI button and respond to its pointer click event.
+                </p>
+
+            </header>
+
+            <section class="example-demo gui-demo">
+
+                <canvas id="basic-gui-button" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 10, new BABYLON.Vector3(0, 0, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-gui id="ui" type="AdvancedDynamicTexture">
+                    </arashtad-gui>
+
+                    <arashtad-gui id="button" type="Button" parent="ui" text="CLICK ME" width="'200px'" height="'60px'"
+                        color="'white'" background="'#26a38c'" fontSize="24" cornerRadius="10" OnPointerClick="
+                            document.getElementById('gui-status').innerHTML =
+                                '<strong>Button clicked</strong><br>GUI pointer interaction is working.';
+                        ">
+                    </arashtad-gui>
+
+                </canvas>
+
+                <div id="gui-status">
+                    <strong>GUI Button</strong><br>
+                    Click the button to trigger an action.
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Interactive Button
+                    </h2>
+
+                    <p class="example-section-description">
+                        A Button is created as a child of the AdvancedDynamicTexture and responds to
+                        <code>OnPointerClick</code>. The click action updates the page status to demonstrate that the
+                        GUI event was received.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Button
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                The button uses the runtime ID <code>button</code> and is attached to the GUI root
+                                using <code>parent="ui"</code>.
+                            </p>
+
+                            <p>
+                                The <code>OnPointerClick</code> attribute contains JavaScript that runs when the
+                                button is clicked.
+                            </p>
+
+                            <p>
+                                In this example, the action updates the HTML status element outside the Babylon.js
+                                canvas.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The button is created declaratively and its pointer click behavior is defined directly on the
+                        runtime element.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-gui
+    id="ui"
+    type="AdvancedDynamicTexture"&gt;
+&lt;/arashtad-gui&gt;
+
+&lt;arashtad-gui
+    id="button"
+    type="Button"
+    parent="ui"
+    text="CLICK ME"
+    width="'200px'"
+    height="'60px'"
+    color="'white'"
+    background="'#26a38c'"
+    fontSize="24"
+    cornerRadius="10"
+    OnPointerClick="
+        document.getElementById('gui-status').innerHTML =
+            '&lt;strong&gt;Button clicked&lt;/strong&gt;&lt;br&gt;GUI pointer interaction is working.';
+    "&gt;
+&lt;/arashtad-gui&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/gui/babylon.gui.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('basic-gui-button');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

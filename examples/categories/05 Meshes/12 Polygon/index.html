@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Polygon">
+    <meta name="keywords" content="Mesh, Polygon">
+    <title>Polygon | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #polygon-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Polygon
+                </div>
+
+                <div class="example-eyebrow">
+                    Polygon mesh
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Polygon</h1>
+                    <span class="example-badge green">67</span>
+                </div>
+
+                <p>
+                    Create a custom polygon mesh from an ordered set of three-dimensional vertices
+                    using Babylon.js MeshBuilder through the Arashtad 3D Runtime.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="polygon" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 0.5, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Polygon" id="polygon-mesh" shape="[
+                            new BABYLON.Vector3(-2.5, 0, -1.5),
+                            new BABYLON.Vector3(-1, 0, 1.5),
+                            new BABYLON.Vector3(1.5, 0, 1.2),
+                            new BABYLON.Vector3(2.5, 0, -0.5),
+                            new BABYLON.Vector3(0.8, 0, -2),
+                            new BABYLON.Vector3(-1.5, 0, -2)
+                        ]" depth="0.6" sideOrientation="BABYLON.Mesh.DOUBLESIDE"
+                        position="new BABYLON.Vector3(0, 0, 0)">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="polygon-status">
+                    <strong>Mesh: Polygon</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Polygon Parameters
+                    </h2>
+
+                    <p class="example-section-description">
+                        The Polygon mesh is generated from an ordered 2D contour represented by
+                        Babylon.js Vector3 points. The contour is then extruded to the specified depth.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Configuration
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p><strong>shape</strong> - Ordered array of Vector3 points defining the polygon contour.
+                            </p>
+                            <p><strong>depth</strong> - Depth of the extruded polygon.</p>
+                            <p><strong>sideOrientation</strong> - Determines polygon face orientation.</p>
+                            <p><strong>position</strong> - World-space position of the mesh.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The complete runtime markup used to create the polygon mesh.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;canvas id="polygon"
+    clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)"&gt;
+
+    &lt;arashtad-runtime resize="engine.resize()"&gt;&lt;/arashtad-runtime&gt;
+
+    &lt;arashtad-camera type="ArcRotateCamera" id="camera"
+        args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 0.5, 0)"
+        minZ="0.1"
+        maxZ="1000"&gt;
+    &lt;/arashtad-camera&gt;
+
+    &lt;arashtad-light type="HemisphericLight" id="light"
+        args="new BABYLON.Vector3(0, 1, 0)"
+        intensity="1.3"&gt;
+    &lt;/arashtad-light&gt;
+
+    &lt;arashtad-mesh type="Polygon" id="polygon-mesh"
+        shape="[
+            new BABYLON.Vector3(-2.5, 0, -1.5),
+            new BABYLON.Vector3(-1, 0, 1.5),
+            new BABYLON.Vector3(1.5, 0, 1.2),
+            new BABYLON.Vector3(2.5, 0, -0.5),
+            new BABYLON.Vector3(0.8, 0, -2),
+            new BABYLON.Vector3(-1.5, 0, -2)
+        ]"
+        depth="0.6"
+        sideOrientation="BABYLON.Mesh.DOUBLESIDE"
+        position="new BABYLON.Vector3(0, 0, 0)"&gt;
+    &lt;/arashtad-mesh&gt;
+
+&lt;/canvas&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/earcut.min.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('polygon');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Particle Capacity">
+    <meta name="keywords" content="Particles, Properties">
+    <title>Particle Capacity | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .particle-demo {
+            position: relative;
+        }
+
+        #particle-status {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 12px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Particle Systems / Capacity
+                </div>
+
+                <div class="example-eyebrow">
+                    Runtime Particle Capacity
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Particle Capacity</h1>
+                    <span class="example-badge green">95</span>
+                </div>
+
+                <p>
+                    Create particle systems with different capacities to control the maximum number of particles
+                    available to each effect.
+                </p>
+
+            </header>
+
+            <section class="example-demo particle-demo">
+
+                <canvas id="particle-capacity" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 3, 14, new BABYLON.Vector3(0, 1.5, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="2">
+                    </arashtad-light>
+
+                    <arashtad-particlesystem id="low-capacity" type="ParticleSystem" capacity="250"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(-3.5, 0, 0)" emitRate="80" minSize="0.2" maxSize="0.5"
+                        minLifeTime="1" maxLifeTime="2" direction1="new BABYLON.Vector3(-0.8, 1, 0)"
+                        direction2="new BABYLON.Vector3(0.8, 2, 0)" minEmitPower="1" maxEmitPower="2">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="medium-capacity" type="ParticleSystem" capacity="1000"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(0, 0, 0)" emitRate="120" minSize="0.2" maxSize="0.5"
+                        minLifeTime="1" maxLifeTime="2" direction1="new BABYLON.Vector3(-0.8, 1, 0)"
+                        direction2="new BABYLON.Vector3(0.8, 2, 0)" minEmitPower="1" maxEmitPower="2">
+                    </arashtad-particlesystem>
+
+                    <arashtad-particlesystem id="high-capacity" type="ParticleSystem" capacity="2500"
+                        particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+                        emitter="new BABYLON.Vector3(3.5, 0, 0)" emitRate="180" minSize="0.2" maxSize="0.5"
+                        minLifeTime="1" maxLifeTime="2" direction1="new BABYLON.Vector3(-0.8, 1, 0)"
+                        direction2="new BABYLON.Vector3(0.8, 2, 0)" minEmitPower="1" maxEmitPower="2">
+                    </arashtad-particlesystem>
+
+                </canvas>
+
+                <div id="particle-status">
+                    <strong>250 · 1,000 · 2,500 Particle Capacity</strong>
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Particle Capacity
+                    </h2>
+
+                    <p class="example-section-description">
+                        The capacity determines the maximum number of particles that a ParticleSystem can maintain.
+                        Each system can use a different capacity while sharing the same particle configuration.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Configurations
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                <strong>Low</strong> - 250 particles
+                            </p>
+
+                            <p>
+                                <strong>Medium</strong> - 1,000 particles
+                            </p>
+
+                            <p>
+                                <strong>High</strong> - 2,500 particles
+                            </p>
+
+                            <p>
+                                Each system has its own emitter and particle capacity.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        The <code>capacity</code> attribute defines the maximum particle capacity when creating the
+                        ParticleSystem.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-particlesystem
+    id="low-capacity"
+    type="ParticleSystem"
+    capacity="250"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(-3.5, 0, 0)"
+    emitRate="80"
+    minSize="0.2"
+    maxSize="0.5"
+    minLifeTime="1"
+    maxLifeTime="2"
+    direction1="new BABYLON.Vector3(-0.8, 1, 0)"
+    direction2="new BABYLON.Vector3(0.8, 2, 0)"
+    minEmitPower="1"
+    maxEmitPower="2"&gt;
+&lt;/arashtad-particlesystem&gt;
+
+&lt;arashtad-particlesystem
+    id="medium-capacity"
+    type="ParticleSystem"
+    capacity="1000"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(0, 0, 0)"
+    emitRate="120"
+    minSize="0.2"
+    maxSize="0.5"
+    minLifeTime="1"
+    maxLifeTime="2"
+    direction1="new BABYLON.Vector3(-0.8, 1, 0)"
+    direction2="new BABYLON.Vector3(0.8, 2, 0)"
+    minEmitPower="1"
+    maxEmitPower="2"&gt;
+&lt;/arashtad-particlesystem&gt;
+
+&lt;arashtad-particlesystem
+    id="high-capacity"
+    type="ParticleSystem"
+    capacity="2500"
+    particleTexture="new BABYLON.Texture('../../../assets/textures/flare.png', scene)"
+    emitter="new BABYLON.Vector3(3.5, 0, 0)"
+    emitRate="180"
+    minSize="0.2"
+    maxSize="0.5"
+    minLifeTime="1"
+    maxLifeTime="2"
+    direction1="new BABYLON.Vector3(-0.8, 1, 0)"
+    direction2="new BABYLON.Vector3(0.8, 2, 0)"
+    minEmitPower="1"
+    maxEmitPower="2"&gt;
+&lt;/arashtad-particlesystem&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('particle-capacity');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

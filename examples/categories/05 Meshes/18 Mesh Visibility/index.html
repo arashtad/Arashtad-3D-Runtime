@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Mesh Visibility">
+    <meta name="keywords" content="Mesh, Properties">
+    <title>Mesh Visibility | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .mesh-demo {
+            position: relative;
+        }
+
+        #mesh-visibility-controls {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+            z-index: 10;
+            padding: 14px 16px;
+            border: 1px solid rgba(38, 163, 140, 0.35);
+            border-radius: 6px;
+            background: rgba(8, 12, 18, 0.92);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .visibility-switch {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .visibility-switch input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .visibility-slider {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            background: #333;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .visibility-slider::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .visibility-switch input:checked+.visibility-slider {
+            background: #26a38c;
+        }
+
+        .visibility-switch input:checked+.visibility-slider::after {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A</span>
+                    <span class="example-brand-text">Arashtad</span>
+                    <span class="example-brand-version">3D Runtime 1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">Examples</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    Examples / Meshes / Visibility
+                </div>
+
+                <div class="example-eyebrow">
+                    Mesh Properties
+                </div>
+
+                <div class="example-hero-meta">
+                    <h1>Mesh Visibility</h1>
+                    <span class="example-badge green">76</span>
+                </div>
+
+                <p>
+                    Change mesh visibility interactively using a switch.
+                </p>
+
+            </header>
+
+            <section class="example-demo mesh-demo">
+
+                <canvas id="mesh-visibility" clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()"></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.8, 10, new BABYLON.Vector3(0, 0, 0)" minZ="0.1" maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.5">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="visibility-mesh" size="2" position="new BABYLON.Vector3(0, 0, 0)"
+                        visibility="1">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div id="mesh-visibility-controls">
+
+                    <label class="visibility-switch">
+                        <input id="visibility-toggle" type="checkbox" checked>
+                        <span class="visibility-slider"></span>
+                        <span id="visibility-label">Visible</span>
+                    </label>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Visibility
+                    </h2>
+
+                    <p class="example-section-description">
+                        The mesh starts fully visible. The switch changes its
+                        <code>visibility</code> property between <code>1</code> and
+                        <code>0</code>.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">
+                                Interactive Visibility
+                            </div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Switch on: <code>visibility = 1</code>
+                            </p>
+
+                            <p>
+                                Switch off: <code>visibility = 0</code>
+                            </p>
+
+                            <p>
+                                The property is changed directly on the registered mesh
+                                after the runtime has initialized.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Source
+                    </h2>
+
+                    <p class="example-section-description">
+                        Complete source for the mesh visibility example.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="visibility-mesh"
+    size="2"
+    position="new BABYLON.Vector3(0, 0, 0)"
+    visibility="1"&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;label class="visibility-switch"&gt;
+    &lt;input
+        id="visibility-toggle"
+        type="checkbox"
+        checked
+    &gt;
+    &lt;span class="visibility-slider"&gt;&lt;/span&gt;
+    &lt;span id="visibility-label"&gt;Visible&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;script&gt;
+const toggle = document.getElementById('visibility-toggle');
+const label = document.getElementById('visibility-label');
+
+toggle.addEventListener('change', () =&gt; {
+    const mesh = BABYLON.Meshes[0];
+
+    mesh.visibility = toggle.checked ? 1 : 0;
+    label.textContent = toggle.checked ? 'Visible' : 'Hidden';
+});
+&lt;/script&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                Arashtad 3D Runtime
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('mesh-visibility');
+
+        const scene = await ready(canvas);
+
+        const mesh = scene.meshes.find(
+            mesh => mesh.name === 'visibility-mesh'
+        );
+
+        const toggle = document.getElementById('visibility-toggle');
+        const label = document.getElementById('visibility-label');
+
+        toggle.addEventListener('change', () => {
+            mesh.visibility = toggle.checked ? 1 : 0;
+            label.textContent = toggle.checked ? 'Visible' : 'Hidden';
+        });
+    </script>
+
+</body>
+
+</html>

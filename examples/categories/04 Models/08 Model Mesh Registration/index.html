@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arashtad 3D Runtime - Model mesh registration.">
+    <meta name="keywords" content="Models, Meshes">
+    <title>Model Mesh Registration | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .model-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-demo canvas {
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        .model-demo canvas.loading {
+            opacity: 0;
+        }
+
+        .model-demo canvas.loaded {
+            opacity: 1;
+        }
+
+        #preloader {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #080d0c;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #preloader-spinner {
+            width: 46px;
+            height: 46px;
+            margin-bottom: 22px;
+            border: 3px solid rgba(38, 163, 140, 0.2);
+            border-top-color: #26a38c;
+            border-radius: 50%;
+            animation: preloader-spin 0.9s linear infinite;
+        }
+
+        #loading-label {
+            margin-bottom: 10px;
+            color: #26a38c;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        #loading-counter {
+            margin-bottom: 18px;
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        #loading-track {
+            width: min(280px, 70%);
+            height: 4px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #loading-bar {
+            width: 0;
+            height: 100%;
+            background: #26a38c;
+            transition: width 0.15s ease;
+        }
+
+        #mesh-registration-status {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            width: min(420px, calc(100% - 40px));
+            padding: 12px 15px;
+            border: 1px solid rgba(38, 163, 140, 0.45);
+            background: rgba(8, 13, 12, 0.9);
+            color: #26a38c;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            pointer-events: none;
+        }
+
+        #mesh-registration-status strong {
+            color: #ffffff;
+        }
+
+        @keyframes preloader-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a href="../" class="example-brand">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>Models</span>
+                    <span>/</span>
+                    <span>45</span>
+                </div>
+
+                <div class="example-eyebrow">Model System</div>
+
+                <h1>Model Mesh Registration</h1>
+
+                <p class="example-page-description">
+                    Imported model meshes are automatically registered by their Babylon
+                    mesh names, allowing individual parts of a loaded model to be
+                    referenced and controlled through the runtime.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Model</span>
+                    <span class="example-badge green">Mesh</span>
+                    <span class="example-badge green">Registration</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo model-demo">
+
+                <canvas id="model-mesh-registration" class="loading"
+                    clearColor="new BABYLON.Color4(0.008, 0.012, 0.018, 1)">
+
+                    <arashtad-runtime resize="engine.resize()" OnLoadProgress="
+                            document.getElementById('loading-counter').textContent = progress + '%';
+                            document.getElementById('loading-bar').style.width = progress + '%';
+
+                            if (progress >= 100) {
+                                document.getElementById('mesh-registration-status').innerHTML =
+                                    '<strong>Registered meshes:</strong> black, white, orange';
+
+                                setTimeout(() => {
+                                    document.getElementById('model-mesh-registration').classList.remove('loading');
+                                    document.getElementById('model-mesh-registration').classList.add('loaded');
+                                    document.getElementById('preloader').classList.add('hidden');
+                                }, 200);
+                            }
+                        "></arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.4, 8, new BABYLON.Vector3(0, 1, 0)" minZ="0.1"
+                        maxZ="1000"></arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3"></arashtad-light>
+
+                    <arashtad-model id="linux" src="../../../assets/3d/linux.glb" position="new BABYLON.Vector3(0, -0.5, 0)"
+                        scaling="new BABYLON.Vector3(5, 5, 5)">
+
+                        <arashtad-mesh ref="black" OnPickTrigger="
+                                document.getElementById('mesh-registration-status').innerHTML =
+                                    '<strong>Registered mesh:</strong> black';
+                            "></arashtad-mesh>
+
+                        <arashtad-mesh ref="white" OnPickTrigger="
+                                document.getElementById('mesh-registration-status').innerHTML =
+                                    '<strong>Registered mesh:</strong> white';
+                            "></arashtad-mesh>
+
+                        <arashtad-mesh ref="orange" OnPickTrigger="
+                                document.getElementById('mesh-registration-status').innerHTML =
+                                    '<strong>Registered mesh:</strong> orange';
+                            "></arashtad-mesh>
+
+                    </arashtad-model>
+
+                </canvas>
+
+                <div id="mesh-registration-status">
+                    <strong>Loading model...</strong>
+                </div>
+
+                <div id="preloader">
+
+                    <div id="preloader-spinner"></div>
+
+                    <div id="loading-label">
+                        Loading Model
+                    </div>
+
+                    <div id="loading-counter">
+                        0%
+                    </div>
+
+                    <div id="loading-track">
+                        <div id="loading-bar"></div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Automatic Mesh Registration
+                    </h2>
+
+                    <p class="example-section-description">
+                        When an external model is imported, Arashtad 3D Runtime
+                        registers its named meshes in the runtime registry. The
+                        <code>linux.glb</code> model contains three named meshes:
+                        <code>black</code>, <code>white</code>, and <code>orange</code>.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Registered Meshes</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <pre class="example-code"><code>linux.glb
+├── black    → registered as "black"
+├── white    → registered as "white"
+└── orange   → registered as "orange"</code></pre>
+
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">Direct References</div>
+                        </div>
+
+                        <div class="example-panel-body">
+
+                            <p>
+                                Once registered, an imported mesh can be addressed
+                                directly with its registered name.
+                            </p>
+
+                            <p>
+                                This example uses
+                                <code>&lt;arashtad-mesh ref="..."&gt;</code>
+                                to attach an event to each imported mesh.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">
+                        Registered Mesh References
+                    </h2>
+
+                    <p class="example-section-description">
+                        The three references below resolve to the actual meshes
+                        imported from <code>linux.glb</code>. Click each part in
+                        the scene to verify the registration visually.
+                    </p>
+
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">black</div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Registered from the imported mesh named
+                                <code>black</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">white</div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Registered from the imported mesh named
+                                <code>white</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <div class="example-panel-title">orange</div>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Registered from the imported mesh named
+                                <code>orange</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+
+                    <h2 class="example-section-title">Source</h2>
+
+                    <p class="example-section-description">
+                        The model is imported normally. Its individual meshes are
+                        then resolved from the runtime registry by name.
+                    </p>
+
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-model
+    id="linux"
+    src="../../../assets/3d/linux.glb"
+    position="new BABYLON.Vector3(0, -0.5, 0)"
+    scaling="new BABYLON.Vector3(5, 5, 5)"
+&gt;
+
+    &lt;arashtad-mesh
+        ref="black"
+        OnPickTrigger="
+            document.getElementById('mesh-registration-status').innerHTML =
+                '&lt;strong&gt;Registered mesh:&lt;/strong&gt; black';
+        "
+    &gt;&lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        ref="white"
+        OnPickTrigger="
+            document.getElementById('mesh-registration-status').innerHTML =
+                '&lt;strong&gt;Registered mesh:&lt;/strong&gt; white';
+        "
+    &gt;&lt;/arashtad-mesh&gt;
+
+    &lt;arashtad-mesh
+        ref="orange"
+        OnPickTrigger="
+            document.getElementById('mesh-registration-status').innerHTML =
+                '&lt;strong&gt;Registered mesh:&lt;/strong&gt; orange';
+        "
+    &gt;&lt;/arashtad-mesh&gt;
+
+&lt;/arashtad-model&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime</span>
+                <span>MIT License</span>
+                <span>Version 1.0.0</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('model-mesh-registration');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>
