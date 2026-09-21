@@ -81,6 +81,43 @@ function resolveNestedProperty(object, name) {
     };
 }
 
+function isEventAttribute(name) {
+    const lowerName = name.toLowerCase();
+
+    /*
+     * Native DOM events:
+     *
+     * on-click
+     * on-wheel
+     * on-dblclick
+     * etc.
+     */
+    if (lowerName.startsWith('on-')) {
+        return true;
+    }
+
+    /*
+     * Babylon observable events:
+     *
+     * onPointerObservable
+     * onPointerDownObservable
+     * onBeforeRenderObservable
+     * onAfterRenderObservable
+     * etc.
+     *
+     * HTML normalizes attribute names to lowercase, so matching
+     * is deliberately case-insensitive.
+     */
+    if (
+        lowerName.startsWith('on') &&
+        lowerName.endsWith('observable')
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
 export function applyProperties(
     object,
     element,
@@ -92,15 +129,20 @@ export function applyProperties(
 
     const attributes = Array.from(element.attributes);
 
-    // First pass: normal properties.
-    // This ensures properties such as useAutoRotationBehavior
-    // are initialized before nested properties are processed.
+    /*
+     * First pass: normal properties.
+     *
+     * Event attributes are deliberately excluded here.
+     * They are handled by Events.js after normal properties have
+     * been initialized.
+     */
     for (const attribute of attributes) {
         const name = attribute.name;
 
         if (
             excluded.includes(name) ||
-            name.includes('.')
+            name.includes('.') ||
+            isEventAttribute(name)
         ) {
             continue;
         }
@@ -115,13 +157,16 @@ export function applyProperties(
             reference ?? parseValue(attribute.value, context);
     }
 
-    // Second pass: nested properties.
+    /*
+     * Second pass: nested properties.
+     */
     for (const attribute of attributes) {
         const name = attribute.name;
 
         if (
             excluded.includes(name) ||
-            !name.includes('.')
+            !name.includes('.') ||
+            isEventAttribute(name)
         ) {
             continue;
         }

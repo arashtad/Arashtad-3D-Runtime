@@ -2,6 +2,60 @@ import { executeActions } from './ActionHandler.js';
 import { resolveReference } from './Registry.js';
 import { getRuntimeTag } from './Tags.js';
 
+function resolveObservable(object, attributeName) {
+    const lowerName = attributeName.toLowerCase();
+
+    for (
+        let current = object;
+        current;
+        current = Object.getPrototypeOf(current)
+    ) {
+        const property = Object.getOwnPropertyNames(current).find(
+            key =>
+                key.toLowerCase() === lowerName &&
+                current[key] &&
+                typeof current[key].add === 'function'
+        );
+
+        if (property) {
+            return current[property];
+        }
+    }
+
+    for (const key of Reflect.ownKeys(object)) {
+        if (
+            typeof key !== 'string' ||
+            key.toLowerCase() !== lowerName
+        ) {
+            continue;
+        }
+
+        const observable = object[key];
+
+        if (
+            observable &&
+            typeof observable.add === 'function'
+        ) {
+            return observable;
+        }
+    }
+
+    return null;
+}
+
+function isObservableAttribute(target, name) {
+    const lowerName = name.toLowerCase();
+
+    if (
+        !lowerName.startsWith('on') ||
+        !lowerName.endsWith('observable')
+    ) {
+        return false;
+    }
+
+    return !!resolveObservable(target, lowerName);
+}
+
 export function bindEvents(target, element, modelMeshes = []) {
     const targetName =
         getRuntimeTag(element) === 'action'
@@ -19,13 +73,14 @@ export function bindEvents(target, element, modelMeshes = []) {
     }
 
     const scene = target.getScene?.();
+
     const canvas =
         scene?.getEngine()?.getRenderingCanvas();
 
     /*
      * Immediate action
      *
-     * <action execute="...">
+     * <arashtad-action execute="...">
      */
     if (
         getRuntimeTag(element) === 'action' &&
@@ -47,6 +102,12 @@ export function bindEvents(target, element, modelMeshes = []) {
 
         /*
          * Native JavaScript / DOM events
+         *
+         * on-click
+         * on-wheel
+         * on-dblclick
+         * on-mouseenter
+         * etc.
          */
         if (lowerName.startsWith('on-')) {
             const eventName = name.slice(3);
@@ -70,50 +131,51 @@ export function bindEvents(target, element, modelMeshes = []) {
         }
 
         /*
-         * Babylon GUI observables
+         * Babylon.js Observable
+         *
+         * Examples:
+         *
+         * onPointerObservable
+         * onPointerDownObservable
+         * onPointerUpObservable
+         * onBeforeRenderObservable
+         * onAfterRenderObservable
+         *
+         * HTML attributes are case-insensitive, so the lookup
+         * resolves the actual Babylon property dynamically.
          */
-        if (
-            lowerName.startsWith('onpointer') &&
-            !lowerName.endsWith('trigger')
-        ) {
-            let observableName = null;
-            let current = target;
+        if (isObservableAttribute(target, name)) {
+            const observable =
+                resolveObservable(target, lowerName);
 
-            while (current && !observableName) {
-                observableName =
-                    Object.getOwnPropertyNames(current)
-                        .find(
-                            key =>
-                                key.toLowerCase() ===
-                                `${lowerName}observable`
-                        );
-
-                current =
-                    Object.getPrototypeOf(current);
+            if (!observable) {
+                continue;
             }
 
-            if (
-                observableName &&
-                target[observableName]?.add
-            ) {
-                target[observableName].add(
-                    event => {
-                        executeActions(
-                            target,
-                            value,
-                            scene,
-                            event,
-                            modelMeshes
-                        );
-                    }
-                );
-            }
+            observable.add(
+                event => {
+                    executeActions(
+                        target,
+                        value,
+                        scene,
+                        event,
+                        modelMeshes
+                    );
+                }
+            );
 
             continue;
         }
 
         /*
          * Babylon ActionManager triggers
+         *
+         * Examples:
+         *
+         * OnPickTrigger
+         * OnPointerOverTrigger
+         * OnPointerOutTrigger
+         * etc.
          */
         const triggerName =
             Object.keys(BABYLON.ActionManager)
