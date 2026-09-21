@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bind to a Babylon pointer observable.">
+    <meta name="keywords" content="Events, Babylon">
+    <title>Pointer Observable Event | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .event-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#events">Events</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>127</span>
+                    <span>/</span>
+                    <span>Events</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    127 · Events
+                </div>
+
+                <h1>Pointer Observable Event</h1>
+
+                <p>
+                    Bind to a Babylon pointer observable.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Event</span>
+                    <span class="example-badge">Babylon</span>
+                    <span class="example-badge">Pointer</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo event-demo">
+
+                <canvas id="pointer-observable">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 1, 0)"
+                        on-pointerdown="scaling = new BABYLON.Vector3(1.3, 1.3, 1.3)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="8" height="6">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            A Babylon pointer observable can be bound directly through a runtime attribute.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Pointer Observable
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>on-pointerdown</code> attribute binds to the object's Babylon pointer
+                                observable.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Object-Level Event
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Unlike native canvas events, the observable is attached to the Babylon object itself.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The pointer observable is declared directly on the mesh.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="box"
+    size="2"
+    position="new BABYLON.Vector3(0, 1, 0)"
+    on-pointerdown="scaling = new BABYLON.Vector3(1.3, 1.3, 1.3)"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('pointer-observable');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

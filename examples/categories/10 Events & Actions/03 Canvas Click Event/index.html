@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Respond to a canvas click event.">
+    <meta name="keywords" content="Events, Click">
+    <title>Canvas Click Event | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .event-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#events">Events</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>124</span>
+                    <span>/</span>
+                    <span>Events</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    124 · Events
+                </div>
+
+                <h1>Canvas Click Event</h1>
+
+                <p>
+                    Respond to a canvas click event.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Event</span>
+                    <span class="example-badge">Canvas</span>
+                    <span class="example-badge">Click</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo event-demo">
+
+                <canvas id="canvas-click">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 1, 0)"
+                        on-click="scaling = new BABYLON.Vector3(1, 2, 1)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="8" height="6">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            A native canvas click event handled through a runtime object.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Canvas-Wide Event
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>on-click</code> trigger responds when the canvas is clicked, regardless of
+                                which part of the canvas is clicked.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Target Object
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The action targets the box directly, changing its
+                                <code>scaling</code> when the canvas click occurs.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            A native click trigger is attached to the box and responds to clicks anywhere on the
+                            canvas.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="box"
+    size="2"
+    position="new BABYLON.Vector3(0, 1, 0)"
+    on-click="scaling = new BABYLON.Vector3(1, 2, 1)"&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('canvas-click');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>

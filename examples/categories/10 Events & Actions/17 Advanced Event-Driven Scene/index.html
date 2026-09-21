@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive event-driven 3D control scene with Arashtad 3D Runtime.">
+    <meta name="keywords" content="Arashtad 3D Runtime, Babylon.js, events, actions, interactive 3D">
+    <title>Advanced Event Control Scene</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+    <style>
+        .event-control-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-control-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .event-control-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #26a38c;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .event-control-help {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff9000;
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-brand">
+                <strong>A3D</strong>
+                <span>Arashtad 3D Runtime</span>
+                <small>1.0.0</small>
+            </div>
+
+            <nav class="example-nav">
+                <a href="#">Examples</a>
+                <a href="#">Documentation</a>
+            </nav>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+                <div class="example-breadcrumb">
+                    <span>Examples</span>
+                    <span>/</span>
+                    <span>Events</span>
+                    <span>/</span>
+                    <span>Advanced</span>
+                </div>
+
+                <div class="example-eyebrow">Example 138</div>
+
+                <h1>Advanced Event Control Scene</h1>
+
+                <p>
+                    Build an interactive control scene where pointer events coordinate
+                    multiple Babylon.js objects and modify the entire scene.
+                </p>
+
+                <div class="example-meta">
+                    <span>Events</span>
+                    <span>Actions</span>
+                    <span>Advanced</span>
+                </div>
+            </header>
+
+            <section class="example-demo-section">
+
+                <div class="event-control-demo">
+
+                    <canvas id="event-control-canvas"></canvas>
+
+                    <div class="event-control-help">
+                        Hover a control to activate it.<br>
+                        Click any control to execute its command.
+                    </div>
+
+                    <div class="event-control-output" id="event-control-output">
+                        SYSTEM READY
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-content-section">
+
+                <h2>What this demonstrates</h2>
+
+                <div class="example-panels">
+
+                    <div class="example-panel">
+                        <h3>Event Coordination</h3>
+                        <p>
+                            Individual objects can trigger transformations on other
+                            objects through the Babylon.js scene.
+                        </p>
+                    </div>
+
+                    <div class="example-panel">
+                        <h3>Scene Control</h3>
+                        <p>
+                            Runtime actions can manipulate meshes, materials,
+                            rotations, scaling, and the scene background.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-content-section">
+
+                <h2>Source</h2>
+
+                <pre class="example-code"><code>&lt;arashtad-runtime resize="engine.resize()"&gt;&lt;/arashtad-runtime&gt;
+
+&lt;arashtad-camera
+    type="ArcRotateCamera"
+    id="camera"
+    args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)"&gt;
+&lt;/arashtad-camera&gt;
+
+&lt;arashtad-light
+    type="HemisphericLight"
+    id="light"
+    args="new BABYLON.Vector3(0, 1, 0)"
+    intensity="1.3"&gt;
+&lt;/arashtad-light&gt;
+
+&lt;arashtad-mesh
+    type="Box"
+    id="control"
+    size="2"
+    position="new BABYLON.Vector3(0, 1, 0)"
+    isPickable="true"
+    OnPickTrigger="
+        mesh.rotation.y += Math.PI / 2;
+        scene.clearColor = new BABYLON.Color4(
+            Math.random() * 0.15,
+            Math.random() * 0.2,
+            Math.random() * 0.25,
+            1
+        );
+    "&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <span>Arashtad 3D Runtime 1.0.0</span>
+            <span>Advanced Event Control Scene</span>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('event-control-canvas');
+
+        const runtime = document.createElement('arashtad-runtime');
+        runtime.setAttribute('resize', 'engine.resize()');
+
+        const camera = document.createElement('arashtad-camera');
+        camera.id = 'camera';
+        camera.setAttribute('type', 'ArcRotateCamera');
+        camera.setAttribute('args', 'Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)');
+
+        const light = document.createElement('arashtad-light');
+        light.id = 'light';
+        light.setAttribute('type', 'HemisphericLight');
+        light.setAttribute('args', 'new BABYLON.Vector3(0, 1, 0)');
+        light.setAttribute('intensity', '1.3');
+
+        const left = document.createElement('arashtad-mesh');
+        left.id = 'controlLeft';
+        left.setAttribute('type', 'Box');
+        left.setAttribute('size', '1.6');
+        left.setAttribute('position', 'new BABYLON.Vector3(-2.3, 1, 0)');
+        left.setAttribute('isPickable', 'true');
+
+        left.setAttribute('OnPointerOverTrigger', `
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('leftMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(0.1, 0.8, 0.6);
+        document.getElementById('event-control-output').textContent = 'LEFT CONTROL — ACTIVE';
+    `);
+
+        left.setAttribute('OnPointerOutTrigger', `
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('leftMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(0.2, 0.4, 0.35);
+        document.getElementById('event-control-output').textContent = 'SYSTEM READY';
+    `);
+
+        left.setAttribute('OnPickTrigger', `
+        mesh.rotation.y += Math.PI / 2;
+        mesh.scaling = new BABYLON.Vector3(
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2
+        );
+        scene.getMeshByName('controlCenter').rotation.x += Math.PI / 4;
+        document.getElementById('event-control-output').textContent = 'LEFT CONTROL — COMMAND EXECUTED';
+    `);
+
+        const center = document.createElement('arashtad-mesh');
+        center.id = 'controlCenter';
+        center.setAttribute('type', 'Box');
+        center.setAttribute('size', '2');
+        center.setAttribute('position', 'new BABYLON.Vector3(0, 1.2, 0)');
+        center.setAttribute('isPickable', 'true');
+
+        center.setAttribute('OnPointerOverTrigger', `
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('centerMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(1, 0.55, 0.05);
+        document.getElementById('event-control-output').textContent = 'CORE CONTROL — ACTIVE';
+    `);
+
+        center.setAttribute('OnPointerOutTrigger', `
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('centerMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(0.6, 0.3, 0.05);
+        document.getElementById('event-control-output').textContent = 'SYSTEM READY';
+    `);
+
+        center.setAttribute('OnPickTrigger', `
+        mesh.rotation.y += Math.PI / 2;
+        mesh.scaling = new BABYLON.Vector3(
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2
+        );
+        scene.getMeshByName('controlLeft').rotation.z += Math.PI / 3;
+        scene.getMeshByName('controlRight').rotation.z -= Math.PI / 3;
+        scene.clearColor = new BABYLON.Color4(
+            0.03 + Math.random() * 0.1,
+            0.05 + Math.random() * 0.1,
+            0.08 + Math.random() * 0.12,
+            1
+        );
+        document.getElementById('event-control-output').textContent = 'CORE CONTROL — GLOBAL COMMAND';
+    `);
+
+        const right = document.createElement('arashtad-mesh');
+        right.id = 'controlRight';
+        right.setAttribute('type', 'Box');
+        right.setAttribute('size', '1.6');
+        right.setAttribute('position', 'new BABYLON.Vector3(2.3, 1, 0)');
+        right.setAttribute('isPickable', 'true');
+
+        right.setAttribute('OnPointerOverTrigger', `
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('rightMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(1, 0.35, 0.05);
+        document.getElementById('event-control-output').textContent = 'RIGHT CONTROL — ACTIVE';
+    `);
+
+        right.setAttribute('OnPointerOutTrigger', `
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('rightMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(0.6, 0.25, 0.05);
+        document.getElementById('event-control-output').textContent = 'SYSTEM READY';
+    `);
+
+        right.setAttribute('OnPickTrigger', `
+        mesh.rotation.y -= Math.PI / 2;
+        mesh.scaling = new BABYLON.Vector3(
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2
+        );
+        scene.getMeshByName('controlCenter').rotation.x -= Math.PI / 4;
+        document.getElementById('event-control-output').textContent = 'RIGHT CONTROL — COMMAND EXECUTED';
+    `);
+
+        const ground = document.createElement('arashtad-mesh');
+        ground.id = 'ground';
+        ground.setAttribute('type', 'Ground');
+        ground.setAttribute('width', '8');
+        ground.setAttribute('height', '6');
+
+        canvas.appendChild(runtime);
+        canvas.appendChild(camera);
+        canvas.appendChild(light);
+        canvas.appendChild(left);
+        canvas.appendChild(center);
+        canvas.appendChild(right);
+        canvas.appendChild(ground);
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

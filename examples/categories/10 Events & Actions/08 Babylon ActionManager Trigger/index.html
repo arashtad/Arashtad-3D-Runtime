@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Use Babylon ActionManager triggers with Arashtad 3D Runtime.">
+    <meta name="keywords" content="Arashtad 3D Runtime, Babylon.js, ActionManager, triggers, events">
+    <title>Babylon ActionManager Trigger | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .action-manager-trigger-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#events">Events</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>129</span>
+                    <span>/</span>
+                    <span>EVENTS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    129 · EVENTS
+                </div>
+
+                <h1>Babylon ActionManager Trigger</h1>
+
+                <p>
+                    Use Babylon ActionManager triggers.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Events</span>
+                    <span class="example-badge">ActionManager</span>
+                    <span class="example-badge">Babylon</span>
+                </div>
+
+            </header>
+
+            <section class="example-demo action-manager-trigger-demo">
+
+                <canvas id="action-manager-trigger-canvas">
+
+                    <arashtad-runtime resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-camera type="ArcRotateCamera" id="camera"
+                        args="Math.PI / 2, Math.PI / 2.5, 7, new BABYLON.Vector3(0, 1, 0)">
+                    </arashtad-camera>
+
+                    <arashtad-light type="HemisphericLight" id="light" args="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-mesh type="Box" id="box" size="2" position="new BABYLON.Vector3(0, 1, 0)"
+                        isPickable="true" OnPickTrigger="
+                            scaling = new BABYLON.Vector3(1.3, 1.3, 1.3);
+                        " OnPointerOutTrigger="
+                            scaling = new BABYLON.Vector3(1, 1, 1);
+                        ">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh type="Ground" id="ground" width="8" height="8">
+                    </arashtad-mesh>
+
+                </canvas>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Babylon ActionManager triggers provide object-level event handling through Babylon.js.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                OnPickTrigger
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Clicking the box activates its Babylon ActionManager and executes the associated
+                                runtime action.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                OnPointerOutTrigger
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Moving the pointer away from the picked mesh restores its original scale.
+                                Both triggers operate on the mesh itself.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Babylon ActionManager trigger attributes are mapped to Babylon trigger constants and
+                            executed through the runtime action system.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="box"
+    size="2"
+    position="new BABYLON.Vector3(0, 1, 0)"
+    isPickable="true"
+    OnPickTrigger="
+        scaling = new BABYLON.Vector3(1.3, 1.3, 1.3);
+    "
+    OnPointerOutTrigger="
+        scaling = new BABYLON.Vector3(1, 1, 1);
+    "
+&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('action-manager-trigger-canvas');
+
+        await ready(canvas);
+    </script>
+</body>
+
+</html>
