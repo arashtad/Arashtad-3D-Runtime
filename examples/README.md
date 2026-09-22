@@ -1543,13 +1543,4 @@ It provides a reusable declarative runtime layer for Babylon.js and serves as th
 Built by **Arashtad**.
 
 
-# Changelog
 
-**1.1.0**
-
-1. **Features:**  added two lines: `Physics joints (ball and socket, hinge, distance, slider, 6DOF)` and `Physics constraints`.
-2. **Runtime Tags:**  added `arashtad-joint` and `arashtad-limit` to the tag list, added `joint` and `limit` to the semantic-elements paragraph, and added a sentence about the joint processing pass.
-3. **Physics section:**  added the new **Physics Joints** subsection with a full example, joint attributes, `<arashtad-limit>` details, and the fallback behavior note.
-4. **Project Structure:**  added `Joints.js` to `src/` in alphabetical position.
-5. **Versioning:**  added a sentence clarifying independent versioning between runtime and plugins.
-6. **GUI section:**  added a note that dedicated GUI creation is currently provided for `AdvancedDynamicTexture` and `Button`.
