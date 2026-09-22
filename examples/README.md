@@ -1,28 +1,101 @@
-# Arashtad 3D Runtime Examples
+# Arashtad 3D Runtime
 
-A comprehensive collection of practical examples for **Arashtad 3D Runtime** and its plugins.
+Arashtad 3D Runtime is a declarative HTML layer for [Babylon.js](https://www.babylonjs.com/) that allows interactive 3D scenes to be described directly in HTML while preserving full access to the underlying Babylon.js scene, objects, APIs, and JavaScript runtime.
 
-This repository serves simultaneously as:
+Cameras, lights, models, meshes, materials, particle systems, GUI elements, environments, events, actions, shadows, physics, and other supported Babylon.js functionality can be declared through semantic `arashtad-*` elements.
 
-- Documentation
-- API reference
-- Integration test suite
-- Feature showcase
-- Learning resource
-- Production-oriented reference
-- Demonstration of what can be built with Arashtad 3D Runtime
+The runtime does not replace Babylon.js. Babylon.js remains the underlying 3D engine and rendering framework.
 
-The examples progress from the simplest possible scene to complete, application-level 3D experiences.
-
-There is **no fixed number of examples**. Examples are added whenever necessary to properly demonstrate a runtime feature, API, property, combination, or practical use case.
+Arashtad 3D Runtime provides the declarative layer between HTML and Babylon.js while remaining extensible through JavaScript and plugins.
 
 ---
 
-## What Is Arashtad 3D Runtime?
+## Features
 
-**Arashtad 3D Runtime** is a declarative Babylon.js runtime for building interactive 3D scenes using HTML.
+- Declarative 3D scenes using HTML
+- Babylon.js integration
+- Runtime object references
+- JavaScript expressions in attributes
+- Runtime constructor resolution
+- Babylon.js constructor resolution
+- Babylon.GUI constructor resolution
+- Supported constructor arguments
+- Dynamic object properties
+- Nested properties
+- Case-insensitive property resolution
+- Parent/child relationships
+- Material relationships
+- Model loading
+- Multiple model loading
+- Model loading progress
+- Model loading error handling
+- Imported model mesh registration
+- Model roots and metadata
+- Model animation information
+- Model animation control
+- Runtime loading progress
+- Environment and HDR support
+- Environment intensity
+- Environment background control
+- Environment background blur
+- Environment rotation
+- Native DOM events
+- Babylon.js observable events
+- Babylon.js ActionManager triggers
+- Runtime JavaScript actions
+- Shadows
+- Havok physics integration
+- GUI
+- Particle systems
+- Public JavaScript API
+- Plugin architecture
+- Local Babylon.js distribution
+- No CDN dependency
 
-Instead of creating every object through JavaScript, scene elements can be declared directly in HTML:
+---
+
+# Architecture
+
+Arashtad 3D Runtime is designed around a simple principle:
+
+> HTML describes the scene, Babylon.js remains the engine, and JavaScript remains available whenever direct control is required.
+
+Conceptually, the runtime sits between declarative HTML and Babylon.js:
+
+```text
+                         HTML
+                           │
+                           ▼
+                  Arashtad 3D Runtime
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+   Declarative        Core Scene       Runtime API
+    Processing         Systems              │
+          │                │                │
+          └────────────────┼────────────────┘
+                           │
+                           ▼
+                    Babylon.js Scene
+                           │
+              ┌────────────┴────────────┐
+              │                         │
+        Core Runtime               Plugin Layer
+              │                         │
+              └────────────┬────────────┘
+                           ▼
+                         WebGL
+```
+
+The core runtime is responsible for declarative scene construction and core scene processing.
+
+The plugin layer provides higher-level application functionality without requiring those application concepts to become part of the core scene language.
+
+---
+
+# Declarative HTML
+
+A basic scene can be defined directly inside a canvas:
 
 ```html
 <canvas id="scene">
@@ -49,335 +122,747 @@ Instead of creating every object through JavaScript, scene elements can be decla
 </canvas>
 ```
 
-The runtime converts these declarations into Babylon.js objects and manages their relationships, properties, events, loading, rendering, physics, shadows, and other supported functionality.
+The runtime is initialized from JavaScript:
 
-JavaScript remains available for application logic, runtime APIs, events, and plugins.
+```javascript
+import {
+    ready
+} from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
 
-## Project Goals
+const canvas = document.getElementById('scene');
 
-These examples are designed to be much more than visual demonstrations.
+const scene = await ready(canvas);
+```
 
-**The collection is intended to provide:**
+Initialization creates or retrieves the runtime associated with the canvas, processes the declarative elements, creates the required Babylon.js objects, establishes relationships, applies properties, binds supported events and actions, and starts rendering.
 
-- A practical documentation system
-- A working API reference
-- A regression and integration test suite
-- A feature-by-feature demonstration
-- Progressive learning material
-- Real implementation patterns
-- Production-oriented application examples
+The returned value is the Babylon.js `Scene`.
 
-Every example should demonstrate something that actually exists in the runtime or plugin implementation.
+---
 
-The examples are built against the real APIs rather than hypothetical or conceptual APIs.
+# Runtime Tags
 
-Example Philosophy
-Start Simple
+The runtime recognizes semantic `arashtad-*` elements including:
 
-When a new feature is introduced, the first example demonstrates the simplest meaningful use of that feature.
+```
+arashtad-runtime
+arashtad-camera
+arashtad-light
+arashtad-model
+arashtad-mesh
+arashtad-texture
+arashtad-gui
+arashtad-material
+arashtad-particlesystem
+arashtad-physics
+arashtad-action
+arashtad-shadow
+arashtad-generator
+arashtad-caster
+arashtad-receiver
+arashtad-velocity
+arashtad-impulse
+arashtad-force
+arashtad-body
+arashtad-collision
+```
 
-## Progressively Increase Complexity
+Not every tag represents a standalone Babylon.js object.
 
-### Later examples introduce:
+Some elements are semantic configuration elements processed by other runtime systems. For example, shadow, physics, action, caster, receiver, velocity, impulse, force, body, and collision elements participate in higher-level runtime processing.
 
-- Additional properties
-- Multiple objects
-- References
-- Parent/child relationships
-- Events
-- JavaScript
-- Multiple features
-- Plugin integration
-- Complete application patterns
+---
 
-**Example Progression**
+# Cameras
 
-The collection follows this general progression:
+The runtime explicitly defines constructor support for:
 
-Basic Scene & Runtime
-        ↓
-Cameras
-        ↓
-Lights
-        ↓
-Models
-        ↓
-Meshes
-        ↓
-Materials
-        ↓
-Particle Systems
-        ↓
-GUI
-        ↓
-Environment
-        ↓
-Events & Actions
-        ↓
-Shadows
-        ↓
-Physics
-        ↓
-Generic Runtime Construction
-        ↓
-Runtime Integration & API
-        ↓
-Plugin System
-        ↓
-Models Plugin
-        ↓
-Lazy Loading Plugin
-        ↓
-Scroll Lock Plugin
-        ↓
-Touch Controls Plugin
-        ↓
-Interactions Plugin
-        ↓
-Plugin Combinations
-        ↓
-Production Examples
+```javascript
+UniversalCamera
+FreeCamera
+ArcRotateCamera
+```
 
-The exact number and grouping of examples may grow as the runtime evolves.
+Example:
 
-## Runtime Features Covered
+```html
+<arashtad-camera
+    type="ArcRotateCamera"
+    id="camera"
+    alpha="1.57"
+    beta="1.2"
+    radius="12"
+    target="new BABYLON.Vector3(0, 0, 0)">
+</arashtad-camera>
+```
 
-The runtime examples progressively cover the supported functionality, including:
+The camera becomes associated with the runtime scene and is assigned as the active scene camera.
 
-- Canvas and scene initialization
-- Runtime configuration
-- Canvas resizing
-- Loading progress
-- Loading errors
-- JavaScript expressions
-- Object references
-- Constructor arguments
-- Generic properties
-- Nested properties
-- Parent/child relationships
-- Cameras
-- Lights
-- Models
-- Meshes
-- Materials
-- Particle systems
-- GUI
-- Environments
-- Events
-- Actions
-- Shadows
-- Physics
-- Runtime JavaScript API
-- Cameras
+Camera properties can subsequently be configured through runtime attributes or JavaScript.
 
-**The currently explicitly supported camera types are:**
+---
 
-- UniversalCamera
-- FreeCamera
-- ArcRotateCamera
+# Lights
 
-Each camera type is introduced through a basic example and a full configuration example.
+The runtime explicitly defines support for:
 
-**Additional examples demonstrate:**
+```javascript
+HemisphericLight
+DirectionalLight
+```
 
-- Multiple cameras
-- Camera references
-- Camera properties
-- Nested camera properties
-- Cameras with models
-- Cameras with multiple models
-- Camera-related events
-- Advanced camera scenes
-- Lights
+Example:
 
-The currently explicitly supported light types are:
+```html
+<arashtad-light
+    type="DirectionalLight"
+    id="light"
+    direction="new BABYLON.Vector3(0, -1, -2)">
+</arashtad-light>
+```
 
-- HemisphericLight
-- DirectionalLight
+Multiple lights can be declared in the same scene.
 
-Each light type is introduced through a basic example and a full configuration example.
+Additional Babylon.js light types should only be used through the generic constructor system when their constructor requirements are compatible with the runtime's generic construction mechanism.
 
-**Additional examples demonstrate:**
+---
 
-- Multiple lights
-- Light references
-- Light properties
-- Lights with meshes
-- Lights with materials
-- Lights with shadows
-- Advanced lighting scenes
-- Models
+# Models
 
-Model examples cover the complete runtime model-loading workflow.
+Models can be loaded declaratively:
 
-### Topics include:
+```html
+<arashtad-model
+    id="model"
+    src="assets/model.glb">
+</arashtad-model>
+```
 
-- Basic model loading
-- Multiple models
-- Model IDs
-- Model references
-- Loading progress
-- Loading errors
-- Model roots
+The runtime uses Babylon.js `SceneLoader.ImportMeshAsync()` for model loading.
+
+Model processing provides:
+
+- Individual model loading progress
+- Aggregate scene loading progress
+- Loading error handling
 - Imported mesh registration
 - Model metadata
+- Model root nodes
 - Animation groups
-- Animation playback
-- Animation selection
-- Animation speed
-- Multiple animated models
-- Advanced model scenes
+- Animation control
 
-The runtime also provides model information through the plugin system.
+Each imported model receives a runtime model root.
 
-## Meshes
+Imported meshes are registered so that individual model meshes can be addressed through runtime references.
 
-The runtime provides declarative access to Babylon.js MeshBuilder.
+For example:
 
-**Examples cover supported MeshBuilder-based scene construction, including:**
+```html
+<arashtad-mesh
+    ref="black"
+    material="accent-material">
+</arashtad-mesh>
+```
 
-- Box
-- Sphere
-- Plane
-- Ground
-- Cylinder
-- Disc
-- Torus
-- Torus Knot
-- Lines
-- Tube
-- Polygon
-- Lathe
-- Extrusion
-- Ribbon
-- Other mesh types available from the loaded Babylon.js MeshBuilder API
+Here, `black` can refer to a mesh registered from an imported model.
 
-**Advanced mesh examples demonstrate:**
+---
 
-- IDs
-- References
-- Position
-- Rotation
-- Scaling
-- Visibility
-- Enabled state
-- Rendering properties
-- Parenting
-- Materials
-- Nested properties
-- Constructor options
-- Multiple meshes
-- Mesh composition
-- Materials
+## Model Animation
 
-**Material examples demonstrate:**
+The runtime model system exposes animation functionality including:
 
-- Material creation
-- Material references
-- Material assignment
-- Material properties
-- Nested properties
-- Multiple materials
-- Materials across multiple meshes
-- Advanced material scenes
-- Particle Systems
+```javascript
+getAnimations()
 
-**Particle examples cover:**
+playAnimation(value)
 
-- ParticleSystem creation
-- Capacity
-- Particle textures
-- ParticleSystem properties
-- Multiple particle systems
-- Particle systems with lights
-- Particle systems with models
-- Advanced particle scenes
-- GUI
+pauseAnimation(value?)
 
-**The runtime currently provides dedicated GUI creation for:**
+stopAnimation(value?)
 
+setAnimationSpeed(speed, value?)
+```
+
+Animations can be selected by supported identifiers such as:
+
+- Animation index
+- Exact animation name
+- Partial animation name
+
+The runtime also exposes model animation information through the Models plugin.
+
+---
+
+# Meshes
+
+Meshes are created declaratively through Babylon.js `MeshBuilder`.
+
+Example:
+
+```html
+<arashtad-mesh
+    type="Box"
+    id="box"
+    size="2">
+</arashtad-mesh>
+```
+
+The runtime resolves mesh factories dynamically using the Babylon.js `MeshBuilder.Create<Type>()` API available in the loaded Babylon.js version.
+
+For example:
+
+```html
+type="Box"
+```
+
+resolves to the corresponding:
+
+```javascript
+BABYLON.MeshBuilder.CreateBox(...)
+```
+
+Mesh construction therefore follows the MeshBuilder implementation supplied by the Babylon.js version distributed with or loaded by the application.
+
+---
+
+# Materials
+
+Materials can be created through the runtime's constructor system and assigned through references.
+
+Example:
+
+```html
+<arashtad-material
+    type="StandardMaterial"
+    id="material">
+</arashtad-material>
+
+<arashtad-mesh
+    type="Box"
+    id="box"
+    material="material">
+</arashtad-mesh>
+```
+
+Properties can be assigned directly through HTML attributes:
+
+```html
+<arashtad-material
+    type="StandardMaterial"
+    id="material"
+    diffuseColor="new BABYLON.Color3(0.15, 0.64, 0.55)"
+    specularColor="new BABYLON.Color3(0.8, 0.8, 0.8)">
+</arashtad-material>
+```
+
+Nested properties can use dot notation where supported by the target object:
+
+```html
+<arashtad-material
+    type="StandardMaterial"
+    id="material"
+    diffuseColor.r="0.15"
+    diffuseColor.g="0.64"
+    diffuseColor.b="0.55">
+</arashtad-material>
+```
+
+---
+
+# Particle Systems
+
+Particle systems are explicitly supported.
+
+Example:
+
+```html
+<arashtad-particlesystem
+    type="ParticleSystem"
+    id="particles"
+    capacity="1000"
+    particleTexture="new BABYLON.Texture('../../textures/flare.png', scene)">
+</arashtad-particlesystem>
+```
+
+The runtime creates and starts supported particle systems after processing their configuration.
+
+Particle system properties can be supplied through runtime attributes using the same property-processing system used by other runtime objects.
+
+---
+
+# GUI
+
+The runtime provides dedicated creation support for Babylon GUI objects.
+
+Currently documented dedicated GUI creation includes:
+
+```javascript
 AdvancedDynamicTexture
 Button
+```
 
-**Examples demonstrate:**
+Create a fullscreen GUI texture:
 
-- Basic GUI creation
-- GUI buttons
-- Button text
-- GUI properties
-- GUI parenting
-- Multiple GUI controls
+```html
+<arashtad-gui
+    type="AdvancedDynamicTexture"
+    id="ui">
+</arashtad-gui>
+```
+
+Create a button:
+
+```html
+<arashtad-gui
+    type="Button"
+    id="button"
+    text="Click Me">
+</arashtad-gui>
+```
+
+A GUI control can be associated with an `AdvancedDynamicTexture`:
+
+```html
+<arashtad-gui
+    type="Button"
+    id="button"
+    parent="ui"
+    text="Click Me">
+</arashtad-gui>
+```
+
+GUI properties can be configured through runtime attributes.
+
+For example:
+
+```html
+<arashtad-gui
+    type="Button"
+    id="button"
+    parent="ui"
+    text="CLICK ME"
+    width="'200px'"
+    height="'60px'"
+    color="'white'"
+    background="'blue'"
+    fontSize="24"
+    cornerRadius="10">
+</arashtad-gui>
+```
+
+The runtime also supports generic Babylon.GUI constructor resolution where the required constructor is compatible with the generic construction system.
+
+---
+
+# Environment
+
+The runtime supports Babylon.js environment textures through the `environment` attribute.
+
+Example:
+
+```html
+<arashtad-runtime
+    environment="assets/environment.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"
+    environmentBackgroundBlur="0.2"
+    environmentRotationY="0">
+</arashtad-runtime>
+```
+
+Supported environment settings include:
+
+```javascript
+environment
+environmentIntensity
+environmentBackground
+environmentBackgroundBlur
+environmentRotationY
+```
+
+The environment can provide image-based scene illumination and reflections and can optionally be rendered as the scene background.
+
+For HDR environments, the runtime uses Babylon.js environment texture support.
+
+The environment path is a normal resource path:
+
+```javascript
+environment="../../environments/room.hdr"
+```
+
+It should not be wrapped in additional JavaScript-string quoting.
+
+---
+
+# Environment Intensity
+
+`environmentIntensity` controls the strength of the environment contribution.
+
+Example:
+
+```html
+<arashtad-runtime
+    environment="../../environments/room.hdr"
+    environmentIntensity="1">
+</arashtad-runtime>
+```
+
+Higher values increase the environment's contribution to the scene.
+
+---
+
+# Environment Background
+
+`environmentBackground` controls whether the environment is rendered as the visible scene background.
+
+```javascript
+environmentBackground="true"
+```
+
+The environment can therefore remain active for lighting and reflections while the visible background is disabled:
+
+```html
+<arashtad-runtime
+    environment="../../environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="false">
+</arashtad-runtime>
+```
+
+When the environment background is disabled, the canvas clear color can be used as the visible background.
+
+---
+
+# Environment Background Blur
+
+`environmentBackgroundBlur` controls the amount of blur applied to the visible environment background.
+
+Example:
+
+```html
+<arashtad-runtime
+    environment="../../environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"
+    environmentBackgroundBlur="0.35">
+</arashtad-runtime>
+```
+
+---
+
+# Environment Rotation
+
+`environmentRotationY` rotates the environment around the Y axis.
+
+Example:
+
+```html
+<arashtad-runtime
+    environment="../../environments/room.hdr"
+    environmentIntensity="1"
+    environmentBackground="true"
+    environmentRotationY="1">
+</arashtad-runtime>
+```
+
+The rotation value is expressed in radians.
+
+Environment intensity, background visibility, background blur, and rotation can be combined in the same runtime configuration.
+
+---
+
+# References
+
+Runtime objects can be registered and referenced by ID.
+
+For example:
+
+```html
+<arashtad-light
+    type="DirectionalLight"
+    id="mainLight"
+    direction="new BABYLON.Vector3(0, -1, -2)">
+</arashtad-light>
+```
+
+Another runtime element can reference the object:
+
+```html
+<arashtad-shadow
+    light="mainLight">
+</arashtad-shadow>
+```
+
+References are maintained through the runtime registry.
+
+The registry can also contain imported model meshes and model information.
+
+This allows declarative elements and runtime actions to address objects without requiring a separate JavaScript lookup system.
+
+---
+
+# JavaScript Expressions
+
+Runtime attributes can contain JavaScript expressions.
+
+For example:
+
+```html
+<arashtad-mesh
+    type="Box"
+    id="box"
+    size="2"
+    position="new BABYLON.Vector3(0, 1, 0)">
+</arashtad-mesh>
+```
+
+Expressions can access the JavaScript environment provided by the runtime, including Babylon.js and registered references where applicable.
+
+This allows complex Babylon.js values to be expressed without requiring a separate parser for every possible Babylon.js type.
+
+JavaScript expressions are one of the mechanisms that allow the declarative syntax to remain close to the underlying Babylon.js API.
+
+---
+
+# Properties
+
+Runtime attributes are applied dynamically to created objects.
+
+Property resolution supports:
+
+- Own object properties
+- Prototype properties
+- Case-insensitive property resolution
+- Nested properties
 - Runtime references
-- GUI and scene integration
-- Advanced GUI scenes
-- Environment
+- Parsed JavaScript values
 
-**Environment examples cover:**
+Nested properties can use dot notation where supported by the target object.
 
-- Basic environments
-- HDR environments
-- Prefiltered environments
-- Environment intensity
-- Environment background
-- Environment background blur
-- Environment rotation
-- Environments without displayed backgrounds
-- Environments with models
-- Environments with lighting
-- Advanced environment scenes
+For example:
 
-The runtime supports .hdr environments and Babylon.js prefiltered environment data.
+```javascript
+diffuseColor.r="0.15"
+diffuseColor.g="0.64"
+diffuseColor.b="0.55"
+```
 
-## Events & Actions
+The runtime resolves the property path and applies the resulting value to the target object.
 
-The runtime provides several ways to connect scene behavior to JavaScript.
+---
 
-**Examples cover:**
+# Constructor Arguments
 
-- Immediate actions
-- Native canvas DOM events
-- Pointer observables
-- Babylon observables
-- Babylon ActionManager triggers
-- Action targets
-- Runtime references
-- Scene access
-- Babylon.js access
-- Event data
+Some runtime-defined object types provide explicit constructor argument mappings.
+
+For example, the runtime defines the constructor parameters for `ArcRotateCamera` as:
+
+```javascript
+alpha
+beta
+radius
+target
+```
+
+A camera can therefore be constructed using:
+
+```html
+<arashtad-camera
+    type="ArcRotateCamera"
+    args="1.57, 1.2, 12, new BABYLON.Vector3(0, 0, 0)">
+</arashtad-camera>
+```
+
+Constructor arguments are evaluated through the runtime expression system.
+
+Constructor argument support depends on the constructor definition registered by the runtime. It should not be interpreted as a guarantee that arbitrary Babylon.js constructors can accept arbitrary `args` strings.
+
+---
+
+# Generic Babylon.js Construction
+
+In addition to explicitly defined runtime object types, the runtime can resolve compatible Babylon.js constructors dynamically.
+
+The generic constructor system can resolve Babylon.js constructors through the Babylon.js API and, where applicable, Babylon GUI constructors.
+
+Conceptually, constructor resolution can use:
+
+```javascript
+BABYLON[type]
+```
+
+and:
+
+```javascript
+BABYLON.GUI[type]
+```
+
+This provides an extensible bridge between declarative HTML and the Babylon.js API.
+
+Generic construction does not guarantee that every Babylon.js class can be instantiated automatically. Constructor requirements, runtime definitions, and the object's relationship to a Babylon.js scene determine whether a particular type can be constructed successfully.
+
+---
+
+# Parent and Child Relationships
+
+Runtime objects can establish relationships using references.
+
+For example:
+
+```html
+<arashtad-gui
+    id="ui"
+    type="AdvancedDynamicTexture">
+</arashtad-gui>
+
+<arashtad-gui
+    id="button"
+    type="Button"
+    parent="ui"
+    text="CLICK ME">
+</arashtad-gui>
+```
+
+The same reference mechanism is used throughout the runtime for supported parent, material, manager, light, model, and other relationships.
+
+---
+
+# Events
+
+The runtime supports multiple event mechanisms.
+
+## Native DOM Events
+
+Supported runtime event processing can connect HTML event attributes to JavaScript action execution.
+
+The event object is made available to the runtime action context.
+
+Example:
+
+```html
+<arashtad-action
+    target="box"
+    on-click="console.log(event)">
+</arashtad-action>
+```
+
+Native event behavior depends on the event and runtime element being processed.
+
+---
+
+## Babylon.js Observables
+
+Runtime event attributes can connect to compatible Babylon.js observable properties.
+
+Observable resolution is performed against the Babylon.js object associated with the runtime element.
+
+---
+
+## ActionManager Triggers
+
+The runtime can resolve compatible Babylon.js `ActionManager` triggers dynamically from the loaded Babylon.js API.
+
+This allows runtime actions to respond to supported Babylon.js ActionManager events without requiring every trigger to be hard-coded into the runtime.
+
+---
+
+# Actions
+
+Runtime actions execute JavaScript with a runtime-provided context.
+
+The action context can expose:
+
+```javascript
+target
+scene
+BABYLON
+refs
+event
+meshes
+mesh
+```
+
+Example:
+
+```html
+<arashtad-action
+    target="box"
+    execute="target.rotation.y += 0.5">
+</arashtad-action>
+```
+
+Actions can interact with:
+
+- The target object
+- The associated scene
+- The Babylon.js API
+- Registered references
+- Event information
 - Imported model meshes
-- Multiple events
-- Multiple actions
 
-**Runtime action code has access to:**
+### GUI Action Context
 
-- target
-- scene
-- BABYLON
-- refs
-- event
-- meshes
-- mesh
-- Shadows
+GUI controls require special care because the GUI control's object hierarchy is different from ordinary scene objects.
 
-**Shadow examples cover:**
+When a GUI action needs the actual Babylon.js `Scene`, the GUI target can provide access to its scene through Babylon.js APIs such as:
 
-- Shadow creation
+```javascript
+target.getScene()
+```
+
+Code should not assume that the action context's `scene` variable is always the Babylon.js `Scene` when the action is attached to a GUI control.
+
+---
+
+# Shadows
+
+The runtime provides declarative shadow configuration.
+
+Shadow-related runtime elements can configure supported shadow functionality including:
+
 - Shadow generators
-- Shadow map size
+- Shadow map configuration
 - Shadow darkness
 - Light shadow properties
 - Shadow casters
 - Shadow receivers
-- Multiple casters
-- Multiple receivers
-- Multiple shadow generators
-- Shadows with multiple lights
-- Advanced shadow scenes
-- Physics
 
-Physics examples demonstrate the runtime's Havok integration.
+Example:
 
-**Topics include:**
+```html
+<arashtad-shadow
+    light="mainLight"
+    mapSize="2048"
+    darkness="0.3">
+</arashtad-shadow>
+```
+
+Caster and receiver elements allow shadow participation to be declared separately from the underlying mesh declaration.
+
+---
+
+# Physics
+
+Arashtad 3D Runtime integrates Babylon.js Havok physics.
+
+Physics support is implemented through the runtime's physics-related semantic elements and supporting systems.
+
+The runtime tag family includes:
+
+```
+arashtad-physics
+arashtad-generator
+arashtad-caster
+arashtad-receiver
+arashtad-velocity
+arashtad-impulse
+arashtad-force
+arashtad-body
+arashtad-collision
+```
+
+Physics functionality includes support for concepts such as:
 
 - Havok initialization
 - Physics aggregates
@@ -392,362 +877,679 @@ Physics examples demonstrate the runtime's Havok integration.
 - Forces
 - Contact positions
 - Motion types
-- Collision start events
-- Collision end events
-- Multiple collision types
-- Multiple physics objects
-- Physics with meshes
-- Physics with models
-- Physics with actions
-- Advanced physics scenes
-- Generic Runtime Construction
+- Collision events
 
-The runtime includes generic Babylon.js and Babylon.GUI constructor resolution.
+Collision systems can respond to supported collision-start and collision-end notifications.
 
-**Examples demonstrate:**
+The exact structure of a physics declaration depends on the physics elements involved and the Babylon.js/Havok configuration required by the scene.
 
-- Generic Babylon constructors
-- Constructor arguments
-- Generic GUI constructors
-- References
-- Properties
-- JavaScript expressions
-- Parent relationships
-- Material assignment
-- Advanced generic runtime construction
-- Runtime JavaScript API
+---
 
-The runtime exposes a small public JavaScript API.
+# Loading Progress
+
+The runtime tracks loading progress for model-based scenes.
+
+Individual model progress can be monitored and combined into aggregate scene progress.
+
+Aggregate progress is monotonic: it does not decrease during loading.
+
+The runtime reserves the final `100%` state for completion.
+
+The runtime exposes loading callbacks including:
+
+```javascript
+OnLoadProgress
+OnLoadError
+```
+
+through the runtime configuration.
+
+---
+
+# Public JavaScript API
+
+The core public API is intentionally small.
+
+## `ready(canvas)`
+
+Initializes the runtime for a canvas and returns the associated Babylon.js `Scene`.
+
 ```javascript
 import {
-    ready,
-    loadModel
-} from './lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
-ready()
+    ready
+} from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
 
-Initializes a canvas and returns its Babylon.js scene.
+const canvas = document.getElementById('scene');
 
 const scene = await ready(canvas);
 ```
 
-**Examples demonstrate:**
+The runtime initialization process handles the runtime setup associated with the canvas and returns the resulting Babylon.js scene.
 
-- Basic initialization
-- Scene retrieval
-- Scene caching
-- Repeated initialization
-- Declarative scene + JavaScript integration
-- loadModel()
+---
 
-Loads a model into an existing runtime scene.
+## `loadModel(scene, url, id)`
+
+Loads a model programmatically into an existing runtime scene.
+
 ```javascript
-await loadModel(scene, url, id);
+import {
+    ready,
+    loadModel
+} from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
+
+const scene = await ready(canvas);
+
+await loadModel(
+    scene,
+    'assets/model.glb',
+    'product'
+);
 ```
 
-**Examples demonstrate:**
+This provides a JavaScript alternative to declarative `<arashtad-model>` elements.
 
-- Basic programmatic model loading
-- Custom model IDs
-- Model registry integration
-- Model animation
-- Multiple models
-- Programmatic + declarative scene integration
-- Plugins
+---
 
-After the runtime itself has been covered, the examples move to the plugin system.
+# Plugin Architecture
 
-Currently implemented plugins are:
+Arashtad 3D Runtime separates core scene processing from higher-level application functionality.
 
-* Models
-* Lazy Loading
-* Scroll Lock
-* Touch Controls
-* Interactions
+The core runtime focuses on:
 
-**The repository also contains plugin modules reserved for future functionality:**
+- Scene creation
+- Declarative object construction
+- Properties
+- References
+- Events
+- Actions
+- Loading
+- Rendering
+- Core scene systems
 
-* Cameras
-* Materials
-* Animations
-* Scene
-* Hotspots
-* AR
-* Annotations
+Plugins provide higher-level functionality without requiring application-specific concepts to become part of the core runtime language.
 
-Reserved modules are not documented as implemented features until functionality actually exists.
+The plugin distribution is:
 
-## Models Plugin
+```
+lib/arashtad/arashtad-3d-runtime-plugins-1.0.0.min.js
+```
 
-The Models plugin provides access to information registered for loaded models.
+The core runtime and plugin layer are distributed as separate bundles.
 
-**Available APIs:**
+This architecture allows applications to use the core runtime independently and add higher-level capabilities when required.
 
-- getModelData(id)
-- getModelMeshes(id)
-- getModelAnimations(id)
-- getModelSkeletons(id)
-- getModelParticleSystems(id)
+---
 
-Examples demonstrate how these APIs can be used with runtime scenes and other plugins.
+# Models Plugin
 
-## Lazy Loading Plugin
+The Models plugin provides access to model information registered by the runtime.
 
-The Lazy Loading plugin uses IntersectionObserver to delay initialization until an element approaches the viewport.
+Public APIs include:
 
-API:
+```javascript
+getModelData(id)
+
+getModelMeshes(id)
+
+getModelAnimations(id)
+
+getModelSkeletons(id)
+
+getModelParticleSystems(id)
+```
+
+The plugin operates on model information maintained by the runtime.
+
+The Models plugin therefore provides a programmatic model-data layer while the core runtime remains responsible for declarative model loading and registration.
+
+---
+
+# Lazy Loading Plugin
+
+The Lazy Loading plugin uses `IntersectionObserver` to trigger loading when an element approaches the viewport.
+
+The primary API is:
+
 ```javascript
 enableLazyLoading(element, callback, options)
 ```
 
-**Supported functionality includes:**
+Supported configuration currently includes:
 
-- Intersection-based loading
-- Custom rootMargin
-- Loading callbacks
-- Multiple lazy-loaded scenes
-- Integration with models
-- Integration with interactions
+```javascript
+{
+    rootMargin: '500px'
+}
+```
 
-**Default rootMargin:**
+The callback is executed on the first intersection and the observer is then removed.
 
-- 500px
-- Scroll Lock Plugin
+---
 
-The Scroll Lock plugin controls page scrolling while interacting with 3D canvases.
+# Scroll Lock Plugin
 
-**APIs:**
+The Scroll Lock plugin provides:
 
-- enableScrollLock()
-- disableScrollLock()
+```javascript
+enableScrollLock()
+
+disableScrollLock()
+```
 
 It targets:
+
 ```javascript
 .canvas-wrapper.scrolllock
 ```
 
-and prevents:
+and prevents wheel-based page scrolling while the target canvas is being interacted with.
 
-- wheel
-- mousewheel
+---
 
-scrolling.
+# Touch Controls Plugin
 
-## Touch Controls Plugin
+The Touch Controls plugin provides:
 
-The Touch Controls plugin provides touch-specific interaction behavior.
+```javascript
+enableTouchControls(element, options)
 
-**APIs:**
+disableTouchControls(element)
 
-- enableTouchControls(element, options)
-- disableTouchControls(element)
+enableTouchControlsForAll(selector)
 
-- enableTouchControlsForAll(selector)
-- disableTouchControlsForAll(selector)
+disableTouchControlsForAll(selector)
+```
 
-**Supported behavior includes:**
+Supported touch behavior includes:
 
-- Touch movement
 - Scroll prevention
 - Double tap
 - Long press
-- 3D touch movement
-- Multiple canvas support
+- Touch movement
+- Custom 3D touch movement events
 
-**Custom events include:**
+Generated custom events include:
 
-- touchlongpress
-- touchmove3d
-- touchdoubletap
-
-**Default options:**
-
-- preventScroll: true
-- doubleTapDelay: 300
-- longPressDelay: 500
-- Interactions Plugin
-
-The Interactions plugin provides application-level interaction functionality for Babylon.js scenes.
-
-**Initialize it with:**
 ```javascript
-const interactions = enableInteractions(scene, canvas);
+touchlongpress
+touchmove3d
+touchdoubletap
 ```
 
-**It provides:**
+---
 
-- Raycasting
-- Picking
-- Pointer events
-- Mesh targeting
-- Regular-expression targeting
-- Hierarchy targeting
-- Event binding
-- Event unbinding
-- Highlighting
-- Information cards
-- Camera navigation
-- Interaction points
-- Built-in actions
-- Custom JavaScript actions
-- Configuration-driven bindings
+# Interactions Plugin
 
-The Interactions plugin is separate from the runtime's core declarative scene engine.
+The Interactions plugin provides higher-level interaction functionality for Babylon.js scenes.
 
-## Interaction Events
+Initialize it with:
 
-**Supported interaction events:**
+```javascript
+const interactions = enableInteractions(
+    scene,
+    canvas
+);
+```
 
-- pick
-- pointerover
-- pointerout
-- pointermove
-- pointerdown
-- pointerup
+The API includes:
 
-**The plugin also emits canvas custom events:**
+```javascript
+raycast()
+raycastMesh()
+raycastPoint()
+highlight()
+unhighlight()
+clearHighlights()
+showCard()
+hideCard()
+navigateTo()
+createPoint()
+removePoint()
+clearPoints()
+bind()
+bindAll()
+bindName()
+bindNameAll()
+bindNamePattern()
+bindHierarchy()
+unbind()
+unbindAll()
+unbindNamePattern()
+unbindHierarchy()
+bindConfig()
+removeBindings()
+resolveTargets()
+on()
+onAll()
+disable()
+```
 
-- interaction:pick
-- interaction:pointerover
-- interaction:pointerout
-- interaction:pointermove
-- interaction:pointerdown
-- interaction:pointerup
-- Interaction Targets
+Supported interaction events include:
 
-**Targets can be:**
+```javascript
+pick
+pointerover
+pointerout
+pointermove
+pointerdown
+pointerup
+```
 
-- Babylon meshes/nodes
-- Exact mesh names
-- Multiple meshes with the same name
-- Regular expressions
-- Arrays of targets
-- Mesh hierarchies
-- Interaction Actions
+Built-in interaction actions include:
 
-**Built-in actions include:**
+```javascript
+highlight
+unhighlight
+card
+hideCard
+navigate
+point
+```
 
-- highlight
-- unhighlight
-- card
-- hideCard
-- navigate
-- point
+Custom JavaScript functions can also be used as interaction actions.
 
-Actions can also be custom JavaScript functions.
+---
 
-Repository Structure
+# Why the Plugin Layer Exists
 
-The exact structure may evolve as the example collection grows.
+The core runtime provides the declarative foundation for Babylon.js scenes.
 
-A typical structure is:
-```text
-examples/
-├── index.php
-├── assets/
-├── examples/
-│   ├── 01-basic-scene/
-│   ├── 02-canvas/
-│   ├── 03-basic-runtime/
-│   └── ...
+Plugins provide higher-level application behavior.
+
+This separation makes it possible to build systems such as:
+
+- Interactive product viewers
+- Product configurators
+- 3D annotations
+- Hotspots
+- Interactive maps
+- Architectural viewers
+- Technical documentation
+- Educational models
+- 3D presentations
+- Information systems
+
+without requiring these application concepts to become part of the core runtime scene language.
+
+The runtime therefore remains a general-purpose Babylon.js declarative layer while plugins provide specialized functionality.
+
+---
+
+# Project Structure
+
+The source repository is organized around the runtime core, plugins, distributed builds, and examples:
+
+```
+arashtad-runtime/
+
+├── src/
+│   ├── ActionHandler.js
+│   ├── Constructor.js
+│   ├── Creator.js
+│   ├── Definitions.js
+│   ├── DOM.js
+│   ├── Events.js
+│   ├── Factory.js
+│   ├── Parser.js
+│   ├── Properties.js
+│   ├── Registry.js
+│   ├── Resolver.js
+│   ├── Runtime.js
+│   └── Tags.js
+│
+├── plugins/
+│   ├── Animations.js
+│   ├── Annotations.js
+│   ├── AR.js
+│   ├── Cameras.js
+│   ├── Hotspots.js
+│   ├── Interactions.js
+│   ├── LazyLoading.js
+│   ├── Materials.js
+│   ├── Models.js
+│   ├── Plugins.js
+│   ├── Scene.js
+│   ├── ScrollLock.js
+│   └── TouchControls.js
+│
 ├── lib/
 │   ├── arashtad/
+│   │   ├── arashtad-3d-runtime-1.1.0.min.js
+│   │   └── arashtad-3d-runtime-plugins-1.0.0.min.js
+│   │
 │   └── babylon/
+│
+├── examples/
+│
+├── LICENSE
+│
 └── README.md
 ```
 
-## Running the Examples
+The exact contents of the source and plugin directories may evolve as the runtime develops. The two files under `lib/arashtad/` represent the versioned distributed runtime builds.
 
-The examples require a web server.
+---
 
-For local development, PHP's built-in server can be used:
+# Distribution
+
+Arashtad 3D Runtime is distributed as two primary JavaScript bundles:
+
+```
+lib/arashtad/arashtad-3d-runtime-1.1.0.min.js
+lib/arashtad/arashtad-3d-runtime-plugins-1.0.0.min.js
+```
+
+The core runtime and plugin bundle are independent layers.
+
+Babylon.js dependencies are distributed locally with the project.
+
+No CDN is required for normal runtime operation.
+
+Applications may therefore deploy the runtime and its Babylon.js dependencies as part of their own project without depending on a third-party CDN.
+
+---
+
+# Babylon.js Dependencies
+
+The runtime distribution includes the Babylon.js libraries required by the supported examples and runtime functionality.
+
+Typical example pages load Babylon.js locally:
+
+```html
+<script src="../../lib/babylon/babylon.js"></script>
+```
+
+Examples that use Babylon GUI additionally load:
+
+```html
+<script src="../../lib/babylon/gui/babylon.gui.min.js"></script>
+```
+
+Examples that load external 3D model formats additionally load the Babylon.js loaders:
+
+```html
+<script src="../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+```
+
+The required Babylon.js modules should be loaded before functionality that depends on them.
+
+---
+
+# Browser Usage
+
+A minimal HTML page can look like:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arashtad 3D Runtime</title>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="scene">
+
+    <arashtad-camera
+        type="ArcRotateCamera"
+        alpha="1.57"
+        beta="1.2"
+        radius="10"
+        target="new BABYLON.Vector3(0, 0, 0)">
+    </arashtad-camera>
+
+    <arashtad-light
+        type="HemisphericLight"
+        direction="new BABYLON.Vector3(0, 1, 0)">
+    </arashtad-light>
+
+    <arashtad-mesh
+        type="Box"
+        id="box"
+        size="2">
+    </arashtad-mesh>
+
+</canvas>
+
+<script src="./lib/babylon/babylon.js"></script>
+
+<script type="module">
+
+    import {
+        ready
+    } from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
+
+    const canvas = document.getElementById('scene');
+
+    await ready(canvas);
+
+</script>
+
+</body>
+</html>
+```
+
+The exact Babylon.js auxiliary modules required by an application depend on the features being used.
+
+---
+
+# Local Development
+
+A web server is required for normal browser module loading and resource access.
+
+Using PHP:
+
 ```bash
 php -S localhost:8000
 ```
 
 Then open:
+
 ```bash
 http://localhost:8000/
 ```
 
-The examples should not be opened directly with:
-```bash
-file://
+Do not rely on opening the project directly through `file://` URLs.
+
+Using a local HTTP server also provides behavior closer to a normal deployed web environment.
+
+---
+
+# Examples
+
+The `examples/` directory contains progressively more advanced demonstrations of the runtime and its plugins.
+
+The examples serve several purposes:
+
+- Documentation
+- API demonstrations
+- Integration tests
+- Feature demonstrations
+- Learning material
+- Portfolio demonstrations
+- Production references
+
+The collection progresses from basic runtime initialization through cameras, lights, models, meshes, materials, particle systems, GUI, environments, events, actions, shadows, physics, runtime integration, plugins, interactions, plugin combinations, and complete production-oriented examples.
+
+There is no fixed example count.
+
+New examples can be added as runtime functionality grows or existing functionality requires additional coverage.
+
+Each example should remain independently useful as documentation and as a practical reference.
+
+---
+
+# Development Principles
+
+Arashtad 3D Runtime follows several core principles.
+
+## Declarative First
+
+Scene construction should be possible through HTML wherever the runtime provides a declarative representation.
+
+JavaScript remains available for functionality that requires direct programmatic control.
+
+---
+
+## Babylon.js Compatible
+
+Babylon.js remains the underlying 3D engine.
+
+The runtime should expose Babylon.js functionality rather than unnecessarily replacing Babylon.js APIs.
+
+Applications retain access to the underlying Babylon.js scene and objects.
+
+---
+
+## Small Core
+
+The runtime core should remain focused on:
+
+- Scene construction
+- Object creation
+- Properties
+- References
+- Events
+- Actions
+- Loading
+- Rendering
+- Core scene systems
+
+Higher-level application functionality belongs in plugins whenever it does not need to be part of the core declarative language.
+
+---
+
+## Extensible
+
+The constructor, property, reference, event, action, and plugin systems provide extension points without requiring a separate runtime implementation for every Babylon.js class or application concept.
+
+Generic construction provides an additional bridge to compatible Babylon.js and Babylon.GUI APIs.
+
+---
+
+## No Unnecessary Dependencies
+
+Required Babylon.js libraries are distributed locally with the project.
+
+Normal runtime operation does not require a third-party CDN.
+
+---
+
+## Direct Babylon.js Access
+
+The runtime is not intended to hide Babylon.js.
+
+The declarative layer and JavaScript API are complementary.
+
+Applications can use HTML for scene declaration and JavaScript for advanced runtime control, integration, custom behavior, and direct Babylon.js operations.
+
+---
+
+# Versioning
+
+Runtime distributions use explicit versioned filenames:
+
+```
+arashtad-3d-runtime-1.1.0.min.js
+arashtad-3d-runtime-plugins-1.0.0.min.js
 ```
 
-because browser module loading and other runtime functionality require an HTTP(S) origin.
+This makes the runtime and plugin versions explicit and allows applications to control exactly which distributed build they load.
 
-## Babylon.js
+Versioned filenames can also help prevent accidental replacement of a runtime build by an incompatible version.
 
-Arashtad 3D Runtime is built on Babylon.js.
+---
 
-The examples use the Babylon.js files bundled with the project rather than relying on a CDN.
+# Compatibility
 
-**This keeps the examples:**
+Arashtad 3D Runtime is designed for modern browsers supporting the technologies required by the runtime and the Babylon.js version distributed with the project.
 
-- Self-contained
-- Reproducible
-- Version-controlled
-- Independent of external CDN availability
-- Development
+The baseline environment includes:
 
-The example collection is intended to remain synchronized with the runtime and plugins.
+- ES modules
+- JavaScript classes
+- WebGL
+- Modern DOM APIs
+- Modern Babylon.js browser requirements
 
-**When functionality changes:**
+Features that depend on additional browser or platform capabilities may have additional requirements.
 
-- Update affected examples.
-- Add examples for newly introduced capabilities.
-- Verify existing examples against the current implementation.
-- Update documentation where behavior changes.
-- Keep examples focused on the actual supported API.
+For example:
 
-Examples must not document functionality that the current runtime or plugin implementation does not provide.
+- Lazy Loading uses `IntersectionObserver`.
+- Babylon.js Havok physics may require WebAssembly and the capabilities required by the corresponding Babylon.js/Havok build.
+- WebGL rendering capabilities depend on the browser, device, GPU, and Babylon.js version.
 
-Testing
+Actual rendering and feature availability therefore depend on the browser and device environment in which the application runs.
 
-The example collection also functions as a practical integration test suite.
+---
 
-**Examples should be checked for:**
+# Security Considerations
 
-- Correct runtime initialization
-- Correct HTML structure
-- Correct JavaScript integration
-- Correct asset loading
-- Correct Babylon.js behavior
-- Correct plugin behavior
-- Browser console errors
-- Loading failures
-- Interaction failures
-- Responsive canvas behavior
+Runtime expressions and actions are intentionally capable of executing JavaScript.
 
-A feature is properly demonstrated only when its example works against the current implementation.
+For example:
 
-Contributing
+```html
+<arashtad-action
+    target="box"
+    execute="target.rotation.y += 0.1">
+</arashtad-action>
+```
 
-**When adding an example:**
+This capability is fundamental to the runtime's design because it allows declarative HTML to interact directly with Babylon.js and application code.
 
-- Identify the runtime or plugin feature being demonstrated.
-- Make the first example for a feature as simple as possible.
-- Introduce additional properties progressively.
-- Avoid combining unrelated features prematurely.
-- Use the actual runtime or plugin APIs.
-- Keep the example focused and reproducible.
-- Update the example index.
-- Update documentation when necessary.
+Runtime scene markup should therefore be treated as trusted application code.
 
-Do not add speculative or undocumented APIs to examples.
+Do not process arbitrary untrusted user-supplied runtime HTML as though it were inert data.
 
-License
+Applications that allow users to create or modify runtime markup should implement their own validation, sanitization, authorization, and execution boundaries appropriate to their security model.
 
-Arashtad 3D Runtime is released under the `MIT License`.
+---
 
-See the LICENSE file for the complete license text.
+# License
 
-`Arashtad`
+Arashtad 3D Runtime is released under the MIT License.
 
-`Arashtad` is an independent software project focused on practical 3D technologies for the web.
+See the `LICENSE` file for the complete license text.
 
-`Arashtad 3D Runtime` provides the foundation for declarative `Babylon.js` scenes.
+---
 
-Its plugins provide higher-level functionality for building interactive 3D applications.
+# Arashtad
 
-This repository brings the two together through working examples that function as documentation, integration tests, API references, and production-oriented demonstrations.
+**Arashtad 3D Runtime** is part of the Arashtad software ecosystem.
+
+It provides a reusable declarative runtime layer for Babylon.js and serves as the foundation for higher-level 3D applications, integrations, and plugins.
+
+Built by **Arashtad**.
+
+
+# Changelog
+
+**1.1.0**
+
+1. **Features:**  added two lines: `Physics joints (ball and socket, hinge, distance, slider, 6DOF)` and `Physics constraints`.
+2. **Runtime Tags:**  added `arashtad-joint` and `arashtad-limit` to the tag list, added `joint` and `limit` to the semantic-elements paragraph, and added a sentence about the joint processing pass.
+3. **Physics section:**  added the new **Physics Joints** subsection with a full example, joint attributes, `<arashtad-limit>` details, and the fallback behavior note.
+4. **Project Structure:**  added `Joints.js` to `src/` in alphabetical position.
+5. **Versioning:**  added a sentence clarifying independent versioning between runtime and plugins.
+6. **GUI section:**  added a note that dedicated GUI creation is currently provided for `AdvancedDynamicTexture` and `Button`.
