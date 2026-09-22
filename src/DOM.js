@@ -10,7 +10,8 @@ import {
 } from './Registry.js';
 import { bindEvents } from './Events.js';
 import { executeActions } from './ActionHandler.js';
-import { getRuntimeTag, runtimeTag } from './Tags.js?v=2';
+import { getRuntimeTag, runtimeTag } from './Tags.js';
+import { createJoint } from './Joints.js';
 
 const elements = new WeakMap();
 const physicsBodies = new WeakMap();
@@ -561,6 +562,10 @@ async function createElement(
 ) {
     const tag = getRuntimeTag(element);
 
+    if (tag === 'joint' || tag === 'limit') {
+        return null;
+    }
+
     if (tag === 'runtime') {
         for (const attribute of element.attributes) {
             const name = attribute.name.toLowerCase();
@@ -705,6 +710,10 @@ async function applyElement(
 ) {
     const tag = getRuntimeTag(element);
     if (tag === 'runtime') {
+        return null;
+    }
+
+    if (tag === 'joint' || tag === 'limit') {
         return null;
     }
 
@@ -1000,6 +1009,12 @@ export async function processCanvas(canvas) {
             canvas
         );
     }
+    
+    /*
+     * Third pass: create joints. This runs after every body has been
+     * registered, so cross-references always resolve.
+     */
+    await applyJoints(scene);
     
     if (!loading.completed) {
         loading.completed = true;
@@ -1326,6 +1341,57 @@ function processPhysicsBody(
             break;
         }
     }
+}
+
+async function applyJoints(scene) {
+    const canvas = scene.getEngine()?.getRenderingCanvas();
+
+    if (!canvas) return;
+
+    for (const element of canvas.children) {
+        await collectJointsFromElement(element, scene);
+    }
+}
+
+async function collectJointsFromElement(element, scene) {
+    if (getRuntimeTag(element) === 'joint') {
+        await createJointFromElement(element, scene);
+        return;
+    }
+
+    for (const child of element.children) {
+        await collectJointsFromElement(child, scene);
+    }
+}
+
+async function createJointFromElement(element, scene) {
+    /*
+     * The parent of a <arashtad-joint> is the mesh whose body is the
+     * "A" side of the constraint.
+     */
+    const parentElement = element.parentElement;
+    const parentId = parentElement?.id;
+
+    if (!parentId) {
+        throw new Error('<arashtad-joint> requires a parent with an id');
+    }
+
+    const parentMesh = resolveReference(parentId);
+    const parentBody = parentMesh?.metadata?.physicsAggregate?.body;
+
+    if (!parentBody) {
+        throw new Error(
+            `Joint parent body not found for ${parentId}. ` +
+            `Make sure the parent has <arashtad-physics>.`
+        );
+    }
+
+    const joint = createJoint(element, parentBody, scene);
+
+    parentMesh.metadata = {
+        ...(parentMesh.metadata ?? {}),
+        joint
+    };
 }
 
 export async function loadModel(scene, url, id = 'runtime-model')
