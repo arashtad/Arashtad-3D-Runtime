@@ -725,6 +725,12 @@ button {
     background: #050b09;
 }
 
+html:has(.scrolllock:hover),
+body:has(.scrolllock:hover) {
+    overscroll-behavior: contain;
+    overflow: hidden;
+}
+
 .example-demo canvas {
     display: block;
     width: 100%;

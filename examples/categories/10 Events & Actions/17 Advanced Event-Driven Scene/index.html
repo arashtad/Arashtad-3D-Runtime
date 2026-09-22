@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Interactive event-driven 3D control scene with Arashtad 3D Runtime.">
     <meta name="keywords" content="Arashtad 3D Runtime, Babylon.js, events, actions, interactive 3D">
-    <title>Advanced Event Control Scene</title>
+    <title>Advanced Event Control Scene | Arashtad 3D Runtime</title>
     <link rel="stylesheet" href="../../../assets/css/example.css">
+
     <style>
         .event-control-demo {
             height: min(680px, calc(100vh - 250px));
@@ -58,124 +59,210 @@
     <div class="example-site example-page">
 
         <header class="example-header">
-            <div class="example-brand">
-                <strong>A3D</strong>
-                <span>Arashtad 3D Runtime</span>
-                <small>1.0.0</small>
-            </div>
+            <div class="example-header-inner">
 
-            <nav class="example-nav">
-                <a href="#">Examples</a>
-                <a href="#">Documentation</a>
-            </nav>
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#events">Events</a>
+                    <a href="../#actions">Actions</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
         </header>
 
         <main class="example-main">
 
             <header class="example-page-header">
+
                 <div class="example-breadcrumb">
-                    <span>Examples</span>
+                    <a href="../">Examples</a>
                     <span>/</span>
-                    <span>Events</span>
+                    <span>138</span>
                     <span>/</span>
-                    <span>Advanced</span>
+                    <span>EVENTS</span>
                 </div>
 
-                <div class="example-eyebrow">Example 138</div>
+                <div class="example-eyebrow">
+                    138 · EVENTS
+                </div>
 
                 <h1>Advanced Event Control Scene</h1>
 
                 <p>
-                    Build an interactive control scene where pointer events coordinate
-                    multiple Babylon.js objects and modify the entire scene.
+                    Build an interactive event-driven scene where multiple Babylon.js objects
+                    respond to pointer events and control other objects in the scene.
                 </p>
 
-                <div class="example-meta">
-                    <span>Events</span>
-                    <span>Actions</span>
-                    <span>Advanced</span>
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Events</span>
+                    <span class="example-badge">Actions</span>
+                    <span class="example-badge">Advanced</span>
                 </div>
+
             </header>
 
-            <section class="example-demo-section">
+            <section class="scrolllock example-demo event-control-demo">
 
-                <div class="event-control-demo">
+                <canvas id="event-control-canvas"></canvas>
 
-                    <canvas id="event-control-canvas"></canvas>
+                <div class="event-control-help">
+                    Hover a control to activate it.<br>
+                    Click any control to execute its command.
+                </div>
 
-                    <div class="event-control-help">
-                        Hover a control to activate it.<br>
-                        Click any control to execute its command.
+                <div class="event-control-output" id="event-control-output">
+                    SYSTEM READY
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Multiple runtime events can coordinate objects and trigger
+                            changes across the Babylon.js scene.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Event Coordination
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Individual controls respond to pointer-over, pointer-out,
+                                and pick events while modifying their own state.
+                            </p>
+                        </div>
+
                     </div>
 
-                    <div class="event-control-output" id="event-control-output">
-                        SYSTEM READY
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Scene Control
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Actions can access other scene meshes and modify their
+                                rotation, scaling, materials, and the scene background.
+                            </p>
+                        </div>
+
                     </div>
 
                 </div>
 
             </section>
 
-            <section class="example-content-section">
+            <section class="example-section" id="source">
 
-                <h2>What this demonstrates</h2>
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
 
-                <div class="example-panels">
-
-                    <div class="example-panel">
-                        <h3>Event Coordination</h3>
-                        <p>
-                            Individual objects can trigger transformations on other
-                            objects through the Babylon.js scene.
+                        <p class="example-section-description">
+                            Runtime events can execute Babylon.js operations across
+                            multiple objects in the same scene.
                         </p>
                     </div>
-
-                    <div class="example-panel">
-                        <h3>Scene Control</h3>
-                        <p>
-                            Runtime actions can manipulate meshes, materials,
-                            rotations, scaling, and the scene background.
-                        </p>
-                    </div>
-
                 </div>
 
-            </section>
-
-            <section class="example-content-section">
-
-                <h2>Source</h2>
-
-                <pre class="example-code"><code>&lt;arashtad-runtime resize="engine.resize()"&gt;&lt;/arashtad-runtime&gt;
-
-&lt;arashtad-camera
-    type="ArcRotateCamera"
-    id="camera"
-    args="Math.PI / 2, Math.PI / 2.5, 8, new BABYLON.Vector3(0, 1, 0)"&gt;
-&lt;/arashtad-camera&gt;
-
-&lt;arashtad-light
-    type="HemisphericLight"
-    id="light"
-    args="new BABYLON.Vector3(0, 1, 0)"
-    intensity="1.3"&gt;
-&lt;/arashtad-light&gt;
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    type="Box"
+    id="controlLeft"
+    size="1.6"
+    position="new BABYLON.Vector3(-2.3, 1, 0)"
+    isPickable="true"
+    OnPointerOverTrigger="
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('leftMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(0.1, 0.8, 0.6);
+        document.getElementById('event-control-output').textContent =
+            'LEFT CONTROL — ACTIVE';
+    "
+    OnPointerOutTrigger="
+        if (!mesh.material) {
+            mesh.material = new BABYLON.StandardMaterial('leftMaterial', scene);
+        }
+        mesh.material.diffuseColor = new BABYLON.Color3(0.2, 0.4, 0.35);
+        document.getElementById('event-control-output').textContent =
+            'SYSTEM READY';
+    "
+    OnPickTrigger="
+        mesh.rotation.y += Math.PI / 2;
+        mesh.scaling = new BABYLON.Vector3(
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2
+        );
+        scene.getMeshByName('controlCenter').rotation.x += Math.PI / 4;
+        document.getElementById('event-control-output').textContent =
+            'LEFT CONTROL — COMMAND EXECUTED';
+    "
+&gt;
+&lt;/arashtad-mesh&gt;
 
 &lt;arashtad-mesh
     type="Box"
-    id="control"
+    id="controlCenter"
     size="2"
-    position="new BABYLON.Vector3(0, 1, 0)"
+    position="new BABYLON.Vector3(0, 1.2, 0)"
     isPickable="true"
     OnPickTrigger="
         mesh.rotation.y += Math.PI / 2;
+        mesh.scaling = new BABYLON.Vector3(
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2,
+            0.8 + Math.random() * 1.2
+        );
+        scene.getMeshByName('controlLeft').rotation.z += Math.PI / 3;
+        scene.getMeshByName('controlRight').rotation.z -= Math.PI / 3;
         scene.clearColor = new BABYLON.Color4(
-            Math.random() * 0.15,
-            Math.random() * 0.2,
-            Math.random() * 0.25,
+            0.03 + Math.random() * 0.1,
+            0.05 + Math.random() * 0.1,
+            0.08 + Math.random() * 0.12,
             1
         );
-    "&gt;
+        document.getElementById('event-control-output').textContent =
+            'CORE CONTROL — GLOBAL COMMAND';
+    "
+&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    type="Box"
+    id="controlRight"
+    size="1.6"
+    position="new BABYLON.Vector3(2.3, 1, 0)"
+    isPickable="true"
+&gt;
 &lt;/arashtad-mesh&gt;</code></pre>
 
             </section>
@@ -183,8 +270,10 @@
         </main>
 
         <footer class="example-footer">
-            <span>Arashtad 3D Runtime 1.0.0</span>
-            <span>Advanced Event Control Scene</span>
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
         </footer>
 
     </div>
