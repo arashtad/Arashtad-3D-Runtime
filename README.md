@@ -1,5 +1,8 @@
 # Arashtad 3D Runtime
 
+**Runtime Version: 1.1.0**
+**Plugins Version: 1.0.0**
+
 Arashtad 3D Runtime is a declarative HTML layer for [Babylon.js](https://www.babylonjs.com/) that allows interactive 3D scenes to be described directly in HTML while preserving full access to the underlying Babylon.js scene, objects, APIs, and JavaScript runtime.
 
 Cameras, lights, models, meshes, materials, particle systems, GUI elements, environments, events, actions, shadows, physics, and other supported Babylon.js functionality can be declared through semantic `arashtad-*` elements.
@@ -127,7 +130,7 @@ The runtime is initialized from JavaScript:
 ```javascript
 import {
     ready
-} from './lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+} from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
 
 const canvas = document.getElementById('scene');
 
@@ -917,7 +920,7 @@ Initializes the runtime for a canvas and returns the associated Babylon.js `Scen
 ```javascript
 import {
     ready
-} from './lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+} from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
 
 const canvas = document.getElementById('scene');
 
@@ -936,7 +939,7 @@ Loads a model programmatically into an existing runtime scene.
 import {
     ready,
     loadModel
-} from './lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+} from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
 
 const scene = await ready(canvas);
 
@@ -1215,7 +1218,7 @@ arashtad-runtime/
 │
 ├── lib/
 │   ├── arashtad/
-│   │   ├── arashtad-3d-runtime.1.0.0.min.js
+│   │   ├── arashtad-3d-runtime.1.1.0.min.js
 │   │   └── arashtad-3d-runtime-plugins.1.0.0.min.js
 │   │
 │   └── babylon/
@@ -1236,7 +1239,7 @@ The exact contents of the source and plugin directories may evolve as the runtim
 Arashtad 3D Runtime is distributed as two primary JavaScript bundles:
 
 ```
-lib/arashtad/arashtad-3d-runtime.1.0.0.min.js
+lib/arashtad/arashtad-3d-runtime.1.1.0.min.js
 lib/arashtad/arashtad-3d-runtime-plugins.1.0.0.min.js
 ```
 
@@ -1336,7 +1339,7 @@ A minimal HTML page can look like:
 
     import {
         ready
-    } from './lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+    } from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
 
     const canvas = document.getElementById('scene');
 
@@ -1469,7 +1472,7 @@ Applications can use HTML for scene declaration and JavaScript for advanced runt
 Runtime distributions use explicit versioned filenames:
 
 ```
-arashtad-3d-runtime.1.0.0.min.js
+arashtad-3d-runtime.1.1.0.min.js
 arashtad-3d-runtime-plugins.1.0.0.min.js
 ```
 
