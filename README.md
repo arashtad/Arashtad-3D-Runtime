@@ -130,7 +130,7 @@ The runtime is initialized from JavaScript:
 ```javascript
 import {
     ready
-} from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
+} from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
 
 const canvas = document.getElementById('scene');
 
@@ -920,7 +920,7 @@ Initializes the runtime for a canvas and returns the associated Babylon.js `Scen
 ```javascript
 import {
     ready
-} from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
+} from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
 
 const canvas = document.getElementById('scene');
 
@@ -939,7 +939,7 @@ Loads a model programmatically into an existing runtime scene.
 import {
     ready,
     loadModel
-} from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
+} from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
 
 const scene = await ready(canvas);
 
@@ -975,7 +975,7 @@ Plugins provide higher-level functionality without requiring application-specifi
 The plugin distribution is:
 
 ```
-lib/arashtad/arashtad-3d-runtime-plugins.1.0.0.min.js
+lib/arashtad/arashtad-3d-runtime-plugins-1.0.0.min.js
 ```
 
 The core runtime and plugin layer are distributed as separate bundles.
@@ -1218,8 +1218,8 @@ arashtad-runtime/
 │
 ├── lib/
 │   ├── arashtad/
-│   │   ├── arashtad-3d-runtime.1.1.0.min.js
-│   │   └── arashtad-3d-runtime-plugins.1.0.0.min.js
+│   │   ├── arashtad-3d-runtime-1.1.0.min.js
+│   │   └── arashtad-3d-runtime-plugins-1.0.0.min.js
 │   │
 │   └── babylon/
 │
@@ -1239,8 +1239,8 @@ The exact contents of the source and plugin directories may evolve as the runtim
 Arashtad 3D Runtime is distributed as two primary JavaScript bundles:
 
 ```
-lib/arashtad/arashtad-3d-runtime.1.1.0.min.js
-lib/arashtad/arashtad-3d-runtime-plugins.1.0.0.min.js
+lib/arashtad/arashtad-3d-runtime-1.1.0.min.js
+lib/arashtad/arashtad-3d-runtime-plugins-1.0.0.min.js
 ```
 
 The core runtime and plugin bundle are independent layers.
@@ -1339,7 +1339,7 @@ A minimal HTML page can look like:
 
     import {
         ready
-    } from './lib/arashtad/arashtad-3d-runtime.1.1.0.min.js';
+    } from './lib/arashtad/arashtad-3d-runtime-1.1.0.min.js';
 
     const canvas = document.getElementById('scene');
 
@@ -1472,8 +1472,8 @@ Applications can use HTML for scene declaration and JavaScript for advanced runt
 Runtime distributions use explicit versioned filenames:
 
 ```
-arashtad-3d-runtime.1.1.0.min.js
-arashtad-3d-runtime-plugins.1.0.0.min.js
+arashtad-3d-runtime-1.1.0.min.js
+arashtad-3d-runtime-plugins-1.0.0.min.js
 ```
 
 This makes the runtime and plugin versions explicit and allows applications to control exactly which distributed build they load.

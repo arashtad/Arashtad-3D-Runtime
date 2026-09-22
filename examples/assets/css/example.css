@@ -128,12 +128,8 @@ button {
     justify-content: center;
     width: 34px;
     height: 34px;
-    border: 1px solid var(--arashtad-green);
-    border-radius: var(--arashtad-radius-small);
-    color: var(--arashtad-green-light);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: .08em;
+    background: url(../images/logo.webp) no-repeat center center;
+    background-size: contain;
 }
 
 .example-brand-text {
