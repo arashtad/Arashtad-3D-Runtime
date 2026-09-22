@@ -1100,6 +1100,11 @@ async function processPhysics(element, scene, parent) {
 
     physicsBodies.set(parent, aggregate);
 
+    parent.metadata = {
+        ...(parent.metadata ?? {}),
+        physicsAggregate: aggregate
+    };
+
     for (const child of element.children) {
         processPhysicsBody(child, aggregate, scene, parent);
     }

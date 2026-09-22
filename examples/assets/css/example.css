@@ -62,6 +62,29 @@ button {
     color: #ffffff;
 }
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #26a38c #111;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #111;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #26a38c;
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #ff9000;
+}
+
 .example-site {
     min-height: 100vh;
     background:
@@ -729,6 +752,14 @@ html:has(.scrolllock:hover),
 body:has(.scrolllock:hover) {
     overscroll-behavior: contain;
     overflow: hidden;
+    padding-right: 4px;
+}
+
+@supports (-moz-appearance: none) {
+    html:has(.scrolllock:hover),
+    body:has(.scrolllock:hover) {
+        padding-right: 1px;
+    }
 }
 
 .example-demo canvas {
