@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Add buttons that disable and re-enable the physics engine using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, pause physics, resume physics, disablePhysics">
+    <title>Pause and Resume Physics | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-pause-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-pause-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-pause-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-pause-panel {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: auto;
+            min-width: 200px;
+        }
+
+        .physics-pause-panel button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            background: rgba(38, 163, 140, 0.15);
+            border: 1px solid #26a38c;
+            border-radius: 6px;
+            color: #26a38c;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-pause-panel button:hover {
+            background: #26a38c;
+            color: #000;
+        }
+
+        .physics-pause-panel button:active {
+            transform: translateY(1px);
+        }
+
+        .physics-pause-panel button.reset {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .physics-pause-panel button.reset:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .physics-pause-panel-status {
+            margin-top: 10px;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+            color: #26a38c;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-pause-panel-status.paused {
+            background: rgba(242, 116, 74, 0.15);
+            color: #f2744a;
+        }
+
+        .physics-pause-panel-meta {
+            margin-top: 8px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#actions">Actions</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>204</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    204 · PHYSICS
+                </div>
+
+                <h1>Pause and Resume Physics</h1>
+
+                <p>
+                    Add buttons that disable and re-enable the physics engine using
+                    Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">GUI</span>
+                    <span class="example-badge">Action</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-pause-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.6">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="16"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 19)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="blue"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.9)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="yellow"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.8, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="16"
+                        height="16"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="greenbox"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-2.5, 8, -1)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.5"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="orangebox"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(0, 10, 1)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.5"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="bluesphere"
+                        type="Sphere"
+                        diameter="1.2"
+                        segments="24"
+                        position="new BABYLON.Vector3(2.5, 12, 0)"
+                        material="blue">
+
+                        <arashtad-physics
+                            type="SPHERE"
+                            mass="1"
+                            restitution="0.7"
+                            friction="0.4"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="yellowcylinder"
+                        type="Cylinder"
+                        height="1.2"
+                        diameter="1"
+                        tessellation="20"
+                        position="new BABYLON.Vector3(0, 14, 0)"
+                        material="yellow">
+
+                        <arashtad-physics
+                            type="CYLINDER"
+                            mass="1"
+                            restitution="0.4"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-pause-panel">
+                    <button type="button" id="pause-button">Pause physics</button>
+                    <button type="button" id="resume-button" class="reset">Resume physics</button>
+                    <div class="physics-pause-panel-status" id="pause-status">
+                        Running
+                    </div>
+                    <div class="physics-pause-panel-meta" id="pause-meta">
+                        4 dynamic bodies
+                    </div>
+                </div>
+
+                <div class="physics-pause-output">
+                    Pause freezes all bodies in mid-air · Resume restores simulation
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Toggle Havok simulation on and off without touching the
+                            bodies themselves. Meshes keep their transforms while
+                            physics is paused, and all motion resumes cleanly.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Engine Toggle
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Babylon exposes
+                                <code>scene.getPhysicsEngine().setTimeStep(0)</code> and
+                                a direct
+                                <code>scene.disablePhysicsEngine()</code> /
+                                <code>scene.enablePhysics()</code> pair. This example
+                                uses the <code>setTimeStep</code> route so the plugin
+                                stays attached and no re-initialization cost is paid.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Bodies Stay Intact
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Because the aggregates are never disposed, all bodies
+                                keep their velocities and internal state. When physics
+                                resumes, they continue from exactly where they were
+                                frozen.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Two plain HTML buttons toggle the physics engine between
+                            running and paused.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;button type="button" id="pause-button"&gt;Pause physics&lt;/button&gt;
+&lt;button type="button" id="resume-button"&gt;Resume physics&lt;/button&gt;
+
+&lt;div id="pause-status"&gt;Running&lt;/div&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-pause-canvas');
+
+        const scene = await ready(canvas);
+
+        const dynamicIds = [
+            'greenbox',
+            'orangebox',
+            'bluesphere',
+            'yellowcylinder'
+        ];
+
+        /*
+        * Collected body references and saved velocities. Populated lazily on
+        * first pause so we don't do this work if the user never pauses.
+        */
+        let bodies = null;
+        let savedVelocities = null;
+        let paused = false;
+
+        function collectBodies() {
+            if (bodies) return bodies;
+
+            bodies = [];
+
+            for (const id of dynamicIds) {
+                const mesh = scene.getMeshByName(id);
+                const aggregate = mesh?.metadata?.physicsAggregate;
+                const body = aggregate?.body;
+
+                if (body) bodies.push(body);
+            }
+
+            return bodies;
+        }
+
+        function pausePhysics() {
+            if (paused) return;
+
+            const list = collectBodies();
+
+            /*
+            * Save each body's velocities before switching motion type, since
+            * setMotionType(STATIC) resets velocity on Havok.
+            */
+            savedVelocities = list.map(body => ({
+                linear: body.getLinearVelocity().clone(),
+                angular: body.getAngularVelocity().clone()
+            }));
+
+            for (const body of list) {
+                try {
+                    body.setMotionType(BABYLON.PhysicsMotionType.STATIC);
+                } catch (error) {
+                    console.warn('setMotionType(STATIC) failed:', error);
+                }
+            }
+
+            paused = true;
+            updateStatus();
+        }
+
+        function resumePhysics() {
+            if (!paused) return;
+
+            const list = collectBodies();
+
+            for (let i = 0; i < list.length; i++) {
+                const body = list[i];
+
+                try {
+                    body.setMotionType(BABYLON.PhysicsMotionType.DYNAMIC);
+
+                    /*
+                    * Restore saved velocities so the body picks up exactly
+                    * where it left off.
+                    */
+                    const saved = savedVelocities?.[i];
+
+                    if (saved) {
+                        body.setLinearVelocity(saved.linear);
+                        body.setAngularVelocity(saved.angular);
+                    }
+                } catch (error) {
+                    console.warn('setMotionType(DYNAMIC) failed:', error);
+                }
+            }
+
+            savedVelocities = null;
+            paused = false;
+            updateStatus();
+        }
+
+        function updateStatus() {
+            const status = document.getElementById('pause-status');
+            if (!status) return;
+
+            if (paused) {
+                status.textContent = 'Paused';
+                status.classList.add('paused');
+            } else {
+                status.textContent = 'Running';
+                status.classList.remove('paused');
+            }
+        }
+
+        const pauseButton = document.getElementById('pause-button');
+        const resumeButton = document.getElementById('resume-button');
+
+        if (pauseButton) pauseButton.addEventListener('click', pausePhysics);
+        if (resumeButton) resumeButton.addEventListener('click', resumePhysics);
+
+        window.__pausePhysics = pausePhysics;
+        window.__resumePhysics = resumePhysics;
+        window.__togglePhysics = () => (paused ? resumePhysics() : pausePhysics());
+    </script>
+
+</body>
+
+</html>

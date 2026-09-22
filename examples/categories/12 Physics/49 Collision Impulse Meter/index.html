@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Visualize the last collision impulse magnitude with a meter using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, collision impulse, meter bar, impact magnitude">
+    <title>Collision Impulse Meter | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-impulse-meter-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-impulse-meter-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-impulse-meter-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-impulse-meter {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            width: 240px;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            pointer-events: none;
+        }
+
+        .physics-impulse-meter .physics-impulse-meter-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .physics-impulse-meter .physics-impulse-meter-value {
+            display: block;
+            margin-top: 4px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #26a38c;
+            line-height: 1.1;
+        }
+
+        .physics-impulse-meter .physics-impulse-meter-unit {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: normal;
+        }
+
+        .physics-impulse-meter-track {
+            position: relative;
+            margin-top: 10px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .physics-impulse-meter-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0%;
+            background: linear-gradient(90deg, #26a38c 0%, #f4c15c 70%, #ff4d3a 100%);
+            border-radius: 4px;
+            transition: width 0.15s ease-out;
+        }
+
+        .physics-impulse-meter-peak {
+            position: absolute;
+            top: -3px;
+            bottom: -3px;
+            width: 2px;
+            background: #fff;
+            opacity: 0.7;
+            border-radius: 1px;
+            transition: left 0.15s ease-out;
+        }
+
+        .physics-impulse-meter-meta {
+            margin-top: 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#collision">Collision</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>200</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    200 · PHYSICS
+                </div>
+
+                <h1>Collision Impulse Meter</h1>
+
+                <p>
+                    Visualize the last collision impulse magnitude with a meter
+                    using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Collision</span>
+                    <span class="example-badge">Meter</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-impulse-meter-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.6">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="14"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 17)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="16"
+                        height="16"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="heavybox"
+                        type="Box"
+                        size="1.4"
+                        position="new BABYLON.Vector3(-2, 8, 0)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="3"
+                            restitution="0.3"
+                            friction="0.6"
+                            startAsleep="false">
+
+                            <arashtad-collision
+                                type="started"
+                                on-collide="
+                                    window.__updateImpulseMeter('heavy', event);
+                                ">
+                            </arashtad-collision>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="lightbox"
+                        type="Box"
+                        size="0.8"
+                        position="new BABYLON.Vector3(2, 5, 0)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0.4"
+                            restitution="0.6"
+                            friction="0.4"
+                            startAsleep="false">
+
+                            <arashtad-collision
+                                type="started"
+                                on-collide="
+                                    window.__updateImpulseMeter('light', event);
+                                ">
+                            </arashtad-collision>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="bumper"
+                        type="Box"
+                        width="0.6"
+                        height="0.6"
+                        depth="0.6"
+                        position="new BABYLON.Vector3(4, 0.4, 0)"
+                        material="green"
+                        onPickTrigger="
+                            const boxes = [refs['heavybox'], refs['lightbox']];
+
+                            for (const box of boxes) {
+                                const aggregate = box?.metadata?.physicsAggregate;
+                                if (!aggregate?.body) continue;
+
+                                aggregate.body.applyImpulse(
+                                    new BABYLON.Vector3(0, 10, 0),
+                                    box.getAbsolutePosition()
+                                );
+                            }
+                        ">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.2"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-impulse-meter">
+                    <div class="physics-impulse-meter-label">Last impulse</div>
+                    <span class="physics-impulse-meter-value" id="impulse-value">
+                        0.00
+                    </span>
+
+                    <div class="physics-impulse-meter-track">
+                        <div class="physics-impulse-meter-fill" id="impulse-fill"></div>
+                        <div class="physics-impulse-meter-peak" id="impulse-peak" style="left: 0%"></div>
+                    </div>
+
+                    <div class="physics-impulse-meter-meta">
+                        <span id="impulse-source">—</span>
+                        <span id="impulse-peak-label">peak 0.00</span>
+                    </div>
+                </div>
+
+                <div class="physics-impulse-meter-output">
+                    Two boxes with different mass · impulse magnitude compared per collision
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Read the impulse magnitude Havok reports on each collision
+                            and use it to drive a visual meter. Heavy vs light bodies
+                            produce visibly different impact readings.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Reading the Impulse
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The collision event exposes <code>event.impulse</code>.
+                                Its exact shape varies, so the meter helper inspects
+                                <code>x</code>, <code>y</code>, <code>z</code> fields when
+                                present, or falls back to <code>length()</code> if the
+                                value happens to be a <code>Vector3</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Mass Contrast
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The heavy box (<code>mass="3"</code>) produces a much
+                                larger impulse on impact than the light box
+                                (<code>mass="0.4"</code>). Watching the meter between
+                                the two shows that mass directly scales impact
+                                magnitude.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Both boxes funnel their collision events into a shared
+                            helper that computes magnitude and drives the meter.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="heavybox"
+    type="Box"
+    size="1.4"
+    position="new BABYLON.Vector3(-2, 8, 0)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="3"
+        restitution="0.3"
+        friction="0.6"
+        startAsleep="false"
+    &gt;
+        &lt;arashtad-collision
+            type="started"
+            on-collide="
+                window.__updateImpulseMeter('heavy', event);
+            "
+        &gt;&lt;/arashtad-collision&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="lightbox"
+    type="Box"
+    size="0.8"
+    position="new BABYLON.Vector3(2, 5, 0)"
+    material="orange"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="0.4"
+        restitution="0.6"
+        friction="0.4"
+        startAsleep="false"
+    &gt;
+        &lt;arashtad-collision
+            type="started"
+            on-collide="
+                window.__updateImpulseMeter('light', event);
+            "
+        &gt;&lt;/arashtad-collision&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        /*
+         * The exact shape of event.impulse varies between Havok builds.
+         * Read its magnitude defensively: prefer a length() method if the
+         * value is a Vector3, then fall back to {x, y, z} components,
+         * then to 0 if nothing is available.
+         */
+        function impulseMagnitude(impulse) {
+            if (!impulse) return 0;
+
+            if (typeof impulse.length === 'function') {
+                try {
+                    return impulse.length();
+                } catch {
+                    /* fall through */
+                }
+            }
+
+            if (
+                typeof impulse.x === 'number' &&
+                typeof impulse.y === 'number' &&
+                typeof impulse.z === 'number'
+            ) {
+                return Math.sqrt(
+                    impulse.x * impulse.x +
+                    impulse.y * impulse.y +
+                    impulse.z * impulse.z
+                );
+            }
+
+            if (
+                typeof impulse.x === 'number' &&
+                typeof impulse.z === 'number'
+            ) {
+                return Math.sqrt(
+                    impulse.x * impulse.x +
+                    impulse.z * impulse.z
+                );
+            }
+
+            return 0;
+        }
+
+        /*
+         * Meter state.
+         */
+        const meterState = {
+            peak: 0,
+            scale: 40
+        };
+
+        window.__updateImpulseMeter = function(source, event) {
+            const valueEl = document.getElementById('impulse-value');
+            const fillEl = document.getElementById('impulse-fill');
+            const peakEl = document.getElementById('impulse-peak');
+            const peakLabelEl = document.getElementById('impulse-peak-label');
+            const sourceEl = document.getElementById('impulse-source');
+
+            if (!valueEl || !fillEl || !peakEl) return;
+
+            const magnitude = impulseMagnitude(event?.impulse);
+
+            if (magnitude > meterState.peak) {
+                meterState.peak = magnitude;
+            }
+
+            const percent = Math.min(100, (magnitude / meterState.scale) * 100);
+            const peakPercent = Math.min(100, (meterState.peak / meterState.scale) * 100);
+
+            valueEl.textContent = magnitude.toFixed(2);
+            fillEl.style.width = percent + '%';
+            peakEl.style.left = peakPercent + '%';
+
+            if (sourceEl) sourceEl.textContent = source;
+
+            if (peakLabelEl) {
+                peakLabelEl.textContent = 'peak ' + meterState.peak.toFixed(2);
+            }
+        };
+
+        const canvas = document.getElementById('physics-impulse-meter-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

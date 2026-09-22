@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Apply continuous force to simulate a moving conveyor surface using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, conveyor, continuous force, kinematic, applyForce">
+    <title>Conveyor Floor | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-conveyor-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-conveyor-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-conveyor-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#force">Force</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>190</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    190 · PHYSICS
+                </div>
+
+                <h1>Conveyor Floor</h1>
+
+                <p>
+                    Apply continuous force to simulate a moving conveyor surface
+                    using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Force</span>
+                    <span class="example-badge">Kinematic</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+                <canvas
+                    id="physics-conveyor-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="18"
+                        target="new BABYLON.Vector3(0, 1, 0)"
+                        position="new BABYLON.Vector3(4, 5, 36)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="blue"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.9)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="yellow"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.8, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="24"
+                        height="6"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="leftwall"
+                        type="Box"
+                        width="0.4"
+                        height="1"
+                        depth="6"
+                        position="new BABYLON.Vector3(-12, 0.5, 0)"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="rightwall"
+                        type="Box"
+                        width="0.4"
+                        height="1"
+                        depth="6"
+                        position="new BABYLON.Vector3(12, 0.5, 0)"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="crate1"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-8, 0.6, -1.5)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.1"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                        <arashtad-action
+                            execute="
+                                scene.onBeforeRenderObservable.add(() => {
+                                    const aggregate = target.metadata?.physicsAggregate;
+                                    if (!aggregate?.body) return;
+                                    aggregate.body.applyForce(
+                                        new BABYLON.Vector3(8, 0, 0),
+                                        target.getAbsolutePosition()
+                                    );
+                                });
+                            ">
+                        </arashtad-action>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="crate2"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-8, 0.6, 0)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.1"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                        <arashtad-action
+                            execute="
+                                scene.onBeforeRenderObservable.add(() => {
+                                    const aggregate = target.metadata?.physicsAggregate;
+                                    if (!aggregate?.body) return;
+                                    aggregate.body.applyForce(
+                                        new BABYLON.Vector3(8, 0, 0),
+                                        target.getAbsolutePosition()
+                                    );
+                                });
+                            ">
+                        </arashtad-action>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="crate3"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-8, 0.6, 1.5)"
+                        material="blue">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.1"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                        <arashtad-action
+                            execute="
+                                scene.onBeforeRenderObservable.add(() => {
+                                    const aggregate = target.metadata?.physicsAggregate;
+                                    if (!aggregate?.body) return;
+                                    aggregate.body.applyForce(
+                                        new BABYLON.Vector3(8, 0, 0),
+                                        target.getAbsolutePosition()
+                                    );
+                                });
+                            ">
+                        </arashtad-action>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-conveyor-output">
+                    3 crates · each gets a continuous +X force of (8, 0, 0) every frame
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Simulating a moving conveyor belt by applying a continuous
+                            force to bodies on the surface, since Havok's contact
+                            friction alone does not produce surface motion.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Continuous Force
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each crate has an
+                                <code>&lt;arashtad-action execute="..."&gt;</code> that
+                                registers an
+                                <code>scene.onBeforeRenderObservable</code> callback. Every
+                                frame the callback calls <code>applyForce</code> with a
+                                horizontal vector.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Friction Balance
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Ground friction <code>0.5</code> is high enough that the
+                                crates stay on the surface but low enough that the
+                                continuous force actually accelerates them. End walls keep
+                                the crates from sliding off the far end.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            One observable per crate applies a continuous horizontal
+                            force, and static end walls bound the surface.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    id="green"
+    type="StandardMaterial"
+    diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)"
+&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    id="ground"
+    type="Ground"
+    width="24"
+    height="6"
+    material="brown"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="0"
+        friction="0.5"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="crate1"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(-8, 0.6, -1.5)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.1"
+        friction="0.4"
+    &gt;&lt;/arashtad-physics&gt;
+
+    &lt;arashtad-action
+        execute="
+            scene.onBeforeRenderObservable.add(() =&gt; {
+                const aggregate = target.metadata?.physicsAggregate;
+                if (!aggregate?.body) return;
+                aggregate.body.applyForce(
+                    new BABYLON.Vector3(8, 0, 0),
+                    target.getAbsolutePosition()
+                );
+            });
+        "
+    &gt;
+    &lt;/arashtad-action&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;!-- Repeat for crate2 (z=0), crate3 (z=1.5) --&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-conveyor-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

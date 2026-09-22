@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Handle both collision started and collision ended events using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, collision start, collision end, on-collide, on-end">
+    <title>Collision Start and End | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-collision-startend-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-collision-startend-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-collision-startend-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#collision">Collision</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>163</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    163 · PHYSICS
+                </div>
+
+                <h1>Collision Start and End</h1>
+
+                <p>
+                    Handle both collision started and collision ended events using
+                    Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Collision</span>
+                    <span class="example-badge">Havok</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+                <canvas
+                    id="physics-collision-startend-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="12"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 15)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="box1"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(0, 8, 0)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.8">
+
+                            <arashtad-collision
+                                on-collide="
+                                    if (event.type === 'COLLISION_STARTED') {
+                                        console.log('STARTED', event);
+                                    }
+                                "
+                                on-end="
+                                    console.log('ENDED', event);
+                                ">
+                            </arashtad-collision>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="box2"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(0, 3, 0)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.8">
+
+                            <arashtad-collision
+                                on-collide="
+                                    if (event.type === 'COLLISION_STARTED') {
+                                        console.log('STARTED', event);
+                                    }
+                                "
+                                on-end="
+                                    console.log('ENDED', event);
+                                ">
+                            </arashtad-collision>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="10"
+                        height="10"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-collision-startend-output">
+                    Open the console to see "STARTED" and "ENDED" events for each collision pair.
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Use both <code>on-collide</code> and <code>on-end</code> to
+                            capture the full lifecycle of a collision contact.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Collision Started
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                <code>on-collide</code> fires on every collision update.
+                                Filtering by <code>event.type === 'COLLISION_STARTED'</code>
+                                reduces it to the moment two bodies first touch.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Collision Ended
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                <code>on-end</code> is a dedicated handler that maps
+                                directly to Havok's collision-ended observable, so no type
+                                filtering is required on that side.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Provide both <code>on-collide</code> and <code>on-end</code>
+                            attributes on the same <code>&lt;arashtad-collision&gt;</code>
+                            element.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="box1"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(0, 8, 0)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.8"
+    &gt;
+        &lt;arashtad-collision
+            on-collide="
+                if (event.type === 'COLLISION_STARTED') {
+                    console.log('STARTED', event);
+                }
+            "
+            on-end="
+                console.log('ENDED', event);
+            "
+        &gt;&lt;/arashtad-collision&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="box2"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(0, 3, 0)"
+    material="orange"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.8"
+    &gt;
+        &lt;arashtad-collision
+            on-collide="
+                if (event.type === 'COLLISION_STARTED') {
+                    console.log('STARTED', event);
+                }
+            "
+            on-end="
+                console.log('ENDED', event);
+            "
+        &gt;&lt;/arashtad-collision&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="ground"
+    type="Ground"
+    width="10"
+    height="10"
+    material="brown"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="0"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-collision-startend-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

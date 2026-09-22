@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A small box-pushing puzzle driven entirely by physics and clicks using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, puzzle, box pushing, click interaction, sokoban">
+    <title>Physics Puzzle Level | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-puzzle-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-puzzle-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-puzzle-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-puzzle-panel {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            width: 220px;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            pointer-events: auto;
+        }
+
+        .physics-puzzle-panel h4 {
+            margin: 0 0 10px 0;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            color: #26a38c;
+        }
+
+        .physics-puzzle-panel p {
+            margin: 0 0 10px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .physics-puzzle-status {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            background: rgba(38, 163, 140, 0.1);
+            border: 1px solid rgba(38, 163, 140, 0.3);
+            border-radius: 6px;
+            font-size: 11px;
+            color: #26a38c;
+            text-align: center;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .physics-puzzle-status.solved {
+            background: rgba(77, 191, 122, 0.2);
+            border-color: #4dbf7a;
+            color: #4dbf7a;
+            font-weight: bold;
+        }
+
+        .physics-puzzle-panel button {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-puzzle-panel button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .physics-puzzle-panel button:active {
+            transform: translateY(1px);
+        }
+
+        .physics-puzzle-steps {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#advanced">Advanced</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>209</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    209 · PHYSICS
+                </div>
+
+                <h1>Physics Puzzle Level</h1>
+
+                <p>
+                    A small box-pushing puzzle driven entirely by physics and
+                    clicks using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Advanced</span>
+                    <span class="example-badge">Puzzle</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-puzzle-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.4, -1, -0.4)"
+                        intensity="1.3">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.5">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1"
+                        radius="16"
+                        target="new BABYLON.Vector3(0, 0.5, 0)"
+                        position="new BABYLON.Vector3(0, 8, 18)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="gold"
+                        type="PBRMaterial"
+                        metallic="1"
+                        roughness="0.15"
+                        albedoColor="new BABYLON.Color3(1.0, 0.78, 0.34)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.55, 0.4, 0.25)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="dark"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.15, 0.15, 0.18)">
+                    </arashtad-material>
+
+                    <!-- Playfield ground -->
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="16"
+                        height="12"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!-- Outer walls: left, right, back, front -->
+                    <arashtad-mesh
+                        id="wallleft"
+                        type="Box"
+                        width="0.4"
+                        height="2"
+                        depth="12"
+                        position="new BABYLON.Vector3(-8, 1, 0)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="wallright"
+                        type="Box"
+                        width="0.4"
+                        height="2"
+                        depth="12"
+                        position="new BABYLON.Vector3(8, 1, 0)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="wallback"
+                        type="Box"
+                        width="16"
+                        height="2"
+                        depth="0.4"
+                        position="new BABYLON.Vector3(0, 1, -6)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="wallfront"
+                        type="Box"
+                        width="16"
+                        height="2"
+                        depth="0.4"
+                        position="new BABYLON.Vector3(0, 1, 6)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!--
+                        Interior walls that create the puzzle corridors.
+                        Fixed static obstacles the player must push the
+                        green box around.
+                    -->
+                    <arashtad-mesh
+                        id="obs1"
+                        type="Box"
+                        width="0.4"
+                        height="1.5"
+                        depth="3"
+                        position="new BABYLON.Vector3(-2, 0.75, -3)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="obs2"
+                        type="Box"
+                        width="0.4"
+                        height="1.5"
+                        depth="3"
+                        position="new BABYLON.Vector3(2, 0.75, 3)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="obs3"
+                        type="Box"
+                        width="3"
+                        height="1.5"
+                        depth="0.4"
+                        position="new BABYLON.Vector3(0, 0.75, -1.5)"
+                        material="dark">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!--
+                        The gold target plate. When the green box is over
+                        this point, the puzzle is solved.
+                    -->
+                    <arashtad-mesh
+                        id="target"
+                        type="Box"
+                        width="1.4"
+                        height="0.05"
+                        depth="1.4"
+                        position="new BABYLON.Vector3(6, 0.03, -4)"
+                        material="gold">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!--
+                        The pushable box. Click it to apply a small
+                        impulse in the direction the camera is facing.
+                    -->
+                    <arashtad-mesh
+                        id="crate"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-5, 0.5, 4)"
+                        material="green"
+                        onPickTrigger="
+                            const body = target.metadata?.physicsAggregate?.body;
+                            if (!body) return;
+
+                            /*
+                             * Push direction is the horizontal projection
+                             * of the camera's forward ray.
+                             */
+                            const dir = scene.activeCamera.getForwardRay().direction.clone();
+                            dir.y = 0;
+                            dir.normalize();
+
+                            body.applyImpulse(
+                                dir.scale(4),
+                                target.getAbsolutePosition()
+                            );
+                        ">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.05"
+                            friction="0.5"
+                            linearDamping="0.6"
+                            angularDamping="0.6"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!--
+                        A small orange "hint" cube the player can also
+                        click, to nudge the camera around the field.
+                    -->
+                    <arashtad-mesh
+                        id="camerahint"
+                        type="Box"
+                        width="0.4"
+                        height="0.4"
+                        depth="0.4"
+                        position="new BABYLON.Vector3(0, 0.2, 5.5)"
+                        material="orange"
+                        onPickTrigger="
+                            scene.activeCamera.alpha += Math.PI / 4;
+                        ">
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-puzzle-panel">
+                    <h4>Box Puzzle</h4>
+
+                    <p>
+                        Click the <strong style='color:#4dbf7a'>green crate</strong>
+                        to push it in the direction the camera is looking.
+                        Guide it onto the gold target.
+                    </p>
+
+                    <div class="physics-puzzle-status" id="puzzle-status">
+                        Not solved
+                    </div>
+
+                    <button type="button" id="reset-button">Reset level</button>
+
+                    <div class="physics-puzzle-steps" id="puzzle-steps">
+                        pushes 0
+                    </div>
+                </div>
+
+                <div class="physics-puzzle-output">
+                    Click the green crate to push · reach the gold plate to solve
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            A physics-based puzzle: a clickable dynamic body,
+                            static obstacles forming a maze, a target zone, and
+                            win-condition detection driven from a per-frame check.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Click to Push
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The green crate has an
+                                <code>onPickTrigger</code> that reads the camera's
+                                forward direction, projects it onto the ground plane,
+                                and applies an impulse in that direction. Pushing in
+                                a chosen direction is the entire input scheme.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Win Condition
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Every frame the crate's horizontal distance to the
+                                gold target is measured. When it drops below a
+                                threshold, the puzzle status flips to solved. This
+                                is a per-frame check via
+                                <code>scene.onBeforeRenderObservable</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The crate pushes in the camera forward direction and
+                            the puzzle checks its proximity to the gold plate each
+                            frame.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="crate"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(-5, 0.5, 4)"
+    material="green"
+    onPickTrigger="
+        const body = target.metadata?.physicsAggregate?.body;
+        if (!body) return;
+
+        const dir = scene.activeCamera.getForwardRay().direction.clone();
+        dir.y = 0;
+        dir.normalize();
+
+        body.applyImpulse(
+            dir.scale(4),
+            target.getAbsolutePosition()
+        );
+    "
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.05"
+        friction="0.5"
+        linearDamping="0.6"
+        angularDamping="0.6"
+        startAsleep="false"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-puzzle-canvas');
+
+        const scene = await ready(canvas);
+
+        /* ----------------------------------------------------------------
+        * Puzzle constants
+        * ---------------------------------------------------------------- */
+
+        const CRATE_START = new BABYLON.Vector3(-5, 0.5, 4);
+        const TARGET_POSITION = new BABYLON.Vector3(6, 0, -4);
+        const SOLVE_RADIUS = 0.9;
+
+        const CRATE_PHYSICS_OPTIONS = {
+            mass: 1,
+            restitution: 0.05,
+            friction: 0.5,
+            linearDamping: 0.6,
+            angularDamping: 0.6,
+            startAsleep: false
+        };
+
+        /* ----------------------------------------------------------------
+        * State
+        * ---------------------------------------------------------------- */
+
+        let solved = false;
+        let pushCount = 0;
+
+        function updateStatus() {
+            const status = document.getElementById('puzzle-status');
+            const steps = document.getElementById('puzzle-steps');
+
+            if (status) {
+                if (solved) {
+                    status.textContent = 'Solved!';
+                    status.classList.add('solved');
+                } else {
+                    status.textContent = 'Not solved';
+                    status.classList.remove('solved');
+                }
+            }
+
+            if (steps) {
+                steps.textContent = 'pushes ' + pushCount;
+            }
+        }
+
+        /* ----------------------------------------------------------------
+        * Push the crate
+        * ---------------------------------------------------------------- */
+
+        function pushCrate() {
+            if (solved) return;
+
+            const crate = scene.getMeshByName('crate');
+            if (!crate) return;
+
+            const body = crate.metadata?.physicsAggregate?.body;
+            if (!body) {
+                console.warn('No physics body on crate');
+                return;
+            }
+
+            /*
+            * Push direction is the horizontal projection of the camera's
+            * forward ray.
+            */
+            const dir = scene.activeCamera.getForwardRay().direction.clone();
+            dir.y = 0;
+
+            if (dir.lengthSquared() < 1e-6) return;
+
+            dir.normalize();
+
+            body.applyImpulse(
+                dir.scale(4),
+                crate.getAbsolutePosition()
+            );
+
+            pushCount += 1;
+            updateStatus();
+        }
+
+        /* ----------------------------------------------------------------
+        * Wire scene-level picking
+        * ----------------------------------------------------------------
+        *
+        * Rather than rely on the mesh's ActionManager, we hook the scene's
+        * own pointer observable once and check whether the pick hit the
+        * crate. This is the most reliable approach and works regardless of
+        * how the runtime wires the mesh-level ActionManager.
+        */
+
+        function bindCrateClick() {
+            scene.onPointerObservable.add(info => {
+                if (info.type !== BABYLON.PointerEventTypes.POINTERDOWN) return;
+
+                const pick = info.pickInfo;
+
+                if (!pick?.hit || !pick.pickedMesh) return;
+
+                if (pick.pickedMesh.name === 'crate') {
+                    pushCrate();
+                }
+            });
+        }
+
+        /* ----------------------------------------------------------------
+        * Per-frame win check
+        * ---------------------------------------------------------------- */
+
+        function startWinCheck() {
+            scene.onBeforeRenderObservable.add(() => {
+                if (solved) return;
+
+                const crate = scene.getMeshByName('crate');
+                if (!crate) return;
+
+                const dx = crate.position.x - TARGET_POSITION.x;
+                const dz = crate.position.z - TARGET_POSITION.z;
+
+                if (Math.sqrt(dx * dx + dz * dz) < SOLVE_RADIUS) {
+                    solved = true;
+                    updateStatus();
+                }
+            });
+        }
+
+        /* ----------------------------------------------------------------
+        * Reset
+        * ---------------------------------------------------------------- */
+
+        function resetPuzzle() {
+            const crateMesh = scene.getMeshByName('crate');
+            if (!crateMesh) return;
+
+            const existing = crateMesh.metadata?.physicsAggregate;
+
+            if (existing) {
+                try { existing.dispose(); } catch { /* ignore */ }
+                crateMesh.metadata.physicsAggregate = null;
+            }
+
+            crateMesh.position.copyFrom(CRATE_START);
+
+            if (!crateMesh.rotationQuaternion) {
+                crateMesh.rotationQuaternion = BABYLON.Quaternion.Identity();
+            } else {
+                crateMesh.rotationQuaternion.copyFrom(BABYLON.Quaternion.Identity());
+            }
+
+            crateMesh.computeWorldMatrix(true);
+
+            try {
+                const aggregate = new BABYLON.PhysicsAggregate(
+                    crateMesh,
+                    BABYLON.PhysicsShapeType.BOX,
+                    CRATE_PHYSICS_OPTIONS,
+                    scene
+                );
+
+                crateMesh.metadata = {
+                    ...(crateMesh.metadata ?? {}),
+                    physicsAggregate: aggregate
+                };
+            } catch (error) {
+                console.warn('Puzzle reset failed:', error);
+            }
+
+            solved = false;
+            pushCount = 0;
+            updateStatus();
+        }
+
+        document
+            .getElementById('reset-button')
+            ?.addEventListener('click', resetPuzzle);
+
+        bindCrateClick();
+        startWinCheck();
+        updateStatus();
+
+        window.__puzzle = {
+            reset: resetPuzzle,
+            isSolved: () => solved,
+            push: pushCrate
+        };
+    </script>
+
+</body>
+
+</html>

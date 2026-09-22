@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A single scene combining shapes, materials, static and dynamic bodies, and GUI controls with Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, playground, shapes, materials, dynamic bodies">
+    <title>Physics Playground | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-playground-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-playground-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-playground-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-playground-panel {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            width: 220px;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            pointer-events: auto;
+        }
+
+        .physics-playground-panel h4 {
+            margin: 0 0 10px 0;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            color: #26a38c;
+        }
+
+        .physics-playground-panel .group {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .physics-playground-panel .group:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .physics-playground-panel label {
+            display: block;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .physics-playground-panel button {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background: rgba(38, 163, 140, 0.15);
+            border: 1px solid #26a38c;
+            border-radius: 6px;
+            color: #26a38c;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-playground-panel button:hover {
+            background: #26a38c;
+            color: #000;
+        }
+
+        .physics-playground-panel button:active {
+            transform: translateY(1px);
+        }
+
+        .physics-playground-panel button.warn {
+            background: rgba(242, 116, 74, 0.12);
+            border-color: #f2744a;
+            color: #f2744a;
+        }
+
+        .physics-playground-panel button.warn:hover {
+            background: #f2744a;
+            color: #000;
+        }
+
+        .physics-playground-panel select {
+            width: 100%;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .physics-playground-panel select option {
+            background: #1a1a1a;
+        }
+
+        .physics-playground-stats {
+            margin-top: 8px;
+            padding: 6px 10px;
+            background: rgba(38, 163, 140, 0.1);
+            border-radius: 6px;
+            font-size: 11px;
+            color: #26a38c;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#advanced">Advanced</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>205</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    205 · PHYSICS
+                </div>
+
+                <h1>Physics Playground</h1>
+
+                <p>
+                    A single scene combining shapes, materials, static and dynamic
+                    bodies, and GUI controls with Arashtad 3D Runtime and Havok
+                    physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Advanced</span>
+                    <span class="example-badge">Playground</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-playground-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()"
+                        environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="0.6"
+                        environmentBackground="true"
+                        environmentBackgroundBlur="0.4"
+                        environmentRotationY="1">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1.4">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.4">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="20"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 6, 23)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="blue"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.9)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="yellow"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.8, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="gold"
+                        type="PBRMaterial"
+                        metallic="1"
+                        roughness="0.2"
+                        albedoColor="new BABYLON.Color3(1.0, 0.78, 0.34)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.55, 0.4, 0.25)">
+                    </arashtad-material>
+
+                    <!-- Static ground -->
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="18"
+                        height="18"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!-- Static walls forming a bowl -->
+                    <arashtad-mesh
+                        id="wallleft"
+                        type="Box"
+                        width="0.4"
+                        height="3"
+                        depth="18"
+                        position="new BABYLON.Vector3(-9, 1.5, 0)"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="wallright"
+                        type="Box"
+                        width="0.4"
+                        height="3"
+                        depth="18"
+                        position="new BABYLON.Vector3(9, 1.5, 0)"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="wallback"
+                        type="Box"
+                        width="18"
+                        height="3"
+                        depth="0.4"
+                        position="new BABYLON.Vector3(0, 1.5, -9)"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="wallfront"
+                        type="Box"
+                        width="18"
+                        height="3"
+                        depth="0.4"
+                        position="new BABYLON.Vector3(0, 1.5, 9)"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!-- Static tower base (visible) -->
+                    <arashtad-mesh
+                        id="towerbase"
+                        type="Box"
+                        width="4"
+                        height="0.4"
+                        depth="4"
+                        position="new BABYLON.Vector3(-4, 0.2, 0)"
+                        material="blue">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.9">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!-- Static ramp -->
+                    <arashtad-mesh
+                        id="ramp"
+                        type="Box"
+                        width="3"
+                        height="0.3"
+                        depth="6"
+                        position="new BABYLON.Vector3(4, 1.5, 0)"
+                        rotation="new BABYLON.Vector3(0, 0, -0.4)"
+                        material="yellow">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.4">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!-- A few pre-placed dynamic bodies so the scene is alive on load -->
+                    <arashtad-mesh
+                        id="prebox1"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-4, 5, -1)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.4"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="prebox2"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-4, 7, 1)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.4"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="preball"
+                        type="Sphere"
+                        diameter="1.2"
+                        segments="24"
+                        position="new BABYLON.Vector3(4, 6, 0)"
+                        material="gold">
+
+                        <arashtad-physics
+                            type="SPHERE"
+                            mass="1"
+                            restitution="0.6"
+                            friction="0.4"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-playground-panel">
+                    <div class="group">
+                        <h4>Spawn</h4>
+                        <label for="shape-select">Shape</label>
+                        <select id="shape-select">
+                            <option value="Box">Box</option>
+                            <option value="Sphere" selected>Sphere</option>
+                            <option value="Capsule">Capsule</option>
+                            <option value="Cylinder">Cylinder</option>
+                        </select>
+                        <button type="button" id="spawn-button">Spawn shape</button>
+                    </div>
+
+                    <div class="group">
+                        <h4>Physics</h4>
+                        <button type="button" id="pause-button">Pause</button>
+                        <button type="button" id="reset-button" class="warn">Reset scene</button>
+                    </div>
+
+                    <div class="physics-playground-stats" id="stats">
+                        0 spawned
+                    </div>
+                </div>
+
+                <div class="physics-playground-output">
+                    Shape selector · spawn button · pause and reset controls · HDR environment
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            All the runtime's main physics capabilities composed into
+                            one scene: static and dynamic bodies, multiple shapes,
+                            mixed Standard and PBR materials, an HDR environment, and
+                            interactive UI controls.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Scene Composition
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The bowl, tower base, and ramp are static. The two boxes
+                                and metallic ball that fall at load time are dynamic.
+                                Spawned bodies join them from a menu of four shapes.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Live Controls
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The right-hand panel spawns shapes, pauses simulation,
+                                and resets the scene. Every control operates on the same
+                                shared physics context, so the effects compose cleanly.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Static walls and platforms, dynamic bodies in markup, and
+                            host-page controls for spawning, pausing, and resetting.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh id="ground" type="Ground" width="18" height="18" material="brown"&gt;
+    &lt;arashtad-physics type="BOX" mass="0" friction="0.8"&gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;!-- wallleft · wallright · wallback · wallfront · towerbase · ramp --&gt;
+
+&lt;arashtad-mesh id="preball" type="Sphere" diameter="1.2" segments="24"
+    position="new BABYLON.Vector3(4, 6, 0)" material="gold"&gt;
+    &lt;arashtad-physics type="SPHERE" mass="1" restitution="0.6" friction="0.4" startAsleep="false"&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;select id="shape-select"&gt;
+    &lt;option value="Box"&gt;Box&lt;/option&gt;
+    &lt;option value="Sphere" selected&gt;Sphere&lt;/option&gt;
+    &lt;option value="Capsule"&gt;Capsule&lt;/option&gt;
+    &lt;option value="Cylinder"&gt;Cylinder&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;button type="button" id="spawn-button"&gt;Spawn shape&lt;/button&gt;
+&lt;button type="button" id="pause-button"&gt;Pause&lt;/button&gt;
+&lt;button type="button" id="reset-button"&gt;Reset scene&lt;/button&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-playground-canvas');
+
+        const scene = await ready(canvas);
+
+        /* ----------------------------------------------------------------
+         * Spawned-body tracking
+         * ---------------------------------------------------------------- */
+
+        const spawned = [];
+
+        const materialIds = ['green', 'orange', 'blue', 'yellow', 'gold'];
+
+        const shapeConfig = {
+            Box:      { mesh: 'Box',      diameter: null, size: 0.9, restitution: 0.4 },
+            Sphere:   { mesh: 'Sphere',   diameter: 0.9,  size: null, restitution: 0.6 },
+            Capsule:  { mesh: 'Capsule',  diameter: 0.8,  size: null, restitution: 0.3, height: 1.2, radius: 0.35 },
+            Cylinder: { mesh: 'Cylinder', diameter: 0.9,  size: null, restitution: 0.4, height: 1, radius: 0.45 }
+        };
+
+        function pickMaterial() {
+            const id = materialIds[Math.floor(Math.random() * materialIds.length)];
+            return scene.getMaterialByName(id) ?? null;
+        }
+
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            if (stats) {
+                stats.textContent = spawned.length + ' spawned';
+            }
+        }
+
+        /* ----------------------------------------------------------------
+         * Spawn logic
+         * ---------------------------------------------------------------- */
+
+        function spawnShape(kind) {
+            const cfg = shapeConfig[kind] ?? shapeConfig.Sphere;
+            const name = kind.toLowerCase() + '_' + Date.now() + '_' + spawned.length;
+
+            /*
+             * Randomize the spawn area so successive spawns don't stack.
+             */
+            const x = -6 + Math.random() * 12;
+            const z = -6 + Math.random() * 12;
+
+            let mesh;
+
+            switch (cfg.mesh) {
+                case 'Box':
+                    mesh = BABYLON.MeshBuilder.CreateBox(
+                        name,
+                        { size: cfg.size },
+                        scene
+                    );
+                    break;
+
+                case 'Capsule':
+                    mesh = BABYLON.MeshBuilder.CreateCapsule(
+                        name,
+                        { height: cfg.height, radius: cfg.radius, tessellation: 16 },
+                        scene
+                    );
+                    break;
+
+                case 'Cylinder':
+                    mesh = BABYLON.MeshBuilder.CreateCylinder(
+                        name,
+                        { height: cfg.height, diameter: cfg.radius * 2, tessellation: 20 },
+                        scene
+                    );
+                    break;
+
+                case 'Sphere':
+                default:
+                    mesh = BABYLON.MeshBuilder.CreateSphere(
+                        name,
+                        { diameter: cfg.diameter, segments: 20 },
+                        scene
+                    );
+                    break;
+            }
+
+            mesh.position = new BABYLON.Vector3(x, 12, z);
+            mesh.material = pickMaterial();
+
+            const aggregate = new BABYLON.PhysicsAggregate(
+                mesh,
+                BABYLON.PhysicsShapeType[kind.toUpperCase()],
+                {
+                    mass: 1,
+                    restitution: cfg.restitution,
+                    friction: 0.4,
+                    startAsleep: false
+                },
+                scene
+            );
+
+            mesh.metadata = {
+                ...(mesh.metadata ?? {}),
+                physicsAggregate: aggregate,
+                spawnedShape: true
+            };
+
+            spawned.push({ mesh, aggregate });
+            updateStats();
+
+            /*
+             * Cap total spawned bodies so long sessions don't degrade.
+             */
+            while (spawned.length > 30) {
+                const oldest = spawned.shift();
+                disposeSpawned(oldest);
+            }
+        }
+
+        function disposeSpawned(entry) {
+            try {
+                entry.aggregate?.dispose();
+            } catch { /* ignore */ }
+
+            try {
+                entry.mesh?.dispose();
+            } catch { /* ignore */ }
+        }
+
+        /* ----------------------------------------------------------------
+         * Pause / resume
+         * ---------------------------------------------------------------- */
+
+        let paused = false;
+        let savedVelocities = null;
+
+        function gatherAllDynamicBodies() {
+            const list = [];
+
+            /*
+             * Pre-placed bodies.
+             */
+            for (const id of ['prebox1', 'prebox2', 'preball']) {
+                const mesh = scene.getMeshByName(id);
+                const body = mesh?.metadata?.physicsAggregate?.body;
+                if (body) list.push(body);
+            }
+
+            /*
+             * Spawned bodies.
+             */
+            for (const entry of spawned) {
+                const body = entry.aggregate?.body;
+                if (body) list.push(body);
+            }
+
+            return list;
+        }
+
+        function setPaused(next) {
+            if (next === paused) return;
+
+            if (next) {
+                const list = gatherAllDynamicBodies();
+
+                savedVelocities = list.map(body => ({
+                    linear: body.getLinearVelocity().clone(),
+                    angular: body.getAngularVelocity().clone()
+                }));
+
+                for (const body of list) {
+                    try {
+                        body.setMotionType(BABYLON.PhysicsMotionType.STATIC);
+                    } catch { /* ignore */ }
+                }
+
+                paused = true;
+            } else {
+                const list = gatherAllDynamicBodies();
+
+                for (let i = 0; i < list.length; i++) {
+                    const body = list[i];
+
+                    try {
+                        body.setMotionType(BABYLON.PhysicsMotionType.DYNAMIC);
+
+                        const saved = savedVelocities?.[i];
+                        if (saved) {
+                            body.setLinearVelocity(saved.linear);
+                            body.setAngularVelocity(saved.angular);
+                        }
+                    } catch { /* ignore */ }
+                }
+
+                savedVelocities = null;
+                paused = false;
+            }
+
+            const pauseButton = document.getElementById('pause-button');
+            if (pauseButton) {
+                pauseButton.textContent = paused ? 'Resume' : 'Pause';
+            }
+        }
+
+        /* ----------------------------------------------------------------
+         * Reset
+         * ---------------------------------------------------------------- */
+
+        function resetScene() {
+            /*
+             * Dispose every spawned body.
+             */
+            while (spawned.length) {
+                disposeSpawned(spawned.pop());
+            }
+            updateStats();
+
+            /*
+             * Reset pre-placed bodies to their start transforms by
+             * disposing and recreating their aggregates.
+             */
+            const preplaced = [
+                { id: 'prebox1',        shape: 'BOX',      position: new BABYLON.Vector3(-4, 5, -1), options: { mass: 1, restitution: 0.4, friction: 0.5, startAsleep: false } },
+                { id: 'prebox2',        shape: 'BOX',      position: new BABYLON.Vector3(-4, 7,  1), options: { mass: 1, restitution: 0.4, friction: 0.5, startAsleep: false } },
+                { id: 'preball',        shape: 'SPHERE',   position: new BABYLON.Vector3( 4, 6,  0), options: { mass: 1, restitution: 0.6, friction: 0.4, startAsleep: false } }
+            ];
+
+            for (const def of preplaced) {
+                const mesh = scene.getMeshByName(def.id);
+                if (!mesh) continue;
+
+                const existing = mesh.metadata?.physicsAggregate;
+
+                if (existing) {
+                    try { existing.dispose(); } catch { /* ignore */ }
+                    mesh.metadata.physicsAggregate = null;
+                }
+
+                mesh.position.copyFrom(def.position);
+
+                if (!mesh.rotationQuaternion) {
+                    mesh.rotationQuaternion = BABYLON.Quaternion.Identity();
+                } else {
+                    mesh.rotationQuaternion.copyFrom(BABYLON.Quaternion.Identity());
+                }
+
+                mesh.computeWorldMatrix(true);
+
+                try {
+                    const aggregate = new BABYLON.PhysicsAggregate(
+                        mesh,
+                        BABYLON.PhysicsShapeType[def.shape],
+                        def.options,
+                        scene
+                    );
+
+                    mesh.metadata = {
+                        ...(mesh.metadata ?? {}),
+                        physicsAggregate: aggregate
+                    };
+                } catch (error) {
+                    console.warn('Reset failed for', def.id, error);
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------
+         * UI wiring
+         * ---------------------------------------------------------------- */
+
+        const spawnButton = document.getElementById('spawn-button');
+        const pauseButton = document.getElementById('pause-button');
+        const resetButton = document.getElementById('reset-button');
+        const shapeSelect = document.getElementById('shape-select');
+
+        if (spawnButton && shapeSelect) {
+            spawnButton.addEventListener('click', () => {
+                spawnShape(shapeSelect.value);
+            });
+        }
+
+        if (pauseButton) {
+            pauseButton.addEventListener('click', () => setPaused(!paused));
+        }
+
+        if (resetButton) {
+            resetButton.addEventListener('click', () => {
+                if (paused) setPaused(false);
+                resetScene();
+            });
+        }
+
+        updateStats();
+
+        window.__playground = {
+            spawn: spawnShape,
+            pause: () => setPaused(true),
+            resume: () => setPaused(false),
+            reset: resetScene
+        };
+    </script>
+
+</body>
+
+</html>

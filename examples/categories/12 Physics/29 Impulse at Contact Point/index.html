@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Compare an off-center impulse against a centered one with Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, impulse, contact point, torque, angular response">
+    <title>Impulse at Contact Point | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-impulse-contact-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-impulse-contact-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-impulse-contact-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#impulse">Impulse</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>179</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    179 · PHYSICS
+                </div>
+
+                <h1>Impulse at Contact Point</h1>
+
+                <p>
+                    Compare an off-center impulse against a centered one with
+                    Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Impulse</span>
+                    <span class="example-badge">Contact</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+                <canvas
+                    id="physics-impulse-contact-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="16"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 19)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="20"
+                        height="20"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="centered"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-2.5, 1, 0)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.1"
+                            friction="0.4">
+
+                            <arashtad-impulse
+                                value="new BABYLON.Vector3(6, 0, 0)"
+                                contact="new BABYLON.Vector3(-2.5, 1, 0)">
+                            </arashtad-impulse>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="offcenter"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(2.5, 1, 0)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.1"
+                            friction="0.4">
+
+                            <arashtad-impulse
+                                value="new BABYLON.Vector3(6, 0, 0)"
+                                contact="new BABYLON.Vector3(2.5, 1.5, 0)">
+                            </arashtad-impulse>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-impulse-contact-output">
+                    value="(6, 0, 0)" · contact at center · contact above center
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            The same impulse value applied at two different world-space
+                            contact points produces very different rotation responses.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Centered Contact
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                When <code>contact</code> matches the body's center of
+                                mass, the impulse produces pure translation with no
+                                rotation. The green box slides away without spinning.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Off-Center Contact
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                When <code>contact</code> is offset from the center, part
+                                of the impulse becomes torque. The orange box slides and
+                                tumbles because the contact sits above the center line.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Keep the impulse value identical and only move the contact
+                            point to isolate the effect of the offset.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-material
+    id="green"
+    type="StandardMaterial"
+    diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)"
+&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-material
+    id="orange"
+    type="StandardMaterial"
+    diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)"
+&gt;
+&lt;/arashtad-material&gt;
+
+&lt;arashtad-mesh
+    id="centered"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(-2.5, 1, 0)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.1"
+        friction="0.4"
+    &gt;
+        &lt;arashtad-impulse
+            value="new BABYLON.Vector3(6, 0, 0)"
+            contact="new BABYLON.Vector3(-2.5, 1, 0)"
+        &gt;&lt;/arashtad-impulse&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="offcenter"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(2.5, 1, 0)"
+    material="orange"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.1"
+        friction="0.4"
+    &gt;
+        &lt;arashtad-impulse
+            value="new BABYLON.Vector3(6, 0, 0)"
+            contact="new BABYLON.Vector3(2.5, 1.5, 0)"
+        &gt;&lt;/arashtad-impulse&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-impulse-contact-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Inspect type, collider, point, normal, and impulse on collision using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, collision event, event fields, collider, impulse, normal">
+    <title>Collision Event Fields | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-collision-fields-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-collision-fields-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-collision-fields-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#collision">Collision</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>162</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    162 · PHYSICS
+                </div>
+
+                <h1>Collision Event Fields</h1>
+
+                <p>
+                    Inspect type, collider, point, normal, and impulse on collision
+                    using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Collision</span>
+                    <span class="example-badge">Havok</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+                <canvas
+                    id="physics-collision-fields-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="12"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 15)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="box1"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(0, 8, 0)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.8">
+
+                            <arashtad-collision
+                                on-collide="
+                                    console.log('COLLISION');
+                                    console.log('type:', event.type);
+                                    console.log('collider:', event.collider);
+                                    console.log('against:', event.collidedAgainst);
+                                    console.log('point:', event.point);
+                                    console.log('normal:', event.normal);
+                                    console.log('impulse:', event.impulse);
+                                ">
+                            </arashtad-collision>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="box2"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(0, 3, 0)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.8">
+
+                            <arashtad-collision
+                                on-collide="
+                                    console.log('COLLISION');
+                                    console.log('type:', event.type);
+                                    console.log('collider:', event.collider);
+                                    console.log('against:', event.collidedAgainst);
+                                    console.log('point:', event.point);
+                                    console.log('normal:', event.normal);
+                                    console.log('impulse:', event.impulse);
+                                ">
+                            </arashtad-collision>
+
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="10"
+                        height="10"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-collision-fields-output">
+                    Open the console to inspect individual event fields on each collision.
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Read individual fields from the Havok collision event object
+                            instead of logging the whole thing at once.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Event Fields
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                <code>event.type</code> is the collision phase,
+                                <code>event.collider</code> and
+                                <code>event.collidedAgainst</code> are the two bodies,
+                                <code>event.point</code> and <code>event.normal</code>
+                                describe the contact, and <code>event.impulse</code>
+                                measures the impact strength.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Per-Body Inspection
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Both dynamic boxes log their own collisions, so you can
+                                compare how the same event fields look from each body's
+                                perspective.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Read individual fields from <code>event</code> inside the
+                            <code>on-collide</code> callback.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="box1"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(0, 8, 0)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.8"
+    &gt;
+        &lt;arashtad-collision
+            on-collide="
+                console.log('COLLISION');
+                console.log('type:', event.type);
+                console.log('collider:', event.collider);
+                console.log('against:', event.collidedAgainst);
+                console.log('point:', event.point);
+                console.log('normal:', event.normal);
+                console.log('impulse:', event.impulse);
+            "
+        &gt;&lt;/arashtad-collision&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="box2"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(0, 3, 0)"
+    material="orange"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.8"
+    &gt;
+        &lt;arashtad-collision
+            on-collide="
+                console.log('COLLISION');
+                console.log('type:', event.type);
+                console.log('collider:', event.collider);
+                console.log('against:', event.collidedAgainst);
+                console.log('point:', event.point);
+                console.log('normal:', event.normal);
+                console.log('impulse:', event.impulse);
+            "
+        &gt;&lt;/arashtad-collision&gt;
+    &lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="ground"
+    type="Ground"
+    width="10"
+    height="10"
+    material="brown"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="0"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-collision-fields-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

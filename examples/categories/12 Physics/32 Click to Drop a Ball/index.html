@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Spawn a dynamic sphere with an impulse on each click using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, spawn sphere, impulse, click interaction, dynamic body">
+    <title>Click to Drop a Ball | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-click-drop-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-click-drop-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-click-drop-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#actions">Actions</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>182</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    182 · PHYSICS
+                </div>
+
+                <h1>Click to Drop a Ball</h1>
+
+                <p>
+                    Spawn a dynamic sphere with an impulse on each click using
+                    Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Actions</span>
+                    <span class="example-badge">Interaction</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+                <canvas
+                    id="physics-click-drop-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="16"
+                        target="new BABYLON.Vector3(0, 1.5, 0)"
+                        position="new BABYLON.Vector3(6, 13, 50)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="20"
+                        height="20"
+                        material="brown"
+                        onPickTrigger="
+                            const colors = [0.3, 0.6, 0.9, 1.0];
+                            const color = colors[Math.floor(Math.random() * colors.length)];
+
+                            const ball = BABYLON.MeshBuilder.CreateSphere(
+                                'ball_' + Date.now(),
+                                { diameter: 0.8, segments: 24 },
+                                scene
+                            );
+
+                            ball.position = new BABYLON.Vector3(
+                                scene.pointerX / scene.getEngine().getRenderWidth() * 10 - 5,
+                                8,
+                                scene.pointerY / scene.getEngine().getRenderHeight() * 10 - 5
+                            );
+
+                            const mat = new BABYLON.StandardMaterial(
+                                'ballmat_' + Date.now(),
+                                scene
+                            );
+                            mat.diffuseColor = new BABYLON.Color3(color, 0.5, 0.3);
+                            ball.material = mat;
+
+                            const aggregate = new BABYLON.PhysicsAggregate(
+                                ball,
+                                BABYLON.PhysicsShapeType.SPHERE,
+                                { mass: 1, restitution: 0.5, friction: 0.4 },
+                                scene
+                            );
+
+                            aggregate.body.applyImpulse(
+                                new BABYLON.Vector3(0, 8, 0),
+                                ball.getAbsolutePosition()
+                            );
+                        ">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.6">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-click-drop-output">
+                    Click anywhere on the ground → spawn a sphere with an upward impulse
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Create dynamic bodies at runtime from inside a click handler
+                            and attach physics to them on the fly.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Runtime Spawning
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The ground's <code>onPickTrigger</code> creates a brand
+                                new sphere with <code>MeshBuilder.CreateSphere</code>,
+                                assigns a fresh material, and wraps it in a
+                                <code>PhysicsAggregate</code> all in one click.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Impulse on Spawn
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each new ball receives an upward impulse immediately, so
+                                it launches into the air the moment it appears and then
+                                falls back onto the ground.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Spawn dynamic bodies from a click handler and give each one
+                            an initial impulse via Havok.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="ground"
+    type="Ground"
+    width="20"
+    height="20"
+    material="brown"
+    onPickTrigger="
+        const ball = BABYLON.MeshBuilder.CreateSphere(
+            'ball_' + Date.now(),
+            { diameter: 0.8, segments: 24 },
+            scene
+        );
+
+        ball.position = new BABYLON.Vector3(0, 8, 0);
+
+        const aggregate = new BABYLON.PhysicsAggregate(
+            ball,
+            BABYLON.PhysicsShapeType.SPHERE,
+            { mass: 1, restitution: 0.5, friction: 0.4 },
+            scene
+        );
+
+        aggregate.body.applyImpulse(
+            new BABYLON.Vector3(0, 8, 0),
+            ball.getAbsolutePosition()
+        );
+    "
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="0"
+        friction="0.6"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-click-drop-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+</html>

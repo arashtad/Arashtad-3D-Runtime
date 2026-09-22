@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Control shadow darkness for a Babylon.js ShadowGenerator using Arashtad 3D Runtime.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, shadows, ShadowGenerator, shadow darkness, shadow properties">
+    <title>Shadow Darkness | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .shadow-darkness-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shadow-darkness-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .shadow-darkness-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#shadows">Shadows</a>
+                    <a href="../#lighting">Lighting</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>142</span>
+                    <span>/</span>
+                    <span>SHADOWS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    142 · SHADOWS
+                </div>
+
+                <h1>Shadow Darkness</h1>
+
+                <p>
+                    Control the darkness of generated shadows using Arashtad 3D Runtime.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Shadows</span>
+                    <span class="example-badge">Properties</span>
+                    <span class="example-badge">ShadowGenerator</span>
+                </div>
+
+            </header>
+
+            <section class="scrolllock example-demo shadow-darkness-demo">
+
+                <canvas id="shadow-darkness-canvas" clearColor="new BABYLON.Color4(0.8, 0.8, 0.8, 1)">
+
+                    <arashtad-runtime lazy resize="engine.resize()" environment="../../../assets/environments/room.hdr"
+                        environmentIntensity="1" environmentBackground="true" environmentBackgroundBlur="0.1"
+                        environmentRotationY="1">
+                    </arashtad-runtime>
+
+                    <arashtad-light id="directional" type="DirectionalLight" direction="new BABYLON.Vector3(0, -1, 0)"
+                        intensity="3">
+                    </arashtad-light>
+
+                    <arashtad-camera id="camera" type="ArcRotateCamera" alpha="1.57" beta="1.2" radius="12"
+                        target="new BABYLON.Vector3(0, 0.4, 0)" position="new BABYLON.Vector3(0, 0.4, 3)" fov="0.4"
+                        minZ="0.1" maxZ="1000" useAutoRotationBehavior="true" autoRotationBehavior.idleRotationSpeed="0"
+                        autoRotationBehavior.idleRotationWaitTime="3000"
+                        autoRotationBehavior.idleRotationSpinupTime="6000">
+                    </arashtad-camera>
+
+                    <arashtad-model id="model_1" src="../../../assets/3d/linux.glb">
+                    </arashtad-model>
+
+                    <arashtad-mesh type="Ground" id="ground" size="5, 5">
+                    </arashtad-mesh>
+
+                    <arashtad-shadow light="directional" mapSize="2048" darkness="0.1" minZ="0.1" maxZ="100"
+                        orthoLeft="-20" orthoRight="20" orthoTop="20" orthoBottom="-20">
+
+                        <arashtad-generator useBlurExponentialShadowMap="true" blurKernel="64" blurScale="20">
+                        </arashtad-generator>
+
+                        <arashtad-caster ref="model_1"></arashtad-caster>
+                        <arashtad-receiver ref="ground"></arashtad-receiver>
+
+                    </arashtad-shadow>
+
+                </canvas>
+
+                <div class="shadow-darkness-output">
+                    Shadow darkness: 0.1
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Control the darkness of a Babylon.js shadow through the runtime
+                            shadow properties.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Darkness
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The <code>darkness</code> property controls how strongly the
+                                generated shadow darkens the receiving surface.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Shadow Settings
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The shadow map and filtering configuration remain unchanged,
+                                allowing the darkness property to be isolated in this example.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Set the shadow darkness directly with the
+                            <code>darkness</code> property.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-shadow
+    light="directional"
+    mapSize="1024"
+    darkness="0.7"
+    minZ="0.1"
+    maxZ="100"
+    orthoLeft="-20"
+    orthoRight="20"
+    orthoTop="20"
+    orthoBottom="-20"
+&gt;
+    &lt;arashtad-generator
+        useBlurExponentialShadowMap="true"
+        blurKernel="64"
+        blurScale="20"
+    &gt;&lt;/arashtad-generator&gt;
+
+    &lt;arashtad-caster ref="model_1"&gt;&lt;/arashtad-caster&gt;
+    &lt;arashtad-receiver ref="ground"&gt;&lt;/arashtad-receiver&gt;
+&lt;/arashtad-shadow&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/babylon.js"></script>
+    <script src="../../../../lib/babylon/loaders/babylonjs.loaders.min.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('shadow-darkness-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

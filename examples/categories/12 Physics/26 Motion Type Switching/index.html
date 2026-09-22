@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Switch a physics body between DYNAMIC, STATIC, and KINEMATIC at runtime with Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, motion type, DYNAMIC, STATIC, KINEMATIC, setMotionType">
+    <title>Motion Type Switching | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-motion-switch-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-motion-switch-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-motion-switch-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#body">Body</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>176</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    176 · PHYSICS
+                </div>
+
+                <h1>Motion Type Switching</h1>
+
+                <p>
+                    Switch a body between DYNAMIC, STATIC, and KINEMATIC at runtime
+                    with Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Body</span>
+                    <span class="example-badge">Motion</span>
+                    <span class="example-badge">Action</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+                <canvas
+                    id="physics-motion-switch-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="14"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 17)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="14"
+                        height="14"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="box"
+                        type="Box"
+                        size="1.2"
+                        position="new BABYLON.Vector3(0, 5, 0)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.3"
+                            friction="0.5">
+
+                            <arashtad-body type="DYNAMIC"></arashtad-body>
+
+                        </arashtad-physics>
+
+                        <arashtad-action
+                            onPickTrigger="
+                                const aggregate = target.metadata?.physicsAggregate;
+                                if (!aggregate || !aggregate.body) {
+                                    console.warn('No physics aggregate on box');
+                                    return;
+                                }
+
+                                const order = [
+                                    BABYLON.PhysicsMotionType.DYNAMIC,
+                                    BABYLON.PhysicsMotionType.STATIC,
+                                    BABYLON.PhysicsMotionType.ANIMATED
+                                ];
+                                const names = {
+                                    [BABYLON.PhysicsMotionType.DYNAMIC]: 'DYNAMIC',
+                                    [BABYLON.PhysicsMotionType.STATIC]: 'STATIC',
+                                    [BABYLON.PhysicsMotionType.ANIMATED]: 'KINEMATIC'
+                                };
+
+                                const current = aggregate.body.getMotionType();
+                                const index = order.indexOf(current);
+                                const next = order[(index + 1) % order.length];
+
+                                aggregate.body.setMotionType(next);
+                                console.log('Motion type →', names[next]);
+                            ">
+                        </arashtad-action>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-motion-switch-output">
+                    Open console and click the box → cycles DYNAMIC → STATIC → KINEMATIC
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Cycle a body's motion type at runtime and observe how its
+                            behavior changes with each switch.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Three Motion Types
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                <code>DYNAMIC</code> responds to gravity and forces,
+                                <code>STATIC</code> is immovable, and
+                                <code>KINEMATIC</code> is driven by its transform only.
+                                All three are values of
+                                <code>BABYLON.PhysicsMotionType</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Cycled on Click
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                An <code>&lt;arashtad-action&gt;</code> with
+                                <code>onPickTrigger</code> advances the box to the next
+                                motion type each time it is clicked and logs the new
+                                type to the console.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Read the current motion type from the aggregate's body,
+                            advance to the next one, and set it back via
+                            <code>setMotionType</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="box"
+    type="Box"
+    size="1.2"
+    position="new BABYLON.Vector3(0, 5, 0)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.3"
+        friction="0.5"
+    &gt;
+        &lt;arashtad-body type="DYNAMIC"&gt;&lt;/arashtad-body&gt;
+    &lt;/arashtad-physics&gt;
+
+    &lt;arashtad-action
+        onPickTrigger="
+            const aggregate = target.metadata?.physicsAggregate;
+            if (!aggregate || !aggregate.body) return;
+
+            const order = [
+                BABYLON.PhysicsMotionType.DYNAMIC,
+                BABYLON.PhysicsMotionType.STATIC,
+                BABYLON.PhysicsMotionType.ANIMATED
+            ];
+            const current = aggregate.body.getMotionType();
+            const index = order.indexOf(current);
+            const next = order[(index + 1) % order.length];
+            aggregate.body.setMotionType(next);
+        "
+    &gt;
+    &lt;/arashtad-action&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-motion-switch-canvas');
+
+        await ready(canvas);
+    </script>
+
+</body>
+
+</html>

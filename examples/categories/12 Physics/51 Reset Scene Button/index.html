@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Add a button that resets all dynamic bodies to their start transforms using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, reset scene, recreate body">
+    <title>Reset Scene Button | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-reset-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-reset-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-reset-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-reset-panel {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: auto;
+        }
+
+        .physics-reset-panel button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            background: rgba(38, 163, 140, 0.15);
+            border: 1px solid #26a38c;
+            border-radius: 6px;
+            color: #26a38c;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-reset-panel button:hover {
+            background: #26a38c;
+            color: #000;
+        }
+
+        .physics-reset-panel button:active {
+            transform: translateY(1px);
+        }
+
+        .physics-reset-panel-meta {
+            margin-top: 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#actions">Actions</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>202</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    202 · PHYSICS
+                </div>
+
+                <h1>Reset Scene Button</h1>
+
+                <p>
+                    Add a button that resets all dynamic bodies to their start
+                    transforms using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">GUI</span>
+                    <span class="example-badge">Action</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-reset-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.6">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="16"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 19)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="blue"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.9)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="yellow"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.8, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="16"
+                        height="16"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="greenbox"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(-2, 6, -1)"
+                        material="green">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.5"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="orangebox"
+                        type="Box"
+                        size="1"
+                        position="new BABYLON.Vector3(0, 8, 1)"
+                        material="orange">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="1"
+                            restitution="0.5"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="bluesphere"
+                        type="Sphere"
+                        diameter="1.2"
+                        segments="24"
+                        position="new BABYLON.Vector3(2, 10, 0)"
+                        material="blue">
+
+                        <arashtad-physics
+                            type="SPHERE"
+                            mass="1"
+                            restitution="0.7"
+                            friction="0.4"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <arashtad-mesh
+                        id="yellowcylinder"
+                        type="Cylinder"
+                        height="1.2"
+                        diameter="1"
+                        tessellation="20"
+                        position="new BABYLON.Vector3(0, 12, 0)"
+                        material="yellow">
+
+                        <arashtad-physics
+                            type="CYLINDER"
+                            mass="1"
+                            restitution="0.4"
+                            friction="0.5"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-reset-panel">
+                    <button type="button" id="reset-button">Reset scene</button>
+                    <div class="physics-reset-panel-meta" id="reset-meta">
+                        ready · 4 dynamic bodies
+                    </div>
+                </div>
+
+                <div class="physics-reset-output">
+                    Click "Reset scene" to return every body to its start transform
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Snapshot each body's start state, then recreate its
+                            physics body on reset. Destroying and recreating is the
+                            most reliable way to teleport a running dynamic body in
+                            Babylon's Havok plugin.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Full Snapshot
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each body's <code>position</code>, <code>rotation</code>,
+                                physics shape type, and physics options are captured at
+                                scene start. That's enough to rebuild the body
+                                identically.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Recreate on Reset
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                On reset, the old body is disposed and a new
+                                <code>PhysicsAggregate</code> is created at the snapshot
+                                transform with the original options. The body exists
+                                fresh in Havok at the exact start position.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            A shared reset helper disposes and recreates each body at
+                            its snapshot transform.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="greenbox"
+    type="Box"
+    size="1"
+    position="new BABYLON.Vector3(-2, 6, -1)"
+    material="green"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="1"
+        restitution="0.5"
+        friction="0.5"
+        startAsleep="false"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;!-- orangebox · bluesphere · yellowcylinder --&gt;
+
+&lt;button type="button" id="reset-button"&gt;Reset scene&lt;/button&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-reset-canvas');
+
+        const scene = await ready(canvas);
+
+        /*
+         * Body definitions. Every dynamic body in the scene is listed
+         * here with its shape type and physics options, so the reset can
+         * rebuild it identically without reading anything from the old
+         * body.
+         */
+        const bodyDefinitions = [
+            {
+                id: 'greenbox',
+                shape: 'BOX',
+                options: {
+                    mass: 1,
+                    restitution: 0.5,
+                    friction: 0.5,
+                    startAsleep: false
+                }
+            },
+            {
+                id: 'orangebox',
+                shape: 'BOX',
+                options: {
+                    mass: 1,
+                    restitution: 0.5,
+                    friction: 0.5,
+                    startAsleep: false
+                }
+            },
+            {
+                id: 'bluesphere',
+                shape: 'SPHERE',
+                options: {
+                    mass: 1,
+                    restitution: 0.7,
+                    friction: 0.4,
+                    startAsleep: false
+                }
+            },
+            {
+                id: 'yellowcylinder',
+                shape: 'CYLINDER',
+                options: {
+                    mass: 1,
+                    restitution: 0.4,
+                    friction: 0.5,
+                    startAsleep: false
+                }
+            }
+        ];
+
+        const snapshots = [];
+
+        for (const def of bodyDefinitions) {
+            const mesh = scene.getMeshByName(def.id);
+            if (!mesh) {
+                console.warn('Reset: mesh not found for id', def.id);
+                continue;
+            }
+
+            snapshots.push({
+                def,
+                mesh,
+                position: mesh.position.clone(),
+                rotationQuaternion: mesh.rotationQuaternion
+                    ? mesh.rotationQuaternion.clone()
+                    : BABYLON.Quaternion.FromEulerVector(mesh.rotation.clone())
+            });
+        }
+
+        console.log('Reset snapshots captured:', snapshots.length, snapshots.map(s => s.def.id));
+
+        function resetBodies() {
+            let resetCount = 0;
+
+            for (const snap of snapshots) {
+                const mesh = snap.mesh;
+                const def = snap.def;
+
+                /*
+                 * Step 1: dispose the existing physics body if it exists.
+                 */
+                const existing = mesh.metadata?.physicsAggregate;
+
+                if (existing) {
+                    try {
+                        existing.dispose();
+                    } catch (error) {
+                        console.warn('dispose failed for', def.id, error);
+                    }
+
+                    mesh.metadata.physicsAggregate = null;
+                }
+
+                /*
+                 * Step 2: move the mesh to its snapshot transform.
+                 */
+                mesh.position.copyFrom(snap.position);
+
+                if (mesh.rotationQuaternion) {
+                    mesh.rotationQuaternion.copyFrom(snap.rotationQuaternion);
+                } else {
+                    mesh.rotationQuaternion = snap.rotationQuaternion.clone();
+                }
+
+                mesh.computeWorldMatrix(true);
+
+                /*
+                 * Step 3: build a fresh PhysicsAggregate on the mesh at
+                 * the snapshot transform, using the original shape and
+                 * options.
+                 */
+                try {
+                    const shapeType =
+                        BABYLON.PhysicsShapeType[def.shape]
+                        ?? BABYLON.PhysicsShapeType.BOX;
+
+                    const aggregate = new BABYLON.PhysicsAggregate(
+                        mesh,
+                        shapeType,
+                        def.options,
+                        scene
+                    );
+
+                    mesh.metadata = {
+                        ...(mesh.metadata ?? {}),
+                        physicsAggregate: aggregate
+                    };
+
+                    resetCount++;
+                } catch (error) {
+                    console.warn('PhysicsAggregate creation failed for', def.id, error);
+                }
+            }
+
+            const meta = document.getElementById('reset-meta');
+            if (meta) {
+                meta.textContent =
+                    'reset · ' +
+                    new Date().toLocaleTimeString() +
+                    ' · ' + resetCount + ' bodies';
+            }
+        }
+
+        const button = document.getElementById('reset-button');
+
+        if (button) {
+            button.addEventListener('click', resetBodies);
+        }
+
+        window.__resetPhysicsScene = resetBodies;
+    </script>
+
+</body>
+
+</html>

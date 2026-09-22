@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Hang a heavy box from a spherical joint constraint by chaining bodies using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, pendulum, spherical joint, Physics6DoFConstraint, constraint">
+    <title>Pendulum Swing | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-pendulum-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-pendulum-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-pendulum-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-pendulum-panel {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: auto;
+            min-width: 200px;
+        }
+
+        .physics-pendulum-panel button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            background: rgba(38, 163, 140, 0.15);
+            border: 1px solid #26a38c;
+            border-radius: 6px;
+            color: #26a38c;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-pendulum-panel button:hover {
+            background: #26a38c;
+            color: #000;
+        }
+
+        .physics-pendulum-panel button:active {
+            transform: translateY(1px);
+        }
+
+        .physics-pendulum-panel button.warn {
+            background: rgba(242, 116, 74, 0.12);
+            border-color: #f2744a;
+            color: #f2744a;
+        }
+
+        .physics-pendulum-panel button.warn:hover {
+            background: #f2744a;
+            color: #000;
+        }
+
+        .physics-pendulum-panel-meta {
+            margin-top: 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#advanced">Advanced</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>207</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    207 · PHYSICS
+                </div>
+
+                <h1>Pendulum Swing</h1>
+
+                <p>
+                    Hang a heavy box from a spherical joint constraint by chaining
+                    bodies using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">Advanced</span>
+                    <span class="example-badge">Constraint</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-pendulum-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.5">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="14"
+                        target="new BABYLON.Vector3(0, 5, 0)"
+                        position="new BABYLON.Vector3(4, 6, 17)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="red"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.3, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="yellow"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.8, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="14"
+                        height="14"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                    <!--
+                        Static anchor. The joint element is nested here,
+                        referencing the weight body below. A small yellow
+                        cube marks the pivot point.
+                    -->
+                    <arashtad-mesh
+                        id="anchor"
+                        type="Box"
+                        width="0.3"
+                        height="0.3"
+                        depth="0.3"
+                        position="new BABYLON.Vector3(0, 5, 0)"
+                        material="yellow">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.5">
+                        </arashtad-physics>
+
+                        <arashtad-joint
+                            type="BALL_AND_SOCKET"
+                            body="weight"
+                            pivot="0, 0, 0"
+                            pivotOther="0, 1.5, 0"
+                            collision="false">
+                        </arashtad-joint>
+
+                    </arashtad-mesh>
+
+                    <!--
+                        Heavy dynamic weight hanging from the anchor. It
+                        starts offset so the joint has a reason to swing.
+                    -->
+                    <arashtad-mesh
+                        id="weight"
+                        type="Box"
+                        size="1.4"
+                        position="new BABYLON.Vector3(2.5, 2, 0)"
+                        material="red">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="3"
+                            restitution="0.1"
+                            friction="0.5"
+                            linearDamping="0.05"
+                            angularDamping="0.05"
+                            startAsleep="false">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-pendulum-panel">
+                    <button type="button" id="impulse-button">Push again</button>
+                    <button type="button" class="warn" id="reset-button">Reset swing</button>
+                    <div class="physics-pendulum-panel-meta" id="pendulum-meta">
+                        spherical joint active
+                    </div>
+                </div>
+
+                <div class="physics-pendulum-output">
+                    A heavy box hanging from an anchor via a ball-and-socket joint
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            The runtime's
+                            <code>&lt;arashtad-joint&gt;</code> element composes
+                            bodies created by markup into a physical constraint
+                            without any imperative JavaScript.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Declarative Joints
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                The joint is nested inside the anchor mesh and
+                                references the weight body by id. The runtime
+                                processes all bodies first, then creates joints in a
+                                dedicated pass once every reference resolves.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Spherical Joint
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                <code>type="BALL_AND_SOCKET"</code> locks all
+                                rotation of the weight around the pivot and frees
+                                translation, so the weight swings freely in any
+                                direction while staying attached to the anchor.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            The anchor holds the joint. The weight is a separate
+                            body that the joint pulls into its arc.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;arashtad-mesh
+    id="anchor"
+    type="Box"
+    width="0.3"
+    height="0.3"
+    depth="0.3"
+    position="new BABYLON.Vector3(0, 8, 0)"
+    material="yellow"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="0"
+        friction="0.5"
+    &gt;&lt;/arashtad-physics&gt;
+
+    &lt;arashtad-joint
+        type="BALL_AND_SOCKET"
+        body="weight"
+        pivot="0, 0, 0"
+        pivotOther="0, 1.5, 0"
+        collision="false"
+    &gt;&lt;/arashtad-joint&gt;
+&lt;/arashtad-mesh&gt;
+
+&lt;arashtad-mesh
+    id="weight"
+    type="Box"
+    size="1.4"
+    position="new BABYLON.Vector3(2.5, 5, 0)"
+    material="red"
+&gt;
+    &lt;arashtad-physics
+        type="BOX"
+        mass="3"
+        restitution="0.1"
+        friction="0.5"
+        linearDamping="0.05"
+        angularDamping="0.05"
+        startAsleep="false"
+    &gt;&lt;/arashtad-physics&gt;
+&lt;/arashtad-mesh&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-pendulum-canvas');
+
+        const scene = await ready(canvas);
+
+        function getWeightBody() {
+            const weight = scene.getMeshByName('weight');
+            return weight?.metadata?.physicsAggregate?.body ?? null;
+        }
+
+        function pushAgain() {
+            const weight = scene.getMeshByName('weight');
+            const body = getWeightBody();
+
+            if (!weight || !body) return;
+
+            /*
+             * Alternate the impulse direction so repeated presses keep
+             * the pendulum lively instead of just damping it.
+             */
+            window.__pendulumDir = -(window.__pendulumDir ?? 1);
+
+            body.applyImpulse(
+                new BABYLON.Vector3(8 * window.__pendulumDir, 0, 0),
+                weight.getAbsolutePosition()
+            );
+        }
+
+        function resetSwing() {
+            const weight = scene.getMeshByName('weight');
+            const body = getWeightBody();
+
+            if (!weight || !body) return;
+
+            /*
+             * Move the weight back to its raised start position. The
+             * joint stays active, so the weight will swing back through
+             * the arc from this new starting point.
+             */
+            weight.position.copyFrom(new BABYLON.Vector3(2.5, 5, 0));
+
+            if (!weight.rotationQuaternion) {
+                weight.rotationQuaternion = BABYLON.Quaternion.Identity();
+            } else {
+                weight.rotationQuaternion.copyFrom(BABYLON.Quaternion.Identity());
+            }
+
+            weight.computeWorldMatrix(true);
+
+            try {
+                body.setLinearVelocity(BABYLON.Vector3.Zero());
+                body.setAngularVelocity(BABYLON.Vector3.Zero());
+            } catch { /* ignore */ }
+        }
+
+        document
+            .getElementById('impulse-button')
+            ?.addEventListener('click', pushAgain);
+
+        document
+            .getElementById('reset-button')
+            ?.addEventListener('click', resetSwing);
+
+        window.__pendulumPush = pushAgain;
+        window.__pendulumReset = resetSwing;
+    </script>
+
+</body>
+
+</html>

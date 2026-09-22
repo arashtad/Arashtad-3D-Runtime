@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Add a button that spawns a new dynamic sphere on each press using Arashtad 3D Runtime and Havok physics.">
+    <meta name="keywords"
+        content="Arashtad 3D Runtime, Babylon.js, physics, Havok, spawn sphere, button click, dynamic body">
+    <title>Spawn on Button Click | Arashtad 3D Runtime</title>
+    <link rel="stylesheet" href="../../../assets/css/example.css">
+
+    <style>
+        .physics-spawn-demo {
+            height: min(680px, calc(100vh - 250px));
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .physics-spawn-demo canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .physics-spawn-output {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            z-index: 10;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: none;
+        }
+
+        .physics-spawn-panel {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 10;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            pointer-events: auto;
+            min-width: 200px;
+        }
+
+        .physics-spawn-panel button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            background: rgba(38, 163, 140, 0.15);
+            border: 1px solid #26a38c;
+            border-radius: 6px;
+            color: #26a38c;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .physics-spawn-panel button:hover {
+            background: #26a38c;
+            color: #000;
+        }
+
+        .physics-spawn-panel button:active {
+            transform: translateY(1px);
+        }
+
+        .physics-spawn-panel button.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .physics-spawn-panel button.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .physics-spawn-panel-meta {
+            margin-top: 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example-site example-page">
+
+        <header class="example-header">
+            <div class="example-header-inner">
+
+                <a class="example-brand" href="../">
+                    <span class="example-brand-mark">A3D</span>
+                    <span class="example-brand-text">ARASHTAD 3D RUNTIME</span>
+                    <span class="example-brand-version">1.0.0</span>
+                </a>
+
+                <nav class="example-nav">
+                    <a href="../">All Examples</a>
+                    <a href="../#physics">Physics</a>
+                    <a href="../#actions">Actions</a>
+                    <a href="#source">Source</a>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="example-main">
+
+            <header class="example-page-header">
+
+                <div class="example-breadcrumb">
+                    <a href="../">Examples</a>
+                    <span>/</span>
+                    <span>203</span>
+                    <span>/</span>
+                    <span>PHYSICS</span>
+                </div>
+
+                <div class="example-eyebrow">
+                    203 · PHYSICS
+                </div>
+
+                <h1>Spawn on Button Click</h1>
+
+                <p>
+                    Add a button that spawns a new dynamic sphere on each press
+                    using Arashtad 3D Runtime and Havok physics.
+                </p>
+
+                <div class="example-hero-meta">
+                    <span class="example-badge green">Physics</span>
+                    <span class="example-badge">GUI</span>
+                    <span class="example-badge">Action</span>
+                </div>
+
+            </header>
+
+            <section class="canvas-wrapper scrolllock example-demo">
+
+                <canvas
+                    id="physics-spawn-canvas"
+                    clearColor="new BABYLON.Color4(0.05, 0.1, 0.07, 1)">
+
+                    <arashtad-runtime
+                        lazy
+                        resize="engine.resize()">
+                    </arashtad-runtime>
+
+                    <arashtad-light
+                        id="directional"
+                        type="DirectionalLight"
+                        direction="new BABYLON.Vector3(-0.5, -1, -1)"
+                        intensity="1.2">
+                    </arashtad-light>
+
+                    <arashtad-light
+                        id="fill"
+                        type="HemisphericLight"
+                        direction="new BABYLON.Vector3(0, 1, 0)"
+                        intensity="0.6">
+                    </arashtad-light>
+
+                    <arashtad-camera
+                        id="camera"
+                        type="ArcRotateCamera"
+                        alpha="1.57"
+                        beta="1.15"
+                        radius="16"
+                        target="new BABYLON.Vector3(0, 2, 0)"
+                        position="new BABYLON.Vector3(4, 5, 19)"
+                        fov="0.4"
+                        minZ="0.1"
+                        maxZ="1000">
+                    </arashtad-camera>
+
+                    <arashtad-material
+                        id="green"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="orange"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(1.0, 0.4, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="blue"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.9)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="yellow"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.9, 0.8, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-material
+                        id="brown"
+                        type="StandardMaterial"
+                        diffuseColor="new BABYLON.Color3(0.7, 0.5, 0.3)">
+                    </arashtad-material>
+
+                    <arashtad-mesh
+                        id="ground"
+                        type="Ground"
+                        width="16"
+                        height="16"
+                        material="brown">
+
+                        <arashtad-physics
+                            type="BOX"
+                            mass="0"
+                            friction="0.8">
+                        </arashtad-physics>
+
+                    </arashtad-mesh>
+
+                </canvas>
+
+                <div class="physics-spawn-panel">
+                    <button type="button" id="spawn-button">Spawn sphere</button>
+                    <button type="button" id="clear-button" class="secondary">Clear all</button>
+                    <div class="physics-spawn-panel-meta" id="spawn-meta">
+                        0 spheres spawned
+                    </div>
+                </div>
+
+                <div class="physics-spawn-output">
+                    Click "Spawn sphere" to add a new dynamic body above the ground
+                </div>
+
+            </section>
+
+            <section class="example-section">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            What this demonstrates
+                        </h2>
+
+                        <p class="example-section-description">
+                            Create dynamic bodies on demand from a plain HTML button.
+                            Each sphere is fully simulated by Havok from the moment it
+                            appears.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-layout">
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Runtime Spawning
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Each press of the button creates a fresh
+                                <code>Sphere</code> mesh via
+                                <code>MeshBuilder.CreateSphere</code>, assigns one of
+                                four pre-registered materials, and wraps it in a
+                                <code>PhysicsAggregate</code> with a random
+                                <code>restitution</code>.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="example-panel">
+
+                        <div class="example-panel-header">
+                            <h3 class="example-panel-title">
+                                Cleanup
+                            </h3>
+                        </div>
+
+                        <div class="example-panel-body">
+                            <p>
+                                Spawned meshes are tracked in a list so a second button
+                                can dispose them along with their physics bodies. That
+                                keeps the scene from filling up during long runs.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="example-section" id="source">
+
+                <div class="example-section-header">
+                    <div>
+                        <h2 class="example-section-title">
+                            Source
+                        </h2>
+
+                        <p class="example-section-description">
+                            Two plain HTML buttons drive sphere creation and cleanup
+                            through shared helpers.
+                        </p>
+                    </div>
+                </div>
+
+                <pre class="example-code"><code>&lt;button type="button" id="spawn-button"&gt;Spawn sphere&lt;/button&gt;
+&lt;button type="button" id="clear-button"&gt;Clear all&lt;/button&gt;
+
+&lt;arashtad-material
+    id="green"
+    type="StandardMaterial"
+    diffuseColor="new BABYLON.Color3(0.3, 0.5, 0.3)"
+&gt;
+&lt;/arashtad-material&gt;
+
+&lt;!-- orange · blue · yellow · brown --&gt;</code></pre>
+
+            </section>
+
+        </main>
+
+        <footer class="example-footer">
+            <div class="example-footer-inner">
+                <span>Arashtad 3D Runtime 1.0.0</span>
+                <a href="../">← All Examples</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="../../../../lib/babylon/havok/HavokPhysics_umd.js"></script>
+    <script src="../../../../lib/babylon/babylon.js"></script>
+
+    <script type="module">
+        import { ready } from '../../../../lib/arashtad/arashtad-3d-runtime.1.0.0.min.js';
+
+        const canvas = document.getElementById('physics-spawn-canvas');
+
+        const scene = await ready(canvas);
+
+        /*
+         * Materials created by the runtime markup are registered under
+         * these ids, so we can grab them by name when spawning.
+         */
+        const materialIds = ['green', 'orange', 'blue', 'yellow'];
+
+        /*
+         * Track every spawned mesh so the clear button can dispose them.
+         */
+        const spawned = [];
+
+        function pickMaterial() {
+            const id = materialIds[Math.floor(Math.random() * materialIds.length)];
+            return scene.getMaterialByName(id) ?? null;
+        }
+
+        function spawnSphere() {
+            const count = spawned.length;
+            const name = 'sphere_' + Date.now() + '_' + count;
+
+            /*
+             * Spread spawns over a small area so they don't stack in the
+             * same column.
+             */
+            const x = (Math.random() - 0.5) * 3;
+            const z = (Math.random() - 0.5) * 3;
+
+            const mesh = BABYLON.MeshBuilder.CreateSphere(
+                name,
+                { diameter: 0.9, segments: 20 },
+                scene
+            );
+
+            mesh.position = new BABYLON.Vector3(x, 9, z);
+            mesh.material = pickMaterial();
+
+            const aggregate = new BABYLON.PhysicsAggregate(
+                mesh,
+                BABYLON.PhysicsShapeType.SPHERE,
+                {
+                    mass: 1,
+                    restitution: 0.3 + Math.random() * 0.5,
+                    friction: 0.4
+                },
+                scene
+            );
+
+            mesh.metadata = {
+                ...(mesh.metadata ?? {}),
+                physicsAggregate: aggregate,
+                spawnedSphere: true
+            };
+
+            spawned.push(mesh);
+            updateMeta();
+
+            /*
+             * Cap total spawned spheres so a long session can't blow up
+             * the scene. Oldest spheres are removed first.
+             */
+            while (spawned.length > 40) {
+                const oldest = spawned.shift();
+                disposeSphere(oldest);
+            }
+        }
+
+        function disposeSphere(mesh) {
+            const aggregate = mesh.metadata?.physicsAggregate;
+
+            if (aggregate) {
+                try {
+                    aggregate.dispose();
+                } catch {
+                    /* ignore */
+                }
+            }
+
+            try {
+                mesh.dispose();
+            } catch {
+                /* ignore */
+            }
+        }
+
+        function clearAll() {
+            for (const mesh of spawned) {
+                disposeSphere(mesh);
+            }
+
+            spawned.length = 0;
+            updateMeta();
+        }
+
+        function updateMeta() {
+            const meta = document.getElementById('spawn-meta');
+            if (meta) {
+                meta.textContent =
+                    spawned.length +
+                    (spawned.length === 1 ? ' sphere spawned' : ' spheres spawned');
+            }
+        }
+
+        const spawnButton = document.getElementById('spawn-button');
+        const clearButton = document.getElementById('clear-button');
+
+        if (spawnButton) {
+            spawnButton.addEventListener('click', spawnSphere);
+        }
+
+        if (clearButton) {
+            clearButton.addEventListener('click', clearAll);
+        }
+
+        window.__spawnSphere = spawnSphere;
+        window.__clearSpheres = clearAll;
+    </script>
+
+</body>
+
+</html>
